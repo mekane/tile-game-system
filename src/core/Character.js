@@ -15,7 +15,15 @@ function Character(attributes) {
         return null;
     }
 
-    return {};
+    return {
+        id: makeId(attributes.name)
+    };
+}
+
+function makeId(name) {
+    //TODO: file-safe-string the name
+    const number = Math.random() * 99999999;
+    return `character_${name}_${number.toFixed()}`;
 }
 
 module.exports = Character;

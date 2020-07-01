@@ -23,6 +23,14 @@ describe('The Character core module', () => {
     it(`returns a Character object if the attributes are valid`, () => {
         expect(Character(validCharacter())).to.be.an('object');
     });
+
+    const validCharacterId = /^character_Test_Character_\d{8}/;
+
+    it(`has an automatically generated ID property`, () => {
+        const newChar = Character(validCharacter());
+        expect(newChar.id).to.be.a('string');
+        expect(validCharacterId.test(newChar.id)).to.equal(true);
+    });
 });
 
 function validCharacter() {
