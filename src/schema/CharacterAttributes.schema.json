@@ -5,10 +5,40 @@
   "properties": {
     "name": {
       "type": "string"
+    },
+    "strength": {
+      "type": "integer",
+      "min": 1
+    },
+    "dexterity": {
+      "type": "integer",
+      "min": 1
+    },
+    "constitution": {
+      "type": "integer",
+      "min": 1
+    },
+    "wisdom": {
+      "type": "integer",
+      "min": 1
+    },
+    "intelligence": {
+      "type": "integer",
+      "min": 1
+    },
+    "charisma": {
+      "type": "integer",
+      "min": 1
     }
   },
   "additionalProperties": false,
   "required": [
-    "name"
+    "name",
+    "strength",
+    "dexterity",
+    "constitution",
+    "wisdom",
+    "intelligence",
+    "charisma"
   ]
 }

@@ -21,6 +21,18 @@ describe('The Character core module', () => {
     });
 
     it(`returns a Character object if the attributes are valid`, () => {
-        expect(Character({name: "Test"})).to.be.an('object');
+        expect(Character(validCharacter())).to.be.an('object');
     });
 });
+
+function validCharacter() {
+    return {
+        name: 'Test Character',
+        strength: 12,
+        dexterity: 9,
+        constitution: 3,
+        wisdom: 1,
+        intelligence: 19,
+        charisma: 16
+    }
+}
