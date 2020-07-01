@@ -1,0 +1,19 @@
+{
+  "name": "tile-game-system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha -b"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "jsonschema": "^1.2.6",
+    "mocha": "^8.0.1"
+  }
+}
