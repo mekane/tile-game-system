@@ -24,12 +24,14 @@ describe('The Character core module', () => {
         expect(Character(validCharacter())).to.be.an('object');
     });
 
-    const validCharacterId = /^character_Test_Character_\d{8}/;
+    const validCharacterId = /^character_test_character_\d{8}/;
 
     it(`has an automatically generated ID property`, () => {
         const newChar = Character(validCharacter());
         expect(newChar.id).to.be.a('string');
-        expect(validCharacterId.test(newChar.id)).to.equal(true);
+        const expectedMessage = `Expected ${newChar.id} to match regex ${validCharacterId}`;
+        const matchedRegex = validCharacterId.test(newChar.id)
+        expect(matchedRegex, expectedMessage).to.equal(true);
     });
 });
 

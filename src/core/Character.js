@@ -3,6 +3,7 @@ const Validator = require('jsonschema').Validator;
 const attributesSchema = require('../schema/CharacterAttributes.schema.json');
 const schemaValidator = new Validator();
 
+const util = require('../util');
 
 function Character(attributes) {
 
@@ -20,8 +21,8 @@ function Character(attributes) {
     };
 }
 
-function makeId(name) {
-    //TODO: file-safe-string the name
+function makeId(characterName) {
+    const name = util.fileSafeString(characterName);
     const number = Math.random() * 99999999;
     return `character_${name}_${number.toFixed()}`;
 }
