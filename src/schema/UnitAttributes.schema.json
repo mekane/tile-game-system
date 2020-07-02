@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "$id": "http://martykane.org/schemas/UnitAttributes.schema.json",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "movement": {
+      "type": "integer",
+      "min": 1
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "name",
+    "movement"
+  ]
+}
