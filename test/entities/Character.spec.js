@@ -1,8 +1,8 @@
 const expect = require('chai').expect;
 
-const Character = require('../src/core/Character');
+const Character = require('../../src/entities/Character');
 
-describe('The Character core module', () => {
+describe('The Character entities module', () => {
     it(`exports a constructor function`, () => {
         expect(Character).to.be.a('function');
     });
@@ -28,9 +28,10 @@ describe('The Character core module', () => {
 
     it(`has an automatically generated ID property`, () => {
         const newChar = Character(validCharacter());
-        expect(newChar.id).to.be.a('string');
-        const expectedMessage = `Expected ${newChar.id} to match regex ${validCharacterId}`;
-        const matchedRegex = validCharacterId.test(newChar.id)
+        const newId = newChar.getId();
+        expect(newId).to.be.a('string');
+        const expectedMessage = `Expected ${newId} to match regex ${validCharacterId}`;
+        const matchedRegex = validCharacterId.test(newId)
         expect(matchedRegex, expectedMessage).to.equal(true);
     });
 });

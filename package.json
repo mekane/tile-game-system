@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha -b"
+    "test": "mocha -b --recursive"
   },
   "author": "",
   "license": "ISC",

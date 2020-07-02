@@ -16,8 +16,10 @@ function Character(attributes) {
         return null;
     }
 
+    const id = util.generateId('character', attributes.name);
+
     return {
-        id: util.generateId('character', attributes.name)
+        getId: _ => id
     };
 }
 
