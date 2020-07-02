@@ -18,9 +18,9 @@ function Character(attributes) {
 
     const id = util.generateId('character', attributes.name);
 
-    return {
+    return Object.freeze({
         getId: _ => id
-    };
+    });
 }
 
 module.exports = Character;

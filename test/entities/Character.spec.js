@@ -1,3 +1,4 @@
+'use strict'
 const expect = require('chai').expect;
 
 const Character = require('../../src/entities/Character');
@@ -24,9 +25,14 @@ describe('The Character entities module', () => {
         expect(Character(validCharacter())).to.be.an('object');
     });
 
+    it(`returns an immutable object`, () => {
+        const newChar = Character(validCharacter());
+        expect(_ => newChar.name = 'Test Mutation').to.throw(/Cannot add property/);
+    });
+
     const validCharacterId = /^character_test_character_\d{8}/;
 
-    it(`has an automatically generated ID property`, () => {
+    it(`has an automatically generated ID`, () => {
         const newChar = Character(validCharacter());
         const newId = newChar.getId();
         expect(newId).to.be.a('string');
