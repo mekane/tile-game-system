@@ -27,3 +27,23 @@ describe('The filesafe function', () => {
         expect(util.fileSafeString('+always =check %everything ~twice')).to.equal('always_check_everything_twice');
     });
 });
+
+describe('The generateId function', () => {
+    it(`starts with the type`, () => {
+        const id = util.generateId('test');
+        expect(id.startsWith('test_')).to.equal(true);
+    });
+
+    it(`converts the type and name to filesafe strings`, () => {
+        const id = util.generateId('Test Ty$pe', 'Test Na+me');
+        expect(id.startsWith('test_type_test_name_')).to.equal(true);
+    });
+
+    it(`ends with numbers`, () => {
+        const id = util.generateId('Type', 'Test');
+        const validIdRegex = /^type_test_\d{8}/;
+        const expectedMessage = `Expected ${id} to match regex ${validIdRegex}`;
+        const matchedRegex = validIdRegex.test(id);
+        expect(matchedRegex, expectedMessage).to.equal(true);
+    });
+});

@@ -17,14 +17,8 @@ function Character(attributes) {
     }
 
     return {
-        id: makeId(attributes.name)
+        id: util.generateId('character', attributes.name)
     };
-}
-
-function makeId(characterName) {
-    const name = util.fileSafeString(characterName);
-    const number = Math.random() * 99999999;
-    return `character_${name}_${number.toFixed()}`;
 }
 
 module.exports = Character;

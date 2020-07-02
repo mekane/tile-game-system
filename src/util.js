@@ -4,6 +4,13 @@ function fileSafeString(string) {
     return noSpecialChars.toLowerCase();
 }
 
+function generateId(type, name) {
+    const prefix = fileSafeString(`${type}_${name}`);
+    const number = Math.random() * 99999999;
+    return `${prefix}_${number.toFixed()}`;
+}
+
 module.exports = {
-    fileSafeString
+    fileSafeString,
+    generateId
 }
