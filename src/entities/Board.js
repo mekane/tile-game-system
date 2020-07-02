@@ -1,11 +1,11 @@
 'use strict'
 const Validator = require('jsonschema').Validator;
-const attributesSchema = require('../schema/CharacterAttributes.schema.json');
+const attributesSchema = require('../schema/BoardAttributes.schema.json');
 const schemaValidator = new Validator();
 
 const util = require('../util');
 
-function Character(attributes) {
+function Board(attributes) {
 
     if (typeof attributes === 'undefined')
         return null;
@@ -16,11 +16,11 @@ function Character(attributes) {
         return null;
     }
 
-    const id = util.generateId('character', attributes.name);
+    const id = util.generateId('board', attributes.name);
 
     return Object.freeze({
         getId: _ => id
     });
 }
 
-module.exports = Character;
+module.exports = Board;
