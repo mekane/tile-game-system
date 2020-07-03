@@ -65,7 +65,7 @@ describe('The Unit entity', () => {
         expect(_ => newUnit.name = 'Test Mutation').to.throw(/Cannot add property/);
     });
 
-    const validUnitId = /^unit_test_\d{8}/;
+    const validUnitId = /^unit_test_\d{6,8}/;
 
     it(`has an automatically generated ID`, () => {
         const newUnit = Unit(validUnit());

@@ -41,7 +41,7 @@ describe('The generateId function', () => {
 
     it(`ends with numbers`, () => {
         const id = util.generateId('Type', 'Test');
-        const validIdRegex = /^type_test_\d{8}/;
+        const validIdRegex = /^type_test_\d{6,8}/;
         const expectedMessage = `Expected ${id} to match regex ${validIdRegex}`;
         const matchedRegex = validIdRegex.test(id);
         expect(matchedRegex, expectedMessage).to.equal(true);

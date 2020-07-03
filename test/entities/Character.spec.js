@@ -30,7 +30,7 @@ describe('The Character entities module', () => {
         expect(_ => newChar.name = 'Test Mutation').to.throw(/Cannot add property/);
     });
 
-    const validCharacterId = /^character_test_character_\d{8}/;
+    const validCharacterId = /^character_test_character_\d{6,8}/;
 
     it(`has an automatically generated ID`, () => {
         const newChar = Character(validCharacter());

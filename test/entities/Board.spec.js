@@ -65,7 +65,7 @@ describe('The Board entity', () => {
         expect(_ => newBoard.name = 'Test Mutation').to.throw(/Cannot add property/);
     });
 
-    const validBoardId = /^board_test_\d{8}/;
+    const validBoardId = /^board_test_\d{6,8}/;
 
     it(`has an automatically generated ID`, () => {
         const newBoard = Board(validBoard());
