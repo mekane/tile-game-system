@@ -16,7 +16,8 @@ function Encounter(attributes) {
     const id = util.generateId('encounter', attributes.name);
 
     return Object.freeze({
-        getId: _ => id
+        getId: _ => id,
+        getType: _ => typeName
     });
 }
 

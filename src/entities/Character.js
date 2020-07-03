@@ -12,7 +12,8 @@ function Character(attributes) {
     const id = util.generateId('character', attributes.name);
 
     return Object.freeze({
-        getId: _ => id
+        getId: _ => id,
+        getType: _ => typeName
     });
 }
 

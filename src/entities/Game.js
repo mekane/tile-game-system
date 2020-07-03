@@ -12,7 +12,8 @@ function Game(attributes) {
     const id = util.generateId('game', attributes.name);
 
     return Object.freeze({
-        getId: _ => id
+        getId: _ => id,
+        getType: _ => typeName
     });
 }
 

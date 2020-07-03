@@ -12,7 +12,8 @@ function Unit(attributes) {
     const id = util.generateId('unit', attributes.name);
 
     return Object.freeze({
-        getId: _ => id
+        getId: _ => id,
+        getType: _ => typeName
     });
 }
 

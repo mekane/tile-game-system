@@ -12,7 +12,8 @@ function Board(attributes) {
     const id = util.generateId('board', attributes.name);
 
     return Object.freeze({
-        getId: _ => id
+        getId: _ => id,
+        getType: _ => typeName
     });
 }
 

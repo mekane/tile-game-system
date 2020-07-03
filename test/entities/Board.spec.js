@@ -76,6 +76,12 @@ describe('The Board entity', () => {
         const matchedRegex = validBoardId.test(newId)
         expect(matchedRegex, expectedMessage).to.equal(true);
     });
+
+    it(`has a getType function that returns the name of the entity type`, () => {
+        const newBoard = Board(validBoard());
+        expect(newBoard.getType()).to.equal('Board');
+    });
+
 });
 
 

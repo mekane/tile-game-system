@@ -41,5 +41,10 @@ describe('The Character entities module', () => {
         const matchedRegex = validCharacterId.test(newId)
         expect(matchedRegex, expectedMessage).to.equal(true);
     });
+
+    it(`has a getType function that returns the name of the entity type`, () => {
+        const newCharacter = Character(validCharacter());
+        expect(newCharacter.getType()).to.equal('Character');
+    });
 });
 

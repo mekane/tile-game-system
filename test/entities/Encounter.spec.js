@@ -53,5 +53,10 @@ describe('The Encounter entity', () => {
         const matchedRegex = validEncounterId.test(newId)
         expect(matchedRegex, expectedMessage).to.equal(true);
     });
+
+    it(`has a getType function that returns the name of the entity type`, () => {
+        const newEncounter = Encounter(validEncounter());
+        expect(newEncounter.getType()).to.equal('Encounter');
+    });
 });
 

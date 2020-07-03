@@ -12,7 +12,8 @@ function Scenario(attributes) {
     const id = util.generateId('scenario', attributes.name);
 
     return Object.freeze({
-        getId: _ => id
+        getId: _ => id,
+        getType: _ => typeName
     });
 }
 

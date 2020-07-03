@@ -52,4 +52,9 @@ describe('The Scenario entity', () => {
         const matchedRegex = validScenarioId.test(newId)
         expect(matchedRegex, expectedMessage).to.equal(true);
     });
+
+    it(`has a getType function that returns the name of the entity type`, () => {
+        const newScenario = Scenario(validScenario());
+        expect(newScenario.getType()).to.equal('Scenario');
+    });
 });

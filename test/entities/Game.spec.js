@@ -52,4 +52,9 @@ describe('The Game entity', () => {
         const matchedRegex = validGameId.test(newId)
         expect(matchedRegex, expectedMessage).to.equal(true);
     });
+
+    it(`has a getType function that returns the name of the entity type`, () => {
+        const newGame = Game(validGame());
+        expect(newGame.getType()).to.equal('Game');
+    });
 });

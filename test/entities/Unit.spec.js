@@ -76,5 +76,9 @@ describe('The Unit entity', () => {
         const matchedRegex = validUnitId.test(newId)
         expect(matchedRegex, expectedMessage).to.equal(true);
     });
-});
 
+    it(`has a getType function that returns the name of the entity type`, () => {
+        const newUnit = Unit(validUnit());
+        expect(newUnit.getType()).to.equal('Unit');
+    });
+});
