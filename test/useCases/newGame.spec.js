@@ -5,6 +5,7 @@ const validator = require('../../src/validator');
 const newGameInit = require('../../src/useCases/newGame');
 
 const testScenario = validScenario();
+testScenario.id = 'Test_Scenario_ID'
 const scenarioRepositorySpy = {
     getScenarioCalled: 0,
     getScenario: function() {
@@ -38,14 +39,14 @@ describe('The NewGame Use Case Constructor', () => {
         const newGame = NewGameUseCase({name: 'test', scenarioId: 'scenario_id'});
         const scenario = newGame.getScenario();
 
-        //TODO: use id (without override) and/or name to uniquely identify the scenario
         expect(scenario.getType()).to.equal('Scenario');
+        expect(scenario.getId()).to.equal('Test_Scenario_ID');
         //expect(scenario.toJson()).to.deep.equal(testScenario);
     });
 
     it(`returns a new Game instance`, () => {
         const NewGameUseCase = newGameInit({scenarioRepository: mockScenarioRepository});
-        const newGame = NewGameUseCase({name: 'Test'});
+        const newGame = NewGameUseCase({name: 'Test', scenarioId: 'scenario_id'});
 
         expect(newGame).to.be.an('object');
         expect(newGame.getId().startsWith('game_test_')).to.equal(true);

@@ -10,7 +10,7 @@
       "type": "string"
     },
     "scenario": {
-      "type": "$ref"
+      "$ref": "http://martykane.org/schemas/ScenarioAttributes.schema.json"
     }
   },
   "additionalProperties": false,
