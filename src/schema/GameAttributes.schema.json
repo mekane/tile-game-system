@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "$id": "http://martykane.org/schemas/GameAttributes.schema.json",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "scenario": {
+      "type": "$ref"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "name",
+    "scenario"
+  ]
+}

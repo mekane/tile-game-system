@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "$id": "http://martykane.org/schemas/ScenarioAttributes.schema.json",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "encounter": {
+      "$ref": "http://martykane.org/schemas/EncounterAttributes.schema.json"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "name",
+    "encounter"
+  ]
+}
