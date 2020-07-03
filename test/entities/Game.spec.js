@@ -57,4 +57,11 @@ describe('The Game entity', () => {
         const newGame = Game(validGame());
         expect(newGame.getType()).to.equal('Game');
     });
+
+    it(`has a getScenario function that returns the Scenario entity`, () => {
+        const newGame = Game(validGame());
+
+        const scenario = newGame.getScenario();
+        expect(scenario.getType()).to.equal('Scenario');
+    });
 });

@@ -2,6 +2,8 @@
 const util = require('../util');
 const validator = require('../validator');
 
+const Scenario = require('./Scenario');
+
 const typeName = 'Game';
 
 function Game(attributes) {
@@ -11,9 +13,12 @@ function Game(attributes) {
 
     const id = util.generateId('game', attributes.name);
 
+    const scenario = Scenario(attributes.scenario);
+
     return Object.freeze({
         getId: _ => id,
-        getType: _ => typeName
+        getType: _ => typeName,
+        getScenario: _ => scenario
     });
 }
 
