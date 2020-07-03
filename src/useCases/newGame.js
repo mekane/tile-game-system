@@ -1,9 +1,10 @@
 const Game = require('../entities/Game');
 
-function init() {
-    return function NewGame() {
+function init({scenarioRepository}) {
+    return function NewGame({name = '', scenarioId} = {}) {
+        scenarioRepository.getScenario();
         return Game({
-            name: 'Test',
+            name,
             scenario: {
                 name: 'Test',
                 encounter: {
