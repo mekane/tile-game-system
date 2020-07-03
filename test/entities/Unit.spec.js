@@ -1,5 +1,6 @@
 'use strict'
 const expect = require('chai').expect;
+const validUnit = require('../_fixtures').validUnit;
 
 const Unit = require('../../src/entities/Unit');
 
@@ -77,9 +78,3 @@ describe('The Unit entity', () => {
     });
 });
 
-function validUnit() {
-    return {
-        name: 'Test',
-        movement: 6
-    }
-}

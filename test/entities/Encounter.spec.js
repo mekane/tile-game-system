@@ -1,5 +1,6 @@
 'use strict'
 const expect = require('chai').expect;
+const validEncounter = require('../_fixtures').validEncounter;
 
 const Encounter = require('../../src/entities/Encounter');
 
@@ -20,31 +21,16 @@ describe('The Encounter entity', () => {
         expect(Encounter({})).to.be.a('null');
         expect(Encounter({test: 'test'})).to.be.a('null');
 
-        const badEncounterNoUnitDefs = {
-            name: 'Bad Encounter No Unit Definitions',
-            description: 'description',
-            boardId: 'board_test_12345678'
-        }
+        const badEncounterNoUnitDefs = validEncounter();
+        delete badEncounterNoUnitDefs.units;
         expect(Encounter(badEncounterNoUnitDefs)).to.be.a('null');
 
-        const badEncounterEmptyUnitDefs = {
-            name: 'Bad Encounter Bad Unit Definitions',
-            description: "description",
-            boardId: 'board_test_12345678',
-            unitDefinitions: []
-        }
+        const badEncounterEmptyUnitDefs = validEncounter();
+        badEncounterEmptyUnitDefs.units = [];
         expect(Encounter(badEncounterEmptyUnitDefs)).to.be.a('null');
 
-        const badEncounterInvalidUnitDefs = {
-            name: 'Bad Encounter Bad Unit Definitions',
-            description: "description",
-            boardId: 'board_test_12345678',
-            unitDefinitions: [
-                {
-                    bogus: true
-                }
-            ]
-        }
+        const badEncounterInvalidUnitDefs = validEncounter()
+        badEncounterInvalidUnitDefs.units = [{bogus: true}];
         expect(Encounter(badEncounterInvalidUnitDefs)).to.be.a('null');
     });
 
@@ -69,16 +55,3 @@ describe('The Encounter entity', () => {
     });
 });
 
-function validEncounter() {
-    return {
-        name: 'Test',
-        description: 'A cool encounter',
-        boardId: 'board_test_12345678',
-        unitDefinitions: [
-            {
-                name: "Unit One",
-                movement: 3
-            }
-        ]
-    }
-}

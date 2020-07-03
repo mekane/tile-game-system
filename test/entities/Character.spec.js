@@ -1,5 +1,6 @@
 'use strict'
 const expect = require('chai').expect;
+const validCharacter = require('../_fixtures').validCharacter;
 
 const Character = require('../../src/entities/Character');
 
@@ -42,14 +43,3 @@ describe('The Character entities module', () => {
     });
 });
 
-function validCharacter() {
-    return {
-        name: 'Test Character',
-        strength: 12,
-        dexterity: 9,
-        constitution: 3,
-        wisdom: 1,
-        intelligence: 19,
-        charisma: 16
-    }
-}

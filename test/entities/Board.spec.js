@@ -1,5 +1,6 @@
 'use strict'
 const expect = require('chai').expect;
+const validBoard = require('../_fixtures').validBoard;
 
 const Board = require('../../src/entities/Board');
 
@@ -77,27 +78,4 @@ describe('The Board entity', () => {
     });
 });
 
-function validBoard() {
-    return {
-        name: 'Test',
-        tiles: [
-            ['A', 'A', 'B'],
-            ['C', 'A', 'A'],
-            ['D', 'A', 'A']
-        ],
-        terrain: {
-            A: {
-                name: 'Grass'
-            },
-            B: {
-                name: 'Trees'
-            },
-            C: {
-                name: 'Hills'
-            },
-            D: {
-                name: 'Stones'
-            }
-        }
-    }
-}
+

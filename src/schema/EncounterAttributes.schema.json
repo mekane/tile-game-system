@@ -9,10 +9,10 @@
     "description": {
       "type": "string"
     },
-    "boardId": {
-      "type": "string"
+    "board": {
+      "$ref": "http://martykane.org/schemas/BoardAttributes.schema.json"
     },
-    "unitDefinitions": {
+    "units": {
       "type": "array",
       "items": {
         "$ref": "http://martykane.org/schemas/UnitAttributes.schema.json"
@@ -24,7 +24,7 @@
   "required": [
     "name",
     "description",
-    "boardId",
-    "unitDefinitions"
+    "board",
+    "units"
   ]
 }
