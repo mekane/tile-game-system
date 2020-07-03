@@ -50,7 +50,7 @@ function validEncounter() {
 function validGame() {
     return {
         name: 'Test',
-        scenario: validScenario(),
+        scenario: validScenario()
     }
 }
 

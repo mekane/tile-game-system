@@ -6,8 +6,12 @@ function fileSafeString(string) {
 
 function generateId(type, name) {
     const prefix = fileSafeString(`${type}_${name}`);
-    const number = Math.random() * 99999999;
-    return `${prefix}_${number.toFixed()}`;
+    const number = [digit(), digit(), digit(), digit(), digit(), digit(), digit(), digit()].join('');
+    return `${prefix}_${number}`;
+}
+
+function digit() {
+    return (Math.random() * 9).toFixed();
 }
 
 module.exports = {
