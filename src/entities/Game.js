@@ -4,9 +4,6 @@ const validator = require('../validator');
 
 function Game(attributes) {
 
-    if (typeof attributes === 'undefined')
-        return null;
-
     if (!validator.validateAs(attributes, 'Game'))
         return null;
 

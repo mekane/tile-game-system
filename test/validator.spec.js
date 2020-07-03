@@ -15,6 +15,11 @@ describe('The validator module', () => {
         expect(validator.validateAs).to.be.a('function');
     });
 
+    it(`always returns false for undefined`, () => {
+        let foo;
+        expect(validator.validateAs(foo, 'Board')).to.equal(false);
+    });
+
     it(`returns false for unknown types`, () => {
         expect(validator.validateAs({}, 'NeverHeardOfItNoWay')).to.equal(false);
     });

@@ -8,9 +8,6 @@ const validator = require('../validator');
  */
 function Encounter(attributes) {
 
-    if (typeof attributes === 'undefined')
-        return null;
-
     if (!validator.validateAs(attributes, 'Encounter'))
         return null;
 

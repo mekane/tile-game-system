@@ -25,6 +25,9 @@ types.forEach(type => {
 });
 
 function validateAs(data, type) {
+    if (typeof data === 'undefined')
+        return false;
+
     const schema = schemaForType[type];
 
     if (!schema)
