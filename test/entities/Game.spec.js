@@ -53,6 +53,15 @@ describe('The Game entity', () => {
         expect(matchedRegex, expectedMessage).to.equal(true);
     });
 
+    it(`does not generate an id if one is present in the attributes`, () => {
+        const idString = 'Existing ID';
+        const gameAttributes = validGame();
+        gameAttributes.id = idString;
+        const newGame = Game(gameAttributes);
+
+        expect(newGame.getId()).to.equal(idString);
+    });
+
     it(`has a getType function that returns the name of the entity type`, () => {
         const newGame = Game(validGame());
         expect(newGame.getType()).to.equal('Game');

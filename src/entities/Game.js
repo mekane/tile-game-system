@@ -11,7 +11,7 @@ function Game(attributes) {
     if (!validator.validateAs(attributes, typeName))
         return null;
 
-    const id = util.generateId('game', attributes.name);
+    const id = attributes.id || util.generateId('game', attributes.name);
 
     const scenario = Scenario(attributes.scenario);
 

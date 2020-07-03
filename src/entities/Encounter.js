@@ -13,7 +13,7 @@ function Encounter(attributes) {
     if (!validator.validateAs(attributes, typeName))
         return null;
 
-    const id = util.generateId('encounter', attributes.name);
+    const id = attributes.id || util.generateId('encounter', attributes.name);
 
     return Object.freeze({
         getId: _ => id,

@@ -77,6 +77,15 @@ describe('The Unit entity', () => {
         expect(matchedRegex, expectedMessage).to.equal(true);
     });
 
+    it(`does not generate an id if one is present in the attributes`, () => {
+        const idString = 'Existing ID';
+        const unitAttributes = validUnit();
+        unitAttributes.id = idString;
+        const newUnit = Unit(unitAttributes);
+
+        expect(newUnit.getId()).to.equal(idString);
+    });
+
     it(`has a getType function that returns the name of the entity type`, () => {
         const newUnit = Unit(validUnit());
         expect(newUnit.getType()).to.equal('Unit');

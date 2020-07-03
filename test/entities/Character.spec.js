@@ -42,6 +42,15 @@ describe('The Character entities module', () => {
         expect(matchedRegex, expectedMessage).to.equal(true);
     });
 
+    it(`does not generate an id if one is present in the attributes`, () => {
+        const idString = 'Existing ID';
+        const characterAttributes = validCharacter();
+        characterAttributes.id = idString;
+        const newCharacter = Character(characterAttributes);
+
+        expect(newCharacter.getId()).to.equal(idString);
+    });
+
     it(`has a getType function that returns the name of the entity type`, () => {
         const newCharacter = Character(validCharacter());
         expect(newCharacter.getType()).to.equal('Character');

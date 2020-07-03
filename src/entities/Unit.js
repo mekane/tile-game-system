@@ -9,7 +9,7 @@ function Unit(attributes) {
     if (!validator.validateAs(attributes, typeName))
         return null;
 
-    const id = util.generateId('unit', attributes.name);
+    const id = attributes.id || util.generateId('unit', attributes.name);
 
     return Object.freeze({
         getId: _ => id,

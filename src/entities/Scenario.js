@@ -9,7 +9,7 @@ function Scenario(attributes) {
     if (!validator.validateAs(attributes, typeName))
         return null;
 
-    const id = util.generateId('scenario', attributes.name);
+    const id = attributes.id || util.generateId('scenario', attributes.name);
 
     return Object.freeze({
         getId: _ => id,

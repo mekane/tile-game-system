@@ -77,6 +77,15 @@ describe('The Board entity', () => {
         expect(matchedRegex, expectedMessage).to.equal(true);
     });
 
+    it(`does not generate an id if one is present in the attributes`, () => {
+        const idString = 'Existing ID';
+        const boardAttributes = validBoard();
+        boardAttributes.id = idString;
+        const newBoard = Board(boardAttributes);
+
+        expect(newBoard.getId()).to.equal(idString);
+    });
+
     it(`has a getType function that returns the name of the entity type`, () => {
         const newBoard = Board(validBoard());
         expect(newBoard.getType()).to.equal('Board');

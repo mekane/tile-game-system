@@ -54,6 +54,15 @@ describe('The Encounter entity', () => {
         expect(matchedRegex, expectedMessage).to.equal(true);
     });
 
+    it(`does not generate an id if one is present in the attributes`, () => {
+        const idString = 'Existing ID';
+        const encounterAttributes = validEncounter();
+        encounterAttributes.id = idString;
+        const newEncounter = Encounter(encounterAttributes);
+
+        expect(newEncounter.getId()).to.equal(idString);
+    });
+
     it(`has a getType function that returns the name of the entity type`, () => {
         const newEncounter = Encounter(validEncounter());
         expect(newEncounter.getType()).to.equal('Encounter');

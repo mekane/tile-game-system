@@ -53,6 +53,15 @@ describe('The Scenario entity', () => {
         expect(matchedRegex, expectedMessage).to.equal(true);
     });
 
+    it(`does not generate an id if one is present in the attributes`, () => {
+        const idString = 'Existing ID';
+        const scenarioAttributes = validScenario();
+        scenarioAttributes.id = idString;
+        const newScenario = Scenario(scenarioAttributes);
+
+        expect(newScenario.getId()).to.equal(idString);
+    });
+
     it(`has a getType function that returns the name of the entity type`, () => {
         const newScenario = Scenario(validScenario());
         expect(newScenario.getType()).to.equal('Scenario');
