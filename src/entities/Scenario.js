@@ -10,10 +10,20 @@ function Scenario(attributes) {
         return null;
 
     const id = attributes.id || util.generateId('scenario', attributes.name);
+    const name = attributes.name;
+
+    function toJson() {
+        return {
+            id,
+            name,
+            encounter: attributes.encounter
+        }
+    }
 
     return Object.freeze({
         getId: _ => id,
-        getType: _ => typeName
+        getType: _ => typeName,
+        toJson
     });
 }
 

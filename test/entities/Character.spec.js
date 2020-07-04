@@ -1,6 +1,7 @@
 'use strict'
 const expect = require('chai').expect;
 const validCharacter = require('../_fixtures').validCharacter;
+const validator = require('../../src/validator');
 
 const Character = require('../../src/entities/Character');
 
@@ -54,6 +55,11 @@ describe('The Character entities module', () => {
     it(`has a getType function that returns the name of the entity type`, () => {
         const newCharacter = Character(validCharacter());
         expect(newCharacter.getType()).to.equal('Character');
+    });
+
+    it(`has a toJson method that returns the raw data for the Character`, () => {
+        const newCharacter = Character(validCharacter());
+        expect(validator.validateAs(newCharacter.toJson(), newCharacter.getType())).to.equal(true);
     });
 });
 

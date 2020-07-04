@@ -1,6 +1,7 @@
 'use strict'
 const expect = require('chai').expect;
 const validBoard = require('../_fixtures').validBoard;
+const validator = require('../../src/validator');
 
 const Board = require('../../src/entities/Board');
 
@@ -91,6 +92,10 @@ describe('The Board entity', () => {
         expect(newBoard.getType()).to.equal('Board');
     });
 
+    it(`has a toJson method that returns the raw data for the Board`, () => {
+        const newBoard = Board(validBoard());
+        expect(validator.validateAs(newBoard.toJson(), newBoard.getType())).to.equal(true);
+    });
 });
 
 

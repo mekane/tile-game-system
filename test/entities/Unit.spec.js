@@ -1,6 +1,7 @@
 'use strict'
 const expect = require('chai').expect;
 const validUnit = require('../_fixtures').validUnit;
+const validator = require('../../src/validator');
 
 const Unit = require('../../src/entities/Unit');
 
@@ -20,41 +21,7 @@ describe('The Unit entity', () => {
     it(`expects the object to conform to the UnitAttributes schema and returns null if not`, () => {
         expect(Unit({})).to.be.a('null');
         expect(Unit({test: 'test'})).to.be.a('null');
-
-        const badUnitNoTiles = {
-            name: 'Bad Unit No Tiles',
-            terrain: {}
-        }
-        expect(Unit(badUnitNoTiles)).to.be.a('null');
-
-        const badUnitNoTilesArrays = {
-            name: 'Bad Unit No Items in Tiles',
-            tiles: [],
-            terrain: {}
-        }
-        expect(Unit(badUnitNoTilesArrays)).to.be.a('null');
-
-        const badUnitNoTilesSubArrays = {
-            name: 'Bad Unit No Items in Tiles Arrays',
-            tiles: [
-                [],
-                [],
-                []
-            ],
-            terrain: {}
-        }
-        expect(Unit(badUnitNoTilesSubArrays)).to.be.a('null');
-
-        const badUnitBadContentInSubArrays = {
-            name: 'Bad Unit Non-string Items in Tiles Arrays',
-            tiles: [
-                [1],
-                [{}],
-                [false]
-            ],
-            terrain: {}
-        }
-        expect(Unit(badUnitBadContentInSubArrays)).to.be.a('null');
+        expect(Unit({name: 'test'})).to.be.a('null');
     });
 
     it(`returns a Unit object if the attributes are valid`, () => {
@@ -89,5 +56,10 @@ describe('The Unit entity', () => {
     it(`has a getType function that returns the name of the entity type`, () => {
         const newUnit = Unit(validUnit());
         expect(newUnit.getType()).to.equal('Unit');
+    });
+
+    it(`has a toJson method that returns the raw data for the Unit`, () => {
+        const newUnit = Unit(validUnit());
+        expect(validator.validateAs(newUnit.toJson(), newUnit.getType())).to.equal(true);
     });
 });

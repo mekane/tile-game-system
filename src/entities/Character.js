@@ -11,9 +11,33 @@ function Character(attributes) {
 
     const id = attributes.id || util.generateId('character', attributes.name);
 
+    const {
+        name,
+        strength,
+        dexterity,
+        constitution,
+        wisdom,
+        intelligence,
+        charisma
+    } = attributes;
+
+    function toJson() {
+        return {
+            id,
+            name,
+            strength,
+            dexterity,
+            constitution,
+            wisdom,
+            intelligence,
+            charisma
+        }
+    }
+
     return Object.freeze({
         getId: _ => id,
-        getType: _ => typeName
+        getType: _ => typeName,
+        toJson
     });
 }
 

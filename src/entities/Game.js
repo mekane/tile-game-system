@@ -13,12 +13,23 @@ function Game(attributes) {
 
     const id = attributes.id || util.generateId('game', attributes.name);
 
+    const name = attributes.name;
+
     const scenario = Scenario(attributes.scenario);
+
+    function toJson() {
+        return {
+            id,
+            name,
+            scenario: scenario.toJson()
+        }
+    }
 
     return Object.freeze({
         getId: _ => id,
+        getScenario: _ => scenario,
         getType: _ => typeName,
-        getScenario: _ => scenario
+        toJson
     });
 }
 

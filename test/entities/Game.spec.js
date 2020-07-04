@@ -1,10 +1,12 @@
 'use strict'
 const expect = require('chai').expect;
 const validGame = require('../_fixtures').validGame;
+const validator = require('../../src/validator');
 
 const Game = require('../../src/entities/Game');
+const validGameId = /^game_test_\d{6,8}/;
 
-describe('The Game entity', () => {
+describe('Game Entity Construction', () => {
     it(`exports a constructor function`, () => {
         expect(Game).to.be.a('function');
     });
@@ -42,8 +44,22 @@ describe('The Game entity', () => {
         expect(_ => newGame.name = 'Test Mutation').to.throw(/Cannot add property/);
     });
 
-    const validGameId = /^game_test_\d{6,8}/;
+    it(`can re-create itself from the output of its toJson method`, () => {
+        const originalGameData = validGame();
+        originalGameData.id = 'Game_ID';
+        originalGameData.scenario.id = 'Scenario_ID';
 
+        const newGame = Game(originalGameData);
+
+        const newGameData = newGame.toJson();
+        expect(newGameData).to.deep.equal(originalGameData);
+
+        const reconstructedGame = Game(newGameData);
+        expect(reconstructedGame.toJson()).to.deep.equal(newGameData);
+    });
+});
+
+describe('Game Entity Properties and Methods', () => {
     it(`has an automatically generated ID`, () => {
         const newGame = Game(validGame());
         const newId = newGame.getId();
@@ -72,5 +88,10 @@ describe('The Game entity', () => {
 
         const scenario = newGame.getScenario();
         expect(scenario.getType()).to.equal('Scenario');
+    });
+
+    it(`has a toJson method that returns the raw data for the Game`, () => {
+        const newGame = Game(validGame());
+        expect(validator.validateAs(newGame.toJson(), newGame.getType())).to.equal(true);
     });
 });

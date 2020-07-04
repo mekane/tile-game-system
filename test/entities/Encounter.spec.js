@@ -1,6 +1,7 @@
 'use strict'
 const expect = require('chai').expect;
 const validEncounter = require('../_fixtures').validEncounter;
+const validator = require('../../src/validator');
 
 const Encounter = require('../../src/entities/Encounter');
 
@@ -66,6 +67,11 @@ describe('The Encounter entity', () => {
     it(`has a getType function that returns the name of the entity type`, () => {
         const newEncounter = Encounter(validEncounter());
         expect(newEncounter.getType()).to.equal('Encounter');
+    });
+
+    it(`has a toJson method that returns the raw data for the Encounter`, () => {
+        const newEncounter = Encounter(validEncounter());
+        expect(validator.validateAs(newEncounter.toJson(), newEncounter.getType())).to.equal(true);
     });
 });
 

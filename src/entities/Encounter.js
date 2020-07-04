@@ -15,9 +15,23 @@ function Encounter(attributes) {
 
     const id = attributes.id || util.generateId('encounter', attributes.name);
 
+    const {name, description} = attributes;
+
+
+    function toJson() {
+        return {
+            id,
+            name,
+            description,
+            board: attributes.board,
+            units: attributes.units
+        }
+    }
+
     return Object.freeze({
         getId: _ => id,
-        getType: _ => typeName
+        getType: _ => typeName,
+        toJson
     });
 }
 

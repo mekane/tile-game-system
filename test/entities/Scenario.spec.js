@@ -1,6 +1,7 @@
 'use strict'
 const expect = require('chai').expect;
 const validScenario = require('../_fixtures').validScenario;
+const validator = require('../../src/validator');
 
 const Scenario = require('../../src/entities/Scenario');
 
@@ -65,5 +66,10 @@ describe('The Scenario entity', () => {
     it(`has a getType function that returns the name of the entity type`, () => {
         const newScenario = Scenario(validScenario());
         expect(newScenario.getType()).to.equal('Scenario');
+    });
+
+    it(`has a toJson method that returns the raw data for the Scenario`, () => {
+        const newScenario = Scenario(validScenario());
+        expect(validator.validateAs(newScenario.toJson(), newScenario.getType())).to.equal(true);
     });
 });

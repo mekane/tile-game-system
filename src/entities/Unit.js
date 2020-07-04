@@ -10,10 +10,20 @@ function Unit(attributes) {
         return null;
 
     const id = attributes.id || util.generateId('unit', attributes.name);
+    const {name, movement} = attributes;
+
+    function toJson() {
+        return {
+            id,
+            name,
+            movement
+        }
+    }
 
     return Object.freeze({
         getId: _ => id,
-        getType: _ => typeName
+        getType: _ => typeName,
+        toJson
     });
 }
 
