@@ -63,6 +63,13 @@ describe('The Scenario entity', () => {
         expect(newScenario.getId()).to.equal(idString);
     });
 
+    it(`has a getBoard method that returns the Board entity`, () => {
+        const newScenario = Scenario(validScenario());
+        const encounter = newScenario.getEncounter();
+
+        expect(encounter.getType()).to.equal('Encounter');
+    });
+
     it(`has a getType function that returns the name of the entity type`, () => {
         const newScenario = Scenario(validScenario());
         expect(newScenario.getType()).to.equal('Scenario');

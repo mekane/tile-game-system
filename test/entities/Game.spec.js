@@ -87,6 +87,12 @@ describe('Game Entity Properties and Methods', () => {
         expect(scenario.getType()).to.equal('Scenario');
     });
 
+    it(`has a getState method that returns the current game state`, () => {
+        const newGame = Game(gameDataForStateTest());
+
+        expect(newGame.getState()).to.deep.equal(expectedGameState());
+    });
+
     it(`has a toJson method that returns the raw data for the Game`, () => {
         const newGame = Game(validGame());
         expect(validator.validateAs(newGame.toJson(), newGame.getType())).to.equal(true);
@@ -120,4 +126,41 @@ function validGameDataWithIds() {
     originalGameData.scenario.encounter.units[0].id = 'Unit0_ID';
     originalGameData.scenario.encounter.units[1].id = 'Unit1_ID';
     return originalGameData;
+}
+
+function gameDataForStateTest() {
+    return {
+        id: 'game_simple_1234',
+        name: 'Test Game',
+        scenario: {
+            id: 'scenario_simple_1234',
+            name: 'Test Scenario',
+            encounter: {
+                id: 'encounter_simple_1234',
+                name: 'Test Encounter',
+                description: 'A simple encounter',
+                board: simpleBoard,
+                units: [
+                    {
+                        id: 'unit_simple_1234',
+                        name: 'Test Unit',
+                        movement: 5
+                    }
+                ]
+            }
+        }
+    }
+}
+
+function expectedGameState() {
+    return {
+        board: simpleBoard,
+        unitsById: {
+            'unit_simple_1234': {
+                id: 'unit_simple_1234',
+                name: 'Test Unit',
+                movement: 5
+            }
+        }
+    };
 }

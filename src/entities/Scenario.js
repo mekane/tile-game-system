@@ -24,6 +24,7 @@ function Scenario(attributes) {
     }
 
     return Object.freeze({
+        getEncounter: _ => encounter,
         getId: _ => id,
         getType: _ => typeName,
         toJson

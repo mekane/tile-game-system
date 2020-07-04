@@ -33,8 +33,10 @@ function Encounter(attributes) {
     }
 
     return Object.freeze({
+        getBoard: _ => board,
         getId: _ => id,
         getType: _ => typeName,
+        getUnits: _ => units.slice(),
         toJson
     });
 }

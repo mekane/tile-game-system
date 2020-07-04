@@ -14,6 +14,18 @@ function Game(attributes) {
     const name = attributes.name;
     const scenario = Scenario(attributes.scenario);
 
+    const unitsById = {};
+    scenario.getEncounter().getUnits().forEach(u => unitsById[u.getId()] = u.toJson());
+
+    const state = {
+        board: scenario.getEncounter().getBoard().toJson(),
+        unitsById
+    };
+
+    function getState() {
+        return state; //TODO: test for immutability and freeze or stringify/parse
+    }
+
     function toJson() {
         return {
             id,
@@ -25,6 +37,7 @@ function Game(attributes) {
     return Object.freeze({
         getId: _ => id,
         getScenario: _ => scenario,
+        getState,
         getType: _ => typeName,
         toJson
     });

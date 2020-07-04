@@ -64,9 +64,23 @@ describe('The Encounter entity', () => {
         expect(newEncounter.getId()).to.equal(idString);
     });
 
+    it(`has a getBoard method that returns the Board entity`, () => {
+        const newEncounter = Encounter(validEncounter());
+        const board = newEncounter.getBoard();
+
+        expect(board.getType()).to.equal('Board');
+    });
+
     it(`has a getType function that returns the name of the entity type`, () => {
         const newEncounter = Encounter(validEncounter());
         expect(newEncounter.getType()).to.equal('Encounter');
+    });
+
+    it(`has a getUnits method that returns the Array of Unit entities`, () => {
+        const newEncounter = Encounter(validEncounter());
+        const units = newEncounter.getUnits();
+
+        expect(units[0].getType()).to.equal('Unit');
     });
 
     it(`has a toJson method that returns the raw data for the Encounter`, () => {
