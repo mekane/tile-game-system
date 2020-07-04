@@ -96,6 +96,17 @@ describe('The Board entity', () => {
         const newBoard = Board(validBoard());
         expect(validator.validateAs(newBoard.toJson(), newBoard.getType())).to.equal(true);
     });
+
+    it(`returns copies from toJson, not original objects`, () => {
+        const originalBoardData = validBoard();
+        originalBoardData.id = 'board_test_1234';
+
+        const newBoard = Board(originalBoardData);
+        const json = newBoard.toJson();
+        expect(json).to.not.equal(originalBoardData);
+        expect(json.tiles, 'Tiles JSON').to.not.equal(originalBoardData.tiles);
+        expect(json.terrain, 'Terrain JSON').to.not.equal(originalBoardData.terrain);
+    });
 });
 
 

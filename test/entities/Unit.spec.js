@@ -62,4 +62,13 @@ describe('The Unit entity', () => {
         const newUnit = Unit(validUnit());
         expect(validator.validateAs(newUnit.toJson(), newUnit.getType())).to.equal(true);
     });
+
+    it(`returns copies from toJson, not original objects`, () => {
+        const originalUnitData = validUnit();
+        originalUnitData.id = 'unit_test_1234';
+
+        const newUnit = Unit(originalUnitData);
+        const json = newUnit.toJson();
+        expect(json).to.not.equal(originalUnitData);
+    });
 });

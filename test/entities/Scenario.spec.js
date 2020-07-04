@@ -72,4 +72,14 @@ describe('The Scenario entity', () => {
         const newScenario = Scenario(validScenario());
         expect(validator.validateAs(newScenario.toJson(), newScenario.getType())).to.equal(true);
     });
+
+    it(`returns copies from toJson, not original objects`, () => {
+        const originalScenarioData = validScenario();
+        originalScenarioData.id = 'scenario_test_1234';
+
+        const newScenario = Scenario(originalScenarioData);
+        const json = newScenario.toJson();
+        expect(json).to.not.equal(originalScenarioData);
+        expect(json.encounter).to.not.equal(originalScenarioData.encounter);
+    });
 });

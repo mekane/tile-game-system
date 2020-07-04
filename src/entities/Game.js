@@ -7,14 +7,11 @@ const Scenario = require('./Scenario');
 const typeName = 'Game';
 
 function Game(attributes) {
-
     if (!validator.validateAs(attributes, typeName))
         return null;
 
     const id = attributes.id || util.generateId('game', attributes.name);
-
     const name = attributes.name;
-
     const scenario = Scenario(attributes.scenario);
 
     function toJson() {

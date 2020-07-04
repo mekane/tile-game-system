@@ -45,10 +45,7 @@ describe('Game Entity Construction', () => {
     });
 
     it(`can re-create itself from the output of its toJson method`, () => {
-        const originalGameData = validGame();
-        originalGameData.id = 'Game_ID';
-        originalGameData.scenario.id = 'Scenario_ID';
-
+        const originalGameData = validGameDataWithIds();
         const newGame = Game(originalGameData);
 
         const newGameData = newGame.toJson();
@@ -94,4 +91,33 @@ describe('Game Entity Properties and Methods', () => {
         const newGame = Game(validGame());
         expect(validator.validateAs(newGame.toJson(), newGame.getType())).to.equal(true);
     });
+
+    it(`returns copies from toJson, not original objects`, () => {
+        const originalGameData = validGame();
+        originalGameData.id = 'game_test_1234';
+
+        const newGame = Game(originalGameData);
+        const json = newGame.toJson();
+        expect(json, 'Overall JSON').to.not.equal(originalGameData);
+        expect(json.scenario, 'Scenario JSON').to.not.equal(originalGameData.scenario);
+        expect(json.scenario.encounter, 'Encounter JSON').to.not.equal(originalGameData.scenario.encounter);
+    });
 });
+
+const simpleBoard = {
+    id: 'board_simple_1234',
+    name: 'Simple Board',
+    tiles: [['A']],
+    terrain: {A: {name: 'A'}}
+}
+
+function validGameDataWithIds() {
+    const originalGameData = validGame();
+    originalGameData.id = 'Game_ID';
+    originalGameData.scenario.id = 'Scenario_ID';
+    originalGameData.scenario.encounter.id = 'Encounter_ID';
+    originalGameData.scenario.encounter.board.id = 'Board_ID';
+    originalGameData.scenario.encounter.units[0].id = 'Unit0_ID';
+    originalGameData.scenario.encounter.units[1].id = 'Unit1_ID';
+    return originalGameData;
+}

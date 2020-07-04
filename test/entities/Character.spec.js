@@ -61,5 +61,14 @@ describe('The Character entities module', () => {
         const newCharacter = Character(validCharacter());
         expect(validator.validateAs(newCharacter.toJson(), newCharacter.getType())).to.equal(true);
     });
+
+    it(`returns copies from toJson, not original objects`, () => {
+        const originalCharacterData = validCharacter();
+        originalCharacterData.id = 'character_test_1234';
+
+        const newCharacter = Character(originalCharacterData);
+        const json = newCharacter.toJson();
+        expect(json).to.not.equal(originalCharacterData);
+    });
 });
 

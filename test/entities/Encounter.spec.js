@@ -70,8 +70,27 @@ describe('The Encounter entity', () => {
     });
 
     it(`has a toJson method that returns the raw data for the Encounter`, () => {
-        const newEncounter = Encounter(validEncounter());
-        expect(validator.validateAs(newEncounter.toJson(), newEncounter.getType())).to.equal(true);
+        const originalEncounterData = validEncounter();
+        originalEncounterData.board.id = 'board_test_1234';
+        originalEncounterData.units[0].id = 'unit_test_1234';
+        originalEncounterData.units[1].id = 'unit_test_1235';
+        const newEncounter = Encounter(originalEncounterData);
+
+        const json = newEncounter.toJson();
+        expect(validator.validateAs(json, newEncounter.getType())).to.equal(true);
+        expect(json.board).to.deep.equal(originalEncounterData.board);
+        expect(json.units).to.deep.equal(originalEncounterData.units);
+    });
+
+    it(`returns copies from toJson, not original objects`, () => {
+        const originalEncounterData = validEncounter();
+        originalEncounterData.id = 'encounter_test_1234';
+
+        const newEncounter = Encounter(originalEncounterData);
+        const json = newEncounter.toJson();
+        expect(json).to.not.equal(originalEncounterData);
+        expect(json.board, 'Board JSON').to.not.equal(originalEncounterData.board);
+        expect(json.units, 'Units JSON').to.not.equal(originalEncounterData.units);
     });
 });
 

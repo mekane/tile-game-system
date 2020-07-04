@@ -2,6 +2,9 @@
 const util = require('../util');
 const validator = require('../validator');
 
+const Board = require('./Board');
+const Unit = require('./Unit');
+
 const typeName = 'Encounter';
 
 /**
@@ -16,15 +19,16 @@ function Encounter(attributes) {
     const id = attributes.id || util.generateId('encounter', attributes.name);
 
     const {name, description} = attributes;
-
+    const board = Board(attributes.board);
+    const units = attributes.units.map(Unit);
 
     function toJson() {
         return {
             id,
             name,
             description,
-            board: attributes.board,
-            units: attributes.units
+            board: board.toJson(),
+            units: units.map(u => u.toJson())
         }
     }
 

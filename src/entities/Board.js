@@ -12,7 +12,7 @@ function Board(attributes) {
     const id = attributes.id || util.generateId('board', attributes.name);
     const name = attributes.name;
     const tiles = attributes.tiles.slice();
-    const terrain = attributes.terrain;
+    const terrain = JSON.parse(JSON.stringify(attributes.terrain));
 
     function toJson() {
         return {

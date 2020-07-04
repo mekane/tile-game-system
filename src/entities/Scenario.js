@@ -2,6 +2,8 @@
 const util = require('../util');
 const validator = require('../validator');
 
+const Encounter = require('./Encounter');
+
 const typeName = 'Scenario';
 
 function Scenario(attributes) {
@@ -11,12 +13,13 @@ function Scenario(attributes) {
 
     const id = attributes.id || util.generateId('scenario', attributes.name);
     const name = attributes.name;
+    const encounter = Encounter(attributes.encounter);
 
     function toJson() {
         return {
             id,
             name,
-            encounter: attributes.encounter
+            encounter: encounter.toJson()
         }
     }
 
