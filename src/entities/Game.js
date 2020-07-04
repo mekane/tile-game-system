@@ -14,12 +14,10 @@ function Game(attributes) {
     const name = attributes.name;
     const scenario = Scenario(attributes.scenario);
 
-    const unitsById = {};
-    scenario.getEncounter().getUnits().forEach(u => unitsById[u.getId()] = u.toJson());
 
     const state = {
         board: scenario.getEncounter().getBoard().toJson(),
-        unitsById
+        unitsById: scenario.getEncounter().getUnitsById()
     };
 
     function getState() {

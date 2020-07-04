@@ -83,6 +83,20 @@ describe('The Encounter entity', () => {
         expect(units[0].getType()).to.equal('Unit');
     });
 
+    it(`has a getUnitsById method that returns a map of units by their ids`, () => {
+        const encounterData = validEncounter();
+        encounterData.units[0].id = 'unit_test0_1234';
+        encounterData.units[1].id = 'unit_test1_1234';
+        const newEncounter = Encounter(encounterData);
+
+        const expected = {
+            'unit_test0_1234': encounterData.units[0],
+            'unit_test1_1234': encounterData.units[1]
+        }
+
+        expect(newEncounter.getUnitsById()).to.deep.equal(expected);
+    });
+
     it(`has a toJson method that returns the raw data for the Encounter`, () => {
         const originalEncounterData = validEncounter();
         originalEncounterData.board.id = 'board_test_1234';

@@ -22,6 +22,12 @@ function Encounter(attributes) {
     const board = Board(attributes.board);
     const units = attributes.units.map(Unit);
 
+    function getUnitsById() {
+        const unitsById = {};
+        units.forEach(u => unitsById[u.getId()] = u.toJson());
+        return unitsById;
+    }
+
     function toJson() {
         return {
             id,
@@ -37,6 +43,7 @@ function Encounter(attributes) {
         getId: _ => id,
         getType: _ => typeName,
         getUnits: _ => units.slice(),
+        getUnitsById,
         toJson
     });
 }
