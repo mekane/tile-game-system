@@ -30,8 +30,8 @@ function Game(attributes) {
                 if (!message.unitId)
                     throw new Error('Add Unit failed: missing unit id');
 
-                //TODO: this needs to be unit definitions from the encounter
                 const unitDefs = scenario.getEncounter(currentEncounterIndex).getUnitsById();
+
                 const unitDefinition = unitDefs[message.unitId];
                 if (typeof unitDefinition !== 'object')
                     throw new Error(`Add Unit failed: could not find unit with id ${message.unitId}`);

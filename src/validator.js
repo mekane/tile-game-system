@@ -33,13 +33,13 @@ function validateAs(data, type) {
     const schema = schemaForType[type];
 
     if (!schema) {
-        console.error(`Unknown schema type ${type}`);
+        //console.error(`Unknown schema type ${type}`);
         return false;
     }
 
     const result = schemaValidator.validate(data, schema);
     if (result.errors[0]) {
-        console.error('Invalid attributes: ' + result.errors[0].stack);
+        //console.error('Invalid attributes: ' + result.errors[0].stack);
         return false;
     }
 
