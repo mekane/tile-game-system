@@ -14,11 +14,7 @@ function Game(attributes) {
     const name = attributes.name;
     const scenario = Scenario(attributes.scenario);
 
-
-    const state = {
-        board: scenario.getEncounter().getBoard().toJson(),
-        unitsById: scenario.getEncounter().getUnitsById()
-    };
+    const state = intializeStateFrom(scenario);
 
     function getState() {
         return state; //TODO: test for immutability and freeze or stringify/parse
@@ -39,6 +35,16 @@ function Game(attributes) {
         getType: _ => typeName,
         toJson
     });
+}
+
+function intializeStateFrom(scenario) {
+    const boardDefinition = scenario.getEncounter().getBoard().toJson();
+    const unitsById = scenario.getEncounter().getUnitsById()
+
+    return {
+        board: boardDefinition,
+        unitsById
+    };
 }
 
 module.exports = Game;
