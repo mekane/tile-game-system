@@ -234,13 +234,6 @@ function gameDataForStateTest() {
 
 function expectedGameState() {
     return {
-        board: simpleBoard,
-        unitsById: {
-            'unit_simple_1234': {
-                id: 'unit_simple_1234',
-                name: 'Test Unit',
-                movement: 5
-            }
-        }
+        board: simpleBoard
     };
 }

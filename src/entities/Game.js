@@ -14,7 +14,8 @@ function Game(attributes) {
     const name = attributes.name;
     const scenario = Scenario(attributes.scenario);
 
-    const state = intializeStateFrom(scenario, attributes.currentEncounter || 0);
+    let currentEncounterIndex = attributes.currentEncounter || 0;
+    let state = intializeStateFrom(scenario, currentEncounterIndex);
 
     function getState() {
         return state; //TODO: test for immutability and freeze or stringify/parse
@@ -30,8 +31,9 @@ function Game(attributes) {
                     throw new Error('Add Unit failed: missing unit id');
 
                 //TODO: this needs to be unit definitions from the encounter
-                const unitDef = state.unitsById[message.unitId];
-                if (typeof unitDef !== 'object')
+                const unitDefs = scenario.getEncounter(currentEncounterIndex).getUnitsById();
+                const unitDefinition = unitDefs[message.unitId];
+                if (typeof unitDefinition !== 'object')
                     throw new Error(`Add Unit failed: could not find unit with id ${message.unitId}`);
 
                 if (typeof message.boardX === 'undefined' || typeof message.boardY === 'undefined')
@@ -46,6 +48,8 @@ function Game(attributes) {
 
                 if (boardX < 0 || boardX > boardWidth || boardY < 0 || boardY > boardHeight)
                     throw new Error('Add Unit failed: board coordinates out of bounds');
+
+
 
                 break;
         }
@@ -70,12 +74,11 @@ function Game(attributes) {
 }
 
 function intializeStateFrom(scenario, encounterIndex = 0) {
-    const boardDefinition = scenario.getEncounter(encounterIndex).getBoard().toJson();
-    const unitDefinitions = scenario.getEncounter(encounterIndex).getUnitsById()
+    const currentEncounter = scenario.getEncounter(encounterIndex);
+    const boardDefinition = currentEncounter.getBoard().toJson();
 
     return {
-        board: boardDefinition,
-        unitsById: unitDefinitions
+        board: boardDefinition
     };
 }
 
