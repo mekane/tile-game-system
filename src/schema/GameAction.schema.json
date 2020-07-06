@@ -7,21 +7,15 @@
       "type": "string",
       "enum": [
         "addUnit",
-        "move"
+        "move",
+        "startEncounter"
       ]
-    },
-    "unitId": {
-      "type": "string"
     },
     "boardX": {
       "type": "number"
     },
     "boardY": {
       "type": "number"
-    },
-    "unit": {
-      "type": "number",
-      "minimum": 0
     },
     "direction": {
       "type": "string",
@@ -35,6 +29,16 @@
         "w",
         "nw"
       ]
+    },
+    "encounterIndex": {
+      "type": "number"
+    },
+    "unit": {
+      "type": "number",
+      "minimum": 0
+    },
+    "unitId": {
+      "type": "string"
     }
   },
   "additionalProperties": false,

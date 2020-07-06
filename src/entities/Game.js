@@ -15,7 +15,7 @@ function Game(attributes) {
     const scenario = Scenario(attributes.scenario);
 
     let currentEncounterIndex = attributes.currentEncounter || 0;
-    let state = intializeStateFrom(scenario, currentEncounterIndex);
+    let state = attributes.state || intializeStateForEncounter(scenario, currentEncounterIndex);
 
     function getState() {
         return state; //TODO: test for immutability and freeze or stringify/parse
@@ -49,9 +49,16 @@ function Game(attributes) {
                 if (boardX < 0 || boardX > boardWidth || boardY < 0 || boardY > boardHeight)
                     throw new Error('Add Unit failed: board coordinates out of bounds');
 
-
-
+                //TODO: actual implementation
                 break;
+            case 'startencounter':
+                if (typeof message.encounterIndex !== 'number')
+                    throw new Error('Start Encounter failed: missing encounter index');
+
+                const maxEncounterIndex = 99;//scenario.getNumberOfEncounters();
+                if (message.encounterIndex < 0 || message.encounterIndex > maxEncounterIndex)
+                    throw new Error('Start Encounter failed: invalid encounter index');
+
         }
     }
 
@@ -59,7 +66,8 @@ function Game(attributes) {
         return {
             id,
             name,
-            scenario: scenario.toJson()
+            scenario: scenario.toJson(),
+            //TODO add: currentState: state
         }
     }
 
@@ -73,7 +81,7 @@ function Game(attributes) {
     });
 }
 
-function intializeStateFrom(scenario, encounterIndex = 0) {
+function intializeStateForEncounter(scenario, encounterIndex = 0) {
     const currentEncounter = scenario.getEncounter(encounterIndex);
     const boardDefinition = currentEncounter.getBoard().toJson();
 

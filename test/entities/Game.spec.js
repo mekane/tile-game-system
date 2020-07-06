@@ -147,6 +147,21 @@ describe('Sending actions to the Game', () => {
     });
 });
 
+describe('Game Action - Start Encounter and New Encounter Game State', () => {
+    it(`throws an error if the encounter index is missing or bad`, () => {
+        const game = Game(validGame());
+        const action = "startEncounter";
+
+        const messageMissingEncounterIndex = () => game.sendAction({action});
+        const messageNegativeEncounterIndex = () => game.sendAction({action, encounterIndex: -1});
+        const messageEncounterIndexTooBig = () => game.sendAction({action, encounterIndex: 999});
+
+        expect(messageMissingEncounterIndex).to.throw(/Start Encounter failed: missing encounter index/);
+        expect(messageNegativeEncounterIndex).to.throw(/Start Encounter failed: invalid encounter index/);
+        expect(messageEncounterIndexTooBig).to.throw(/Start Encounter failed: invalid encounter index/);
+    });
+});
+
 describe('Game Action - Add Unit', () => {
     it(`throws an error if no unit is specified`, () => {
         const game = Game(validGame());
@@ -179,7 +194,7 @@ describe('Game Action - Add Unit', () => {
         expect(badBoardYmax).to.throw(/Add Unit failed: board coordinates out of bounds/);
     });
 
-    it(`throws an error if the specified board location already contains a unit`, () => {
+    it.skip(`throws an error if the specified board location already contains a unit`, () => {
         const game = Game(validGame());
         const messageUnitConflict = () => game.sendAction({action: "addUnit"});
         throw new Error('TODO');
