@@ -138,12 +138,51 @@ describe('Sending actions to the Game', () => {
         const sendBadMessageNone = () => game.sendAction()
         const sendBadMessageString = () => game.sendAction("bad data")
         const sendBadMessageArray = () => game.sendAction(["bad", "data"])
-        const sendBadMessageObject = () => game.sendAction({})
+        const sendBadMessageObject = () => game.sendAction({"bad-property": true})
 
         expect(sendBadMessageNone).to.throw(/Invalid action/);
         expect(sendBadMessageString).to.throw(/Invalid action/);
         expect(sendBadMessageArray).to.throw(/Invalid action/);
         expect(sendBadMessageObject).to.throw(/Invalid action/);
+    });
+});
+
+describe('Game Action - Add Unit', () => {
+    it(`throws an error if no unit is specified`, () => {
+        const game = Game(validGame());
+        const messageMissingUnit = () => game.sendAction({action: "addUnit"});
+        expect(messageMissingUnit).to.throw(/Add Unit failed: missing unit id/);
+    });
+
+    it(`throws an error if the specified unit does not exist in the list of units`, () => {
+        const game = Game(validGame());
+        const unitNotFound = () => game.sendAction({action: "addUnit", unitId: "bogus", boardX: 0, boardY: 0});
+        expect(unitNotFound).to.throw(/Add Unit failed: could not find unit with id/);
+    });
+
+    it(`throws an error if the specified board location is invalid`, () => {
+        const game = Game(validGame());
+
+        const action = 'addUnit';
+        const unitId = game.getScenario().getEncounter(0).getUnits()[0].getId();
+
+        const messageMissingBoard = () => game.sendAction({action: "addUnit", unitId});
+        const badBoardXmin = () => game.sendAction({action, unitId, boardX: -1, boardY: 0});
+        const badBoardXmax = () => game.sendAction({action, unitId, boardX: 999, boardY: 0});
+        const badBoardYmin = () => game.sendAction({action, unitId, boardX: 0, boardY: -1});
+        const badBoardYmax = () => game.sendAction({action, unitId, boardX: 0, boardY: 999});
+
+        expect(messageMissingBoard).to.throw(/Add Unit failed: missing board coordinates/);
+        expect(badBoardXmin).to.throw(/Add Unit failed: board coordinates out of bounds/);
+        expect(badBoardXmax).to.throw(/Add Unit failed: board coordinates out of bounds/);
+        expect(badBoardYmin).to.throw(/Add Unit failed: board coordinates out of bounds/);
+        expect(badBoardYmax).to.throw(/Add Unit failed: board coordinates out of bounds/);
+    });
+
+    it(`throws an error if the specified board location already contains a unit`, () => {
+        const game = Game(validGame());
+        const messageUnitConflict = () => game.sendAction({action: "addUnit"});
+        throw new Error('TODO');
     });
 });
 

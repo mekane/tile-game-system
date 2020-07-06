@@ -6,8 +6,18 @@
     "action": {
       "type": "string",
       "enum": [
+        "addUnit",
         "move"
       ]
+    },
+    "unitId": {
+      "type": "string"
+    },
+    "boardX": {
+      "type": "number"
+    },
+    "boardY": {
+      "type": "number"
     },
     "unit": {
       "type": "number",

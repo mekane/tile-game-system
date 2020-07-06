@@ -23,6 +23,32 @@ function Game(attributes) {
     function sendAction(message) {
         if (!validator.validateAs(message, 'GameAction'))
             throw new Error('Invalid action');
+
+        switch (message.action.toLowerCase()) {
+            case 'addunit':
+                if (!message.unitId)
+                    throw new Error('Add Unit failed: missing unit id');
+
+                //TODO: this needs to be unit definitions from the encounter
+                const unitDef = state.unitsById[message.unitId];
+                if (typeof unitDef !== 'object')
+                    throw new Error(`Add Unit failed: could not find unit with id ${message.unitId}`);
+
+                if (typeof message.boardX === 'undefined' || typeof message.boardY === 'undefined')
+                    throw new Error('Add Unit failed: missing board coordinates');
+
+                const {boardX, boardY} = message;
+                //const {boardWidth, boardHeight} = state.board.getDimensions();
+                /*TODO: replace with above getDim() */
+                const boardWidth = 99;
+                /*TODO*/
+                const boardHeight = 99;
+
+                if (boardX < 0 || boardX > boardWidth || boardY < 0 || boardY > boardHeight)
+                    throw new Error('Add Unit failed: board coordinates out of bounds');
+
+                break;
+        }
     }
 
     function toJson() {
@@ -45,11 +71,11 @@ function Game(attributes) {
 
 function intializeStateFrom(scenario, encounterIndex = 0) {
     const boardDefinition = scenario.getEncounter(encounterIndex).getBoard().toJson();
-    const unitsById = scenario.getEncounter(encounterIndex).getUnitsById()
+    const unitDefinitions = scenario.getEncounter(encounterIndex).getUnitsById()
 
     return {
         board: boardDefinition,
-        unitsById
+        unitsById: unitDefinitions
     };
 }
 
