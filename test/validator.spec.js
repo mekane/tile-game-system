@@ -8,6 +8,7 @@ const types = [
     'Character',
     'Encounter',
     'Game',
+    'GameAction',
     'Scenario',
     'Unit'
 ];

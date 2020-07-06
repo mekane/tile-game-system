@@ -14,7 +14,7 @@
     },
     "currentEncounter": {
       "type": "number",
-      "min": 0
+      "minimum": 0
     }
   },
   "additionalProperties": false,

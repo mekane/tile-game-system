@@ -2,6 +2,7 @@ const BoardSchema = require('./schema/BoardAttributes.schema.json');
 const CharacterSchema = require('./schema/CharacterAttributes.schema.json');
 const EncounterSchema = require('./schema/EncounterAttributes.schema.json');
 const GameSchema = require('./schema/GameAttributes.schema.json');
+const GameActionSchema = require('./schema/GameAction.schema.json');
 const ScenarioSchema = require('./schema/ScenarioAttributes.schema.json');
 const UnitSchema = require('./schema/UnitAttributes.schema.json');
 
@@ -10,6 +11,7 @@ const schemaForType = {
     Character: CharacterSchema,
     Encounter: EncounterSchema,
     Game: GameSchema,
+    GameAction: GameActionSchema,
     Scenario: ScenarioSchema,
     Unit: UnitSchema
 }
@@ -30,8 +32,10 @@ function validateAs(data, type) {
 
     const schema = schemaForType[type];
 
-    if (!schema)
+    if (!schema) {
+        console.error(`Unknown schema type ${type}`);
         return false;
+    }
 
     const result = schemaValidator.validate(data, schema);
     if (result.errors[0]) {

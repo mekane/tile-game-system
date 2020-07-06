@@ -54,6 +54,14 @@ function validGame() {
     }
 }
 
+function validGameAction() {
+    return {
+        action: 'move',
+        unit: 0,
+        direction: 'e'
+    }
+}
+
 function validScenario() {
     return {
         name: 'Test',
@@ -76,6 +84,7 @@ module.exports = {
     validCharacter,
     validEncounter,
     validGame,
+    validGameAction,
     validScenario,
     validUnit
 };
