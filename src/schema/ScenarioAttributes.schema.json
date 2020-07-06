@@ -9,13 +9,16 @@
     "name": {
       "type": "string"
     },
-    "encounter": {
-      "$ref": "http://martykane.org/schemas/EncounterAttributes.schema.json"
+    "encounters": {
+      "type": "array",
+      "items": {
+        "$ref": "http://martykane.org/schemas/EncounterAttributes.schema.json"
+      }
     }
   },
   "additionalProperties": false,
   "required": [
     "name",
-    "encounter"
+    "encounters"
   ]
 }

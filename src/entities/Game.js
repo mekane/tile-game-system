@@ -37,9 +37,9 @@ function Game(attributes) {
     });
 }
 
-function intializeStateFrom(scenario) {
-    const boardDefinition = scenario.getEncounter().getBoard().toJson();
-    const unitsById = scenario.getEncounter().getUnitsById()
+function intializeStateFrom(scenario, encounterIndex = 0) {
+    const boardDefinition = scenario.getEncounter(encounterIndex).getBoard().toJson();
+    const unitsById = scenario.getEncounter(encounterIndex).getUnitsById()
 
     return {
         board: boardDefinition,

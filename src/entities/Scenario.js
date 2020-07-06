@@ -13,18 +13,18 @@ function Scenario(attributes) {
 
     const id = attributes.id || util.generateId('scenario', attributes.name);
     const name = attributes.name;
-    const encounter = Encounter(attributes.encounter);
+    const encounters = attributes.encounters.map(Encounter);
 
     function toJson() {
         return {
             id,
             name,
-            encounter: encounter.toJson()
+            encounters: encounters.map(e => e.toJson())
         }
     }
 
     return Object.freeze({
-        getEncounter: _ => encounter,
+        getEncounter: index => encounters[index],
         getId: _ => id,
         getType: _ => typeName,
         toJson

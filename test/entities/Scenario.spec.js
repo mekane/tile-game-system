@@ -65,7 +65,7 @@ describe('The Scenario entity', () => {
 
     it(`has a getBoard method that returns the Board entity`, () => {
         const newScenario = Scenario(validScenario());
-        const encounter = newScenario.getEncounter();
+        const encounter = newScenario.getEncounter(0);
 
         expect(encounter.getType()).to.equal('Encounter');
     });
@@ -87,6 +87,6 @@ describe('The Scenario entity', () => {
         const newScenario = Scenario(originalScenarioData);
         const json = newScenario.toJson();
         expect(json).to.not.equal(originalScenarioData);
-        expect(json.encounter).to.not.equal(originalScenarioData.encounter);
+        expect(json.encounters[0]).to.not.equal(originalScenarioData.encounters[0]);
     });
 });

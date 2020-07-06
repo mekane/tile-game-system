@@ -106,7 +106,7 @@ describe('Game Entity Properties and Methods', () => {
         const json = newGame.toJson();
         expect(json, 'Overall JSON').to.not.equal(originalGameData);
         expect(json.scenario, 'Scenario JSON').to.not.equal(originalGameData.scenario);
-        expect(json.scenario.encounter, 'Encounter JSON').to.not.equal(originalGameData.scenario.encounter);
+        expect(json.scenario.encounters[0], 'Encounter JSON').to.not.equal(originalGameData.scenario.encounters[0]);
     });
 });
 
@@ -121,10 +121,14 @@ function validGameDataWithIds() {
     const originalGameData = validGame();
     originalGameData.id = 'Game_ID';
     originalGameData.scenario.id = 'Scenario_ID';
-    originalGameData.scenario.encounter.id = 'Encounter_ID';
-    originalGameData.scenario.encounter.board.id = 'Board_ID';
-    originalGameData.scenario.encounter.units[0].id = 'Unit0_ID';
-    originalGameData.scenario.encounter.units[1].id = 'Unit1_ID';
+    originalGameData.scenario.encounters[0].id = 'Encounter_ID0';
+    originalGameData.scenario.encounters[0].board.id = 'Board_ID0';
+    originalGameData.scenario.encounters[0].units[0].id = 'Unit0_ID0';
+    originalGameData.scenario.encounters[0].units[1].id = 'Unit1_ID0';
+    originalGameData.scenario.encounters[1].id = 'Encounter_ID1';
+    originalGameData.scenario.encounters[1].board.id = 'Board_ID1';
+    originalGameData.scenario.encounters[1].units[0].id = 'Unit0_ID1';
+    originalGameData.scenario.encounters[1].units[1].id = 'Unit1_ID1';
     return originalGameData;
 }
 
@@ -135,7 +139,7 @@ function gameDataForStateTest() {
         scenario: {
             id: 'scenario_simple_1234',
             name: 'Test Scenario',
-            encounter: {
+            encounters: [{
                 id: 'encounter_simple_1234',
                 name: 'Test Encounter',
                 description: 'A simple encounter',
@@ -147,7 +151,7 @@ function gameDataForStateTest() {
                         movement: 5
                     }
                 ]
-            }
+            }]
         }
     }
 }

@@ -57,7 +57,10 @@ function validGame() {
 function validScenario() {
     return {
         name: 'Test',
-        encounter: validEncounter()
+        encounters: [
+            validEncounter(),
+            validEncounter()
+        ]
     }
 }
 
