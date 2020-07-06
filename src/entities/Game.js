@@ -14,7 +14,7 @@ function Game(attributes) {
     const name = attributes.name;
     const scenario = Scenario(attributes.scenario);
 
-    const state = intializeStateFrom(scenario);
+    const state = intializeStateFrom(scenario, attributes.currentEncounter || 0);
 
     function getState() {
         return state; //TODO: test for immutability and freeze or stringify/parse

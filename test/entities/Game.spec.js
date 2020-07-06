@@ -54,6 +54,23 @@ describe('Game Entity Construction', () => {
         const reconstructedGame = Game(newGameData);
         expect(reconstructedGame.toJson()).to.deep.equal(newGameData);
     });
+
+    it(`initializes the current game state using the first encounter if none is specified`, () => {
+        const gameData = validGameDataWithIds();
+        const newGame = Game(gameData);
+        const expected = gameData.scenario.encounters[0].board.id;
+        const actual = newGame.getState().board.id;
+        expect(actual).to.equal(expected);
+    });
+
+    it(`initializes the current game state using another encounter if one is specified`, () => {
+        const gameData = validGameDataWithIds();
+        gameData.currentEncounter = 1;
+        const newGame = Game(gameData);
+        const expected = gameData.scenario.encounters[1].board.id;
+        const actual = newGame.getState().board.id;
+        expect(actual).to.equal(expected);
+    });
 });
 
 describe('Game Entity Properties and Methods', () => {

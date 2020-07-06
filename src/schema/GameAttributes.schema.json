@@ -11,6 +11,10 @@
     },
     "scenario": {
       "$ref": "http://martykane.org/schemas/ScenarioAttributes.schema.json"
+    },
+    "currentEncounter": {
+      "type": "number",
+      "min": 0
     }
   },
   "additionalProperties": false,
