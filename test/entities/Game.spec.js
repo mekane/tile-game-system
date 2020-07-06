@@ -127,6 +127,26 @@ describe('Game Entity Properties and Methods', () => {
     });
 });
 
+describe('Sending actions to the Game', () => {
+    it(`has a sendAction method that takes a valid action message`, () => {
+        const game = Game(validGame());
+        expect(game.sendAction).to.be.a('function');
+    });
+
+    it(`throws an error if the action message is invalid`, () => {
+        const game = Game(validGame());
+        const sendBadMessageNone = () => game.sendAction()
+        const sendBadMessageString = () => game.sendAction("bad data")
+        const sendBadMessageArray = () => game.sendAction(["bad", "data"])
+        const sendBadMessageObject = () => game.sendAction({})
+
+        expect(sendBadMessageNone).to.throw(/Invalid action/);
+        expect(sendBadMessageString).to.throw(/Invalid action/);
+        expect(sendBadMessageArray).to.throw(/Invalid action/);
+        expect(sendBadMessageObject).to.throw(/Invalid action/);
+    });
+});
+
 const simpleBoard = {
     id: 'board_simple_1234',
     name: 'Simple Board',

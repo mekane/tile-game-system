@@ -20,6 +20,11 @@ function Game(attributes) {
         return state; //TODO: test for immutability and freeze or stringify/parse
     }
 
+    function sendAction(message) {
+        if (!validator.validateAs(message, 'GameAction'))
+            throw new Error('Invalid action');
+    }
+
     function toJson() {
         return {
             id,
@@ -33,6 +38,7 @@ function Game(attributes) {
         getScenario: _ => scenario,
         getState,
         getType: _ => typeName,
+        sendAction,
         toJson
     });
 }
