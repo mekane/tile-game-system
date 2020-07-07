@@ -40,13 +40,9 @@ function Game(attributes) {
                     throw new Error('Add Unit failed: missing board coordinates');
 
                 const {boardX, boardY} = message;
-                //const {boardWidth, boardHeight} = state.board.getDimensions();
-                /*TODO: replace with above getDim() */
-                const boardWidth = 99;
-                /*TODO*/
-                const boardHeight = 99;
+                const {width, height} = state.board.getDimensions();
 
-                if (boardX < 0 || boardX > boardWidth || boardY < 0 || boardY > boardHeight)
+                if (boardX < 0 || boardX > width || boardY < 0 || boardY > height)
                     throw new Error('Add Unit failed: board coordinates out of bounds');
 
                 //TODO: actual implementation
@@ -55,10 +51,11 @@ function Game(attributes) {
                 if (typeof message.encounterIndex !== 'number')
                     throw new Error('Start Encounter failed: missing encounter index');
 
-                const maxEncounterIndex = 99;//scenario.getNumberOfEncounters();
+                const maxEncounterIndex = scenario.getNumberOfEncounters();
                 if (message.encounterIndex < 0 || message.encounterIndex > maxEncounterIndex)
                     throw new Error('Start Encounter failed: invalid encounter index');
 
+                //TODO: set state
         }
     }
 

@@ -6,6 +6,18 @@ const Encounter = require('./Encounter');
 
 const typeName = 'Scenario';
 
+/**
+ * This entity holds the definition of a Scenaio, which is a campaign or adventure
+ * and consists of multiple encounters. It is meant to be used as a read-only reference
+ * for the encounters not as a live object to hold state.
+ *
+ * The scenario editor should load the JSON of the entity and return it (including ID)
+ * when modifications are made, which will update the entire entity and save
+ * it to storage.
+ *
+ * Methods on this entity are convenience methods for retrieving information about
+ * the terrain and tile layout.
+ */
 function Scenario(attributes) {
 
     if (!validator.validateAs(attributes, typeName))
@@ -26,6 +38,7 @@ function Scenario(attributes) {
     return Object.freeze({
         getEncounter: index => encounters[index],
         getId: _ => id,
+        getNumberOfEncounters: _ => encounters.length,
         getType: _ => typeName,
         toJson
     });

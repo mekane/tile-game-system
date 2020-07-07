@@ -70,6 +70,11 @@ describe('The Scenario entity', () => {
         expect(encounter.getType()).to.equal('Encounter');
     });
 
+    it(`has a getNumberOfEncounters method that returns the number of encounters in the scenario`, () => {
+        const newScenario = Scenario(validScenario());
+        expect(newScenario.getNumberOfEncounters()).to.equal(2);
+    });
+
     it(`has a getType function that returns the name of the entity type`, () => {
         const newScenario = Scenario(validScenario());
         expect(newScenario.getType()).to.equal('Scenario');

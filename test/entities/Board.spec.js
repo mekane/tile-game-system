@@ -87,6 +87,26 @@ describe('The Board entity', () => {
         expect(newBoard.getId()).to.equal(idString);
     });
 
+    it(`has a getDimensions method that returns the size of the board`, () => {
+        const newBoard = Board(validBoard());
+        expect(newBoard.getDimensions()).to.deep.equal({width: 3, height: 3});
+    });
+
+    it(`uses the first row as the width for getDimensions`, () => {
+        const boardData = {
+            name: 'Test',
+            tiles: [
+                ['A', 'A', 'A', 'A', 'A', 'A', 'A'],
+                ['A', 'A'],
+                ['A', 'A', 'A'],
+                ['A', 'A']
+            ],
+            terrain: {A: {name: 'Grass'}}
+        }
+        const newBoard = Board(boardData);
+        expect(newBoard.getDimensions()).to.deep.equal({width: 7, height: 4});
+    });
+
     it(`has a getType function that returns the name of the entity type`, () => {
         const newBoard = Board(validBoard());
         expect(newBoard.getType()).to.equal('Board');
