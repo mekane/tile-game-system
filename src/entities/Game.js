@@ -15,10 +15,18 @@ function Game(attributes) {
     const scenario = Scenario(attributes.scenario);
 
     let currentEncounterIndex = attributes.currentEncounter || 0;
-    let state = attributes.state || intializeStateForEncounter(scenario, currentEncounterIndex);
+    let state = attributes.state || intializeStateForEncounter(scenario.getEncounter(currentEncounterIndex));
 
     function getState() {
         return state; //TODO: test for immutability and freeze or stringify/parse
+    }
+
+    function intializeStateForEncounter(currentEncounter) {
+        const boardDefinition = currentEncounter.getBoard().toJson();
+
+        return {
+            board: boardDefinition
+        };
     }
 
     function sendAction(message) {
@@ -30,7 +38,8 @@ function Game(attributes) {
                 if (!message.unitId)
                     throw new Error('Add Unit failed: missing unit id');
 
-                const unitDefs = scenario.getEncounter(currentEncounterIndex).getUnitsById();
+                const encounter = scenario.getEncounter(currentEncounterIndex);
+                const unitDefs = encounter.getUnitsById();
 
                 const unitDefinition = unitDefs[message.unitId];
                 if (typeof unitDefinition !== 'object')
@@ -40,7 +49,7 @@ function Game(attributes) {
                     throw new Error('Add Unit failed: missing board coordinates');
 
                 const {boardX, boardY} = message;
-                const {width, height} = state.board.getDimensions();
+                const {width, height} = encounter.getBoard().getDimensions();
 
                 if (boardX < 0 || boardX > width || boardY < 0 || boardY > height)
                     throw new Error('Add Unit failed: board coordinates out of bounds');
@@ -48,15 +57,21 @@ function Game(attributes) {
                 //TODO: actual implementation
                 break;
             case 'startencounter':
-                if (typeof message.encounterIndex !== 'number')
-                    throw new Error('Start Encounter failed: missing encounter index');
-
-                const maxEncounterIndex = scenario.getNumberOfEncounters();
-                if (message.encounterIndex < 0 || message.encounterIndex > maxEncounterIndex)
-                    throw new Error('Start Encounter failed: invalid encounter index');
-
-                //TODO: set state
+                startEncounter(message);
         }
+    }
+
+    function startEncounter({encounterIndex}) {
+        if (typeof encounterIndex !== 'number')
+            throw new Error('Start Encounter failed: missing encounter index');
+
+        const maxEncounterIndex = scenario.getNumberOfEncounters();
+        if (encounterIndex < 0 || encounterIndex > maxEncounterIndex)
+            throw new Error('Start Encounter failed: invalid encounter index');
+
+        const encounter = scenario.getEncounter(encounterIndex);
+        console.log('start encounter', encounter.toJson());
+        state = intializeStateForEncounter(encounter);
     }
 
     function toJson() {
@@ -76,15 +91,6 @@ function Game(attributes) {
         sendAction,
         toJson
     });
-}
-
-function intializeStateForEncounter(scenario, encounterIndex = 0) {
-    const currentEncounter = scenario.getEncounter(encounterIndex);
-    const boardDefinition = currentEncounter.getBoard().toJson();
-
-    return {
-        board: boardDefinition
-    };
 }
 
 module.exports = Game;

@@ -160,6 +160,15 @@ describe('Game Action - Start Encounter and New Encounter Game State', () => {
         expect(messageNegativeEncounterIndex).to.throw(/Start Encounter failed: invalid encounter index/);
         expect(messageEncounterIndexTooBig).to.throw(/Start Encounter failed: invalid encounter index/);
     });
+
+    it(`resets the current game state for the new encounter`, () => {
+        const game = Game(gameDataForStateTest());
+        //just asserting that the game initializes to the first encounter
+        expect(game.getState().board.id).to.equal(expectedGameState().board.id);
+
+        game.sendAction({action: 'startEncounter', encounterIndex: 1});
+        expect(game.getState().board.id).to.equal('board_complex_1235');
+    });
 });
 
 describe('Game Action - Add Unit', () => {
@@ -201,13 +210,6 @@ describe('Game Action - Add Unit', () => {
     });
 });
 
-const simpleBoard = {
-    id: 'board_simple_1234',
-    name: 'Simple Board',
-    tiles: [['A']],
-    terrain: {A: {name: 'A'}}
-}
-
 function validGameDataWithIds() {
     const originalGameData = validGame();
     originalGameData.id = 'Game_ID';
@@ -221,6 +223,28 @@ function validGameDataWithIds() {
     originalGameData.scenario.encounters[1].units[0].id = 'Unit0_ID1';
     originalGameData.scenario.encounters[1].units[1].id = 'Unit1_ID1';
     return originalGameData;
+}
+
+const simpleBoard = {
+    id: 'board_simple_1234',
+    name: 'Simple Board',
+    tiles: [['A']],
+    terrain: {A: {name: 'A'}}
+}
+
+const complexBoard = {
+    id: 'board_complex_1235',
+    name: 'Complex Board',
+    tiles: [
+        ['A', 'B', 'A', 'B', 'A'],
+        ['B', 'B', 'A', 'A', 'A'],
+        ['A', 'A', 'A', 'A', 'A'],
+        ['A', 'A', 'A', 'A', 'A']
+    ],
+    terrain: {
+        A: {name: 'A'},
+        B: {name: 'B'}
+    }
 }
 
 function gameDataForStateTest() {
@@ -240,6 +264,18 @@ function gameDataForStateTest() {
                         id: 'unit_simple_1234',
                         name: 'Test Unit',
                         movement: 5
+                    }
+                ]
+            }, {
+                id: 'encounter_simple_1235',
+                name: 'Test Encounter 2',
+                description: 'A complex encounter',
+                board: complexBoard,
+                units: [
+                    {
+                        id: 'unit_simple_1235',
+                        name: 'Test Unit 2',
+                        movement: 6
                     }
                 ]
             }]
