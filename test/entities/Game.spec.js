@@ -65,7 +65,7 @@ describe('Game Entity Construction', () => {
 
     it(`initializes the current game state using another encounter if one is specified`, () => {
         const gameData = validGameDataWithIds();
-        gameData.currentEncounter = 1;
+        gameData.currentEncounterIndex = 1;
         const newGame = Game(gameData);
         const expected = gameData.scenario.encounters[1].board.id;
         const actual = newGame.getState().board.id;
@@ -106,8 +106,15 @@ describe('Game Entity Properties and Methods', () => {
 
     it(`has a getState method that returns the current game state`, () => {
         const newGame = Game(gameDataForStateTest());
-
         expect(newGame.getState()).to.deep.equal(expectedGameState());
+    });
+
+    it(`getState returns an immutable object`, () => {
+        const newGame = Game(validGame());
+        const state = newGame.getState();
+        expect(_ => state.name = 'Test Mutation').to.throw(/Cannot add property/);
+        //TODO: deep-freeze (but not at the moment because this state is still in development)
+        //expect(_ => state.board.terrain['Z'] = 'Test Mutation').to.throw(/Cannot add property/);
     });
 
     it(`has a toJson method that returns the raw data for the Game`, () => {
@@ -168,6 +175,7 @@ describe('Game Action - Start Encounter and New Encounter Game State', () => {
 
         game.sendAction({action: 'startEncounter', encounterIndex: 1});
         expect(game.getState().board.id).to.equal('board_complex_1235');
+        expect(game.toJson().currentEncounterIndex).to.equal(1);
     });
 });
 
@@ -203,10 +211,21 @@ describe('Game Action - Add Unit', () => {
         expect(badBoardYmax).to.throw(/Add Unit failed: board coordinates out of bounds/);
     });
 
+    it.skip(`adds a unit to the specified tile`, () => {
+        const game = Game(validGame());
+        const unitId = game.getScenario().getEncounter(0).getUnits()[0].getId();
+        game.sendAction({action: 'addUnit', unitId, boardX: 0, boardY: 0});
+
+        const newState = game.getState();
+        console.log(newState);
+
+        expect(newState).to.equal('wat');
+    });
+
     it.skip(`throws an error if the specified board location already contains a unit`, () => {
         const game = Game(validGame());
         const messageUnitConflict = () => game.sendAction({action: "addUnit"});
-        throw new Error('TODO');
+        expect(messageUnitConflict).to.throw(/Add Unit failed: cannot add unit at specified coordinates/);
     });
 });
 

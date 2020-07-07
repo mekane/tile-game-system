@@ -14,19 +14,19 @@ function Game(attributes) {
     const name = attributes.name;
     const scenario = Scenario(attributes.scenario);
 
-    let currentEncounterIndex = attributes.currentEncounter || 0;
+    let currentEncounterIndex = attributes.currentEncounterIndex || 0;
     let state = attributes.state || intializeStateForEncounter(scenario.getEncounter(currentEncounterIndex));
 
     function getState() {
-        return state; //TODO: test for immutability and freeze or stringify/parse
+        return state;
     }
 
     function intializeStateForEncounter(currentEncounter) {
         const boardDefinition = currentEncounter.getBoard().toJson();
 
-        return {
+        return Object.freeze({
             board: boardDefinition
-        };
+        });
     }
 
     function sendAction(message) {
@@ -69,8 +69,8 @@ function Game(attributes) {
         if (encounterIndex < 0 || encounterIndex > maxEncounterIndex)
             throw new Error('Start Encounter failed: invalid encounter index');
 
+        currentEncounterIndex = encounterIndex;
         const encounter = scenario.getEncounter(encounterIndex);
-        console.log('start encounter', encounter.toJson());
         state = intializeStateForEncounter(encounter);
     }
 
@@ -79,6 +79,7 @@ function Game(attributes) {
             id,
             name,
             scenario: scenario.toJson(),
+            currentEncounterIndex
             //TODO add: currentState: state
         }
     }

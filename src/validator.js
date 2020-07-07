@@ -39,7 +39,7 @@ function validateAs(data, type) {
 
     const result = schemaValidator.validate(data, schema);
     if (result.errors[0]) {
-        //console.error('Invalid attributes: ' + result.errors[0].stack);
+        console.error('Invalid attributes: ' + result.errors[0].stack);
         return false;
     }
 
