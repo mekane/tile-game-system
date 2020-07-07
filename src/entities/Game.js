@@ -37,30 +37,41 @@ function Game(attributes) {
 
         switch (message.action.toLowerCase()) {
             case 'addunit':
-                if (!message.unitId)
-                    throw new Error('Add Unit failed: missing unit id');
-
-                const encounter = scenario.getEncounter(currentEncounterIndex);
-                const unitDefs = encounter.getUnitsById();
-
-                const unitDefinition = unitDefs[message.unitId];
-                if (typeof unitDefinition !== 'object')
-                    throw new Error(`Add Unit failed: could not find unit with id ${message.unitId}`);
-
-                if (typeof message.boardX === 'undefined' || typeof message.boardY === 'undefined')
-                    throw new Error('Add Unit failed: missing board coordinates');
-
-                const {boardX, boardY} = message;
-                const {width, height} = encounter.getBoard().getDimensions();
-
-                if (boardX < 0 || boardX > width || boardY < 0 || boardY > height)
-                    throw new Error('Add Unit failed: board coordinates out of bounds');
-
-                //TODO: actual implementation
+                addUnit(message);
                 break;
             case 'startencounter':
                 startEncounter(message);
         }
+    }
+
+    function addUnit({unitId, boardX, boardY}) {
+        if (!unitId)
+            throw new Error('Add Unit failed: missing unit id');
+
+        const encounter = scenario.getEncounter(currentEncounterIndex);
+        const unitDefs = encounter.getUnitsById();
+
+        const unitDefinition = unitDefs[unitId];
+        if (typeof unitDefinition !== 'object')
+            throw new Error(`Add Unit failed: could not find unit with id ${unitId}`);
+
+        if (typeof boardX === 'undefined' || typeof boardY === 'undefined')
+            throw new Error('Add Unit failed: missing board coordinates');
+
+        const {width, height} = encounter.getBoard().getDimensions();
+
+        if (boardX < 0 || boardX > width || boardY < 0 || boardY > height)
+            throw new Error('Add Unit failed: board coordinates out of bounds');
+
+        state.units.forEach(u => {
+            if (u.positionX === boardX && u.positionY === boardY)
+                throw new Error('Add Unit failed: cannot add unit at specified coordinates');
+        });
+
+        const newUnit = unitDefinition.toJson();
+        newUnit.positionX = boardX;
+        newUnit.positionY = boardY;
+        state.units.push(newUnit);
     }
 
     function startEncounter({encounterIndex}) {

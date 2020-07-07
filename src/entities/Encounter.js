@@ -24,7 +24,7 @@ function Encounter(attributes) {
 
     function getUnitsById() {
         const unitsById = {};
-        units.forEach(u => unitsById[u.getId()] = u.toJson());
+        units.forEach(u => unitsById[u.getId()] = u);
         return unitsById;
     }
 

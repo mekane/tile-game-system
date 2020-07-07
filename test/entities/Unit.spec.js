@@ -53,6 +53,11 @@ describe('The Unit entity', () => {
         expect(newUnit.getId()).to.equal(idString);
     });
 
+    it(`has a getName method that returns the unit's name`, () => {
+        const newUnit = Unit(validUnit());
+        expect(newUnit.getName()).to.equal('Test');
+    });
+
     it(`has a getType function that returns the name of the entity type`, () => {
         const newUnit = Unit(validUnit());
         expect(newUnit.getType()).to.equal('Unit');

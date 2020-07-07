@@ -90,11 +90,12 @@ describe('The Encounter entity', () => {
         const newEncounter = Encounter(encounterData);
 
         const expected = {
-            'unit_test0_1234': encounterData.units[0],
             'unit_test1_1234': encounterData.units[1]
         }
 
-        expect(newEncounter.getUnitsById()).to.deep.equal(expected);
+        const actualUnitsById = newEncounter.getUnitsById();
+        expect(actualUnitsById['unit_test0_1234'].toJson()).to.deep.equal(encounterData.units[0]);
+        expect(actualUnitsById['unit_test1_1234'].toJson()).to.deep.equal(encounterData.units[1]);
     });
 
     it(`has a toJson method that returns the raw data for the Encounter`, () => {

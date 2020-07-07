@@ -203,20 +203,26 @@ describe('Game Action - Add Unit', () => {
         expect(badBoardYmax).to.throw(/Add Unit failed: board coordinates out of bounds/);
     });
 
-    it.skip(`adds a unit to the specified tile`, () => {
+    it(`adds a unit to the specified tile`, () => {
         const game = Game(validGame());
-        const unitId = game.getScenario().getEncounter(0).getUnits()[0].getId();
+        const unitToAdd = game.getScenario().getEncounter(0).getUnits()[0];
+        const unitId = unitToAdd.getId();
         game.sendAction({action: 'addUnit', unitId, boardX: 0, boardY: 0});
 
         const newState = game.getState();
-        console.log(newState);
-
-        expect(newState).to.equal('wat');
+        expect(newState.units.length).to.equal(1);
+        const unit = newState.units[0];
+        expect(unit.name).to.equal(unitToAdd.getName());
     });
 
-    it.skip(`throws an error if the specified board location already contains a unit`, () => {
+    it(`throws an error if the specified board location already contains a unit`, () => {
         const game = Game(validGame());
-        const messageUnitConflict = () => game.sendAction({action: "addUnit"});
+        const unitToAdd = game.getScenario().getEncounter(0).getUnits()[0];
+        const unitId = unitToAdd.getId();
+        const addUnitAction = {action: 'addUnit', unitId, boardX: 0, boardY: 0};
+        game.sendAction(addUnitAction)
+
+        const messageUnitConflict = () => game.sendAction(addUnitAction);
         expect(messageUnitConflict).to.throw(/Add Unit failed: cannot add unit at specified coordinates/);
     });
 });
