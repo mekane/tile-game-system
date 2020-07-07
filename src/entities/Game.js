@@ -24,9 +24,11 @@ function Game(attributes) {
     function intializeStateForEncounter(currentEncounter) {
         const boardDefinition = currentEncounter.getBoard().toJson();
 
-        return Object.freeze({
-            board: boardDefinition
-        });
+        const newState = {
+            units: []
+        };
+
+        return Object.freeze(newState);
     }
 
     function sendAction(message) {

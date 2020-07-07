@@ -56,20 +56,15 @@ describe('Game Entity Construction', () => {
     });
 
     it(`initializes the current game state using the first encounter if none is specified`, () => {
-        const gameData = validGameDataWithIds();
-        const newGame = Game(gameData);
-        const expected = gameData.scenario.encounters[0].board.id;
-        const actual = newGame.getState().board.id;
-        expect(actual).to.equal(expected);
+        const newGame = Game(validGame());
+        expect(newGame.toJson().currentEncounterIndex).to.equal(0);
     });
 
     it(`initializes the current game state using another encounter if one is specified`, () => {
         const gameData = validGameDataWithIds();
         gameData.currentEncounterIndex = 1;
         const newGame = Game(gameData);
-        const expected = gameData.scenario.encounters[1].board.id;
-        const actual = newGame.getState().board.id;
-        expect(actual).to.equal(expected);
+        expect(newGame.toJson().currentEncounterIndex).to.equal(1);
     });
 });
 
@@ -170,11 +165,8 @@ describe('Game Action - Start Encounter and New Encounter Game State', () => {
 
     it(`resets the current game state for the new encounter`, () => {
         const game = Game(gameDataForStateTest());
-        //just asserting that the game initializes to the first encounter
-        expect(game.getState().board.id).to.equal(expectedGameState().board.id);
-
         game.sendAction({action: 'startEncounter', encounterIndex: 1});
-        expect(game.getState().board.id).to.equal('board_complex_1235');
+        expect(game.getState()).to.deep.equal(expectedGameState());
         expect(game.toJson().currentEncounterIndex).to.equal(1);
     });
 });
@@ -304,6 +296,6 @@ function gameDataForStateTest() {
 
 function expectedGameState() {
     return {
-        board: simpleBoard
+        units: []
     };
 }
