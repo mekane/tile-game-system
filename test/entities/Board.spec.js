@@ -107,11 +107,48 @@ describe('The Board entity', () => {
         expect(newBoard.getDimensions()).to.deep.equal({width: 7, height: 4});
     });
 
+    it(`has a getTerrainAt method that returns the terrain definition at a given x,y coordinate`, () => {
+        const newBoard = Board(validBoard());
+        expect(newBoard.getTerrainAt({x: 0, y: 0})).to.deep.equal({
+            name: 'Grass',
+            movementRequired: 1,
+            blocksMovement: false
+        });
+        expect(newBoard.getTerrainAt({x: 2, y: 1})).to.deep.equal({
+            name: 'Trees',
+            movementRequired: 1,
+            blocksMovement: false
+        });
+        expect(newBoard.getTerrainAt({x: 0, y: 1})).to.deep.equal({
+            name: 'Hills',
+            movementRequired: 2,
+            blocksMovement: false
+        });
+        expect(newBoard.getTerrainAt({x: 0, y: 2})).to.deep.equal({
+            name: 'Stones',
+            movementRequired: 1,
+            blocksMovement: true
+        });
+    });
+
+    it(`returns defaults for unknown tiles`, () => {
+        const expectedDefault = {
+            name: 'Unknown',
+            movementRequired: 1,
+            blocksMovement: false
+        };
+        const newBoard = Board(validBoard());
+        expect(newBoard.getTerrainAt({x: -1, y: 0})).to.deep.equal(expectedDefault);
+        expect(newBoard.getTerrainAt({x: 0, y: -1})).to.deep.equal(expectedDefault);
+        expect(newBoard.getTerrainAt({x: -1, y: -1})).to.deep.equal(expectedDefault);
+        expect(newBoard.getTerrainAt({x: 99, y: 99})).to.deep.equal(expectedDefault);
+    });
+
     it(`has a getTileAt method that returns tile definitions at a given x,y coordinate`, () => {
         const newBoard = Board(validBoard());
         expect(newBoard.getTileAt({x: 0, y: 0})).to.equal('A');
         expect(newBoard.getTileAt({x: 1, y: 0})).to.equal('A');
-        expect(newBoard.getTileAt({x: 2, y: 0})).to.equal('B');
+        expect(newBoard.getTileAt({x: 2, y: 1})).to.equal('B');
         expect(newBoard.getTileAt({x: 0, y: 1})).to.equal('C');
         expect(newBoard.getTileAt({x: 0, y: 2})).to.equal('D');
     });

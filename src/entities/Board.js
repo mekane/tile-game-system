@@ -39,6 +39,13 @@ const typeName = 'Board';
  * Methods that take an x and a y will put these in the right order so you can think of the
  * x,y origin as the top-left corner (the @ symbol above)
  */
+
+const terrainDefaults = Object.freeze({
+    name: 'Unknown',
+    movementRequired: 1,
+    blocksMovement: false
+});
+
 function Board(attributes) {
 
     if (!validator.validateAs(attributes, typeName))
@@ -57,15 +64,30 @@ function Board(attributes) {
         return {width, height};
     }
 
+    function getTerrainAt({x, y}) {
+        const terrainType = getTileAt({x, y});
+
+        if (terrainType !== null) {
+            const terrainProperties = terrain[terrainType];
+            return Object.assign({}, terrainDefaults, terrainProperties);
+        }
+
+        return terrainDefaults;
+    }
+
     function getTileAt({x, y}) {
+        return isValidTile(x, y) ? tiles[y][x] : null;
+    }
+
+    function isValidTile(x, y) {
         if (x < 0 || y < 0)
-            return null;
+            return false;
 
         const {width, height} = getDimensions();
         if (x >= width || y >= height)
-            return null;
+            return false;
 
-        return tiles[y][x];
+        return true;
     }
 
     function toJson() {
@@ -80,6 +102,7 @@ function Board(attributes) {
     return Object.freeze({
         getDimensions,
         getId: _ => id,
+        getTerrainAt,
         getTileAt,
         getType: _ => typeName,
         toJson

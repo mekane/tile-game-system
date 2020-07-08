@@ -2,8 +2,8 @@ function validBoard() {
     return {
         name: 'Test',
         tiles: [
-            ['A', 'A', 'B'],
-            ['C', 'A', 'A'],
+            ['A', 'A', 'C'],
+            ['C', 'A', 'B'],
             ['D', 'A', 'A']
         ],
         terrain: {
@@ -14,10 +14,12 @@ function validBoard() {
                 name: 'Trees'
             },
             C: {
-                name: 'Hills'
+                name: 'Hills',
+                movementRequired: 2
             },
             D: {
-                name: 'Stones'
+                name: 'Stones',
+                blocksMovement: true
             }
         }
     }

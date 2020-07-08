@@ -220,7 +220,6 @@ describe('Game Action - Add Unit', () => {
         const game = validGameWithOneUnit();
         const unit = game.getState().units[0];
 
-        console.log(unit);
         expect(unit.id).to.be.an('undefined');
         expect(unit.definitionId).to.be.a('string');
         expect(unit.movementMax).to.equal(6);
@@ -228,6 +227,16 @@ describe('Game Action - Add Unit', () => {
         expect(unit.name).to.equal('Test');
         expect(unit.positionX).to.equal(0);
         expect(unit.positionY).to.equal(0);
+    });
+
+    it(`throws an error if the terrain at the specified location blocks movement`, () => {
+        const game = Game(gameDataWithMoreEncounterDetail());
+        game.sendAction({action: 'startEncounter', encounterIndex: 1});
+
+        const unitToAdd = game.getScenario().getEncounter(1).getUnits()[0];
+        const addUnitToBlockedSpaceAction = {action: 'addUnit', unitId: unitToAdd.getId(), boardX: 0, boardY: 0};
+        const messageUnitConflict = () => game.sendAction(addUnitToBlockedSpaceAction);
+        expect(messageUnitConflict).to.throw(/Add Unit failed: cannot add unit at specified coordinates/);
     });
 
     it(`throws an error if the specified board location already contains a unit`, () => {
@@ -290,6 +299,15 @@ describe('Game Action - Move Unit', () => {
         expect(messageUnitConflict).to.throw(/Move Unit failed: destination is occupied/);
     });
 
+    it(`throws an error if the terrain of the destination tile blocks movement`, () => {
+        const moveSouth = {action: 'moveUnit', unitIndex: 0, direction: 's'};
+        const game = validGameWithOneUnit();
+        game.sendAction(moveSouth);
+
+        const movementBlocked = () => game.sendAction(moveSouth);
+        expect(movementBlocked).to.throw(/Move Unit failed: destination is blocked/);
+    });
+
     it(`reduces the unit's movement remaining by one (by default)`, () => {
         const game = validGameWithOneUnit();
 
@@ -300,27 +318,52 @@ describe('Game Action - Move Unit', () => {
         expect(unit.movementRemaining).to.equal(5);
     });
 
+    it(`reduces the unit's movement remaining by the defined amount on the tile`, () => {
+        const game = Game(gameDataWithMoreEncounterDetail());
+        game.sendAction({action: 'startEncounter', encounterIndex: 1});
+        const unitToAdd = game.getScenario().getEncounter(1).getUnits()[0];
+        game.sendAction({action: 'addUnit', unitId: unitToAdd.getId(), boardX: 1, boardY: 1});
+
+        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 's'});
+        const unit = game.getState().units[0];
+        expect(unit.movementMax).to.equal(6);
+        expect(unit.movementRemaining).to.equal(4);
+    });
+
     it(`throws an error if the unit is out of movement`, () => {
         const game = validGameWithOneUnit();
 
         game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'}); //5 remaining
-        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 's'}); //4
-        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'w'}); //3
-        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'n'}); //2
+        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'w'}); //4
+        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'}); //3
+        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'w'}); //2
         game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'}); //1
-        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 's'}); //0 remaining
+        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'w'}); //0 remaining
 
         const unit = game.getState().units[0];
         expect(unit.movementMax).to.equal(6);
         expect(unit.movementRemaining).to.equal(0);
 
-        const messageNoMove = () => game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'w'});
+        const messageNoMove = () => game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'});
         expect(messageNoMove).to.throw(/Move Unit failed: unit lacks sufficient movement points/);
     });
 
-    //terrain that takes more than one movement point (removes points)
-    //unit has some, but not enough movement for terrain that takes more than one
-    //terrain blocks all movement
+    it(`throws an error if the unit doesn't have enough movement`, () => {
+        const game = validGameWithOneUnit();
+
+        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'}); //5 remaining
+        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'w'}); //4
+        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'}); //3
+        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'w'}); //2
+        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'}); //1 remaining
+
+        const unit = game.getState().units[0];
+        expect(unit.movementMax).to.equal(6);
+        expect(unit.movementRemaining).to.equal(1);
+
+        const messageNoMove = () => game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'});
+        expect(messageNoMove).to.throw(/Move Unit failed: unit lacks sufficient movement points/);
+    });
 
     it(`Moves the unit to the specified tile`, () => {
         const game = validGameWithOneUnit();
@@ -349,9 +392,7 @@ function validGameDataWithIds() {
     return originalGameData;
 }
 
-function
-
-validGameWithOneUnit() {
+function validGameWithOneUnit() {
     const game = Game(validGame());
     const unitToAdd = game.getScenario().getEncounter(0).getUnits()[0];
     const unitId = unitToAdd.getId();
@@ -360,29 +401,38 @@ validGameWithOneUnit() {
     return game;
 }
 
-const simpleBoard = {
-    id: 'board_simple_1234',
-    name: 'Simple Board',
-    tiles: [['A']],
-    terrain: {A: {name: 'A'}}
-}
-
-const complexBoard = {
-    id: 'board_complex_1235',
-    name: 'Complex Board',
-    tiles: [
-        ['A', 'B', 'A', 'B', 'A'],
-        ['B', 'B', 'A', 'A', 'A'],
-        ['A', 'A', 'A', 'A', 'A'],
-        ['A', 'A', 'A', 'A', 'A']
-    ],
-    terrain: {
-        A: {name: 'A'},
-        B: {name: 'B'}
+function gameDataWithMoreEncounterDetail() {
+    const simpleBoard = {
+        id: 'board_simple_1234',
+        name: 'Simple Board',
+        tiles: [['A']],
+        terrain: {A: {name: 'A'}}
     }
-}
 
-function gameDataForStateTest() {
+    const complexBoard = {
+        id: 'board_complex_1235',
+        name: 'Complex Board',
+        tiles: [
+            ['W', 'W', 'W', 'W', 'W'],
+            ['W', 'A', 'A', 'A', 'W'],
+            ['W', 'B', 'A', 'A', 'A'],
+            ['W', 'A', 'A', 'A', 'W'],
+            ['W', 'W', 'W', 'W', 'W']
+        ],
+        terrain: {
+            A: {
+                name: 'Floor'
+            },
+            B: {
+                name: 'Sticky Floor',
+                movementRequired: 2
+            },
+            W: {
+                name: 'Wall',
+                blocksMovement: true
+            }
+        }
+    }
     return {
         id: 'game_simple_1234',
         name: 'Test Game',

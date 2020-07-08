@@ -70,6 +70,10 @@ function Game(attributes) {
         if (boardX < 0 || boardX > width || boardY < 0 || boardY > height)
             throw new Error('Add Unit failed: board coordinates out of bounds');
 
+        const terrainDef = encounter.getBoard().getTerrainAt({x: boardX, y: boardY});
+        if (terrainDef.blocksMovement)
+            throw new Error('Add Unit failed: cannot add unit at specified coordinates');
+
         state.units.forEach(u => {
             if (u.positionX === boardX && u.positionY === boardY)
                 throw new Error('Add Unit failed: cannot add unit at specified coordinates');
@@ -111,10 +115,15 @@ function Game(attributes) {
                 throw new Error('Move Unit failed: destination is occupied');
         });
 
-        if (unitToMove.movementRemaining < 1)
+        const terrainDef = encounter.getBoard().getTerrainAt({x, y});
+
+        if (terrainDef.blocksMovement)
+            throw new Error('Move Unit failed: destination is blocked');
+
+        if (unitToMove.movementRemaining < terrainDef.movementRequired)
             throw new Error('Move Unit failed: unit lacks sufficient movement points');
 
-        unitToMove.movementRemaining--;
+        unitToMove.movementRemaining -= terrainDef.movementRequired;
         unitToMove.positionX = x;
         unitToMove.positionY = y;
     }
