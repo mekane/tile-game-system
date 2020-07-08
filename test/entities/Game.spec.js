@@ -271,26 +271,22 @@ describe('Game Action - Move Unit', () => {
         game.sendAction(addUnitAction)
 
         const moveUnitAction = {action: 'moveUnit', unitIndex: 0, direction: 'e'};
-        game.sendAction(moveUnitAction)
-
         const messageUnitConflict = () => game.sendAction(moveUnitAction);
-        expect(messageUnitConflict).to.throw(/Move Unit failed: cannot move unit in specified direction/);
+        expect(messageUnitConflict).to.throw(/Move Unit failed: destination is occupied/);
     });
 
     //terrain is impassable
     //unit is out of movement
     //
 
-    it.skip(`Moves the unit to the specified tile`, () => {
+    it(`Moves the unit to the specified tile`, () => {
         const game = validGameWithOneUnit();
-        const unitToMove = game.getScenario().getEncounter(0).getUnits()[0];
-        const unitId = unitToMove.getId();
-        game.sendAction({action: 'moveUnit', unitId, boardX: 0, boardY: 0});
+        const moveUnitAction = {action: 'moveUnit', unitIndex: 0, direction: 'e'};
+        game.sendAction(moveUnitAction);
 
-        const newState = game.getState();
-        expect(newState.units.length).to.equal(1);
-        const unit = newState.units[0];
-        expect(unit.name).to.equal(unitToMove.getName());
+        const unit = game.getState().units[0];
+        expect(unit.positionX).to.equal(1);
+        expect(unit.positionY).to.equal(0);
     });
 });
 

@@ -92,16 +92,22 @@ function Game(attributes) {
         if (typeof unitToMove !== 'object')
             throw new Error(`Move Unit failed: could not find unit with index ${unitIndex}`);
 
-        const unitX = unitToMove.positionY;
+        const unitX = unitToMove.positionX;
         const unitY = unitToMove.positionY;
         const encounter = getCurrentEncounter();
         const {x, y} = util.adjustCoordinatesForDirection(unitX, unitY, direction);
         const tile = encounter.getBoard().getTileAt({x, y});
 
-        console.log(tile);
-
         if (tile === null)
             throw new Error('Move Unit failed: destination is out of bounds');
+
+        state.units.forEach(unit => {
+            if (unit.positionX === x && unit.positionY === y)
+                throw new Error('Move Unit failed: destination is occupied');
+        });
+
+        unitToMove.positionX = x;
+        unitToMove.positionY = y;
     }
 
     function startEncounter({encounterIndex}) {

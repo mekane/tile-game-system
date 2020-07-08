@@ -58,7 +58,6 @@ function Board(attributes) {
     }
 
     function getTileAt({x, y}) {
-        console.log(`get tile (${x},${y})`)
         if (x < 0 || y < 0)
             return null;
 

@@ -57,8 +57,8 @@ function validGame() {
 
 function validGameAction() {
     return {
-        action: 'move',
-        unit: 0,
+        action: 'moveUnit',
+        unitIndex: 0,
         direction: 'e'
     }
 }
