@@ -75,9 +75,14 @@ function Game(attributes) {
                 throw new Error('Add Unit failed: cannot add unit at specified coordinates');
         });
 
-        const newUnit = unitDefinition.toJson();
-        newUnit.positionX = boardX;
-        newUnit.positionY = boardY;
+        const newUnit = {
+            definitionId: unitDefinition.getId(),
+            movementMax: unitDefinition.getMovement(),
+            movementRemaining: unitDefinition.getMovement(),
+            name: unitDefinition.getName(),
+            positionX: boardX,
+            positionY: boardY,
+        };
         state.units.push(newUnit);
     }
 
@@ -106,6 +111,10 @@ function Game(attributes) {
                 throw new Error('Move Unit failed: destination is occupied');
         });
 
+        if (unitToMove.movementRemaining < 1)
+            throw new Error('Move Unit failed: unit lacks sufficient movement points');
+
+        unitToMove.movementRemaining--;
         unitToMove.positionX = x;
         unitToMove.positionY = y;
     }

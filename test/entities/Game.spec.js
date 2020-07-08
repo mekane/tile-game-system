@@ -100,10 +100,11 @@ describe('Game Entity Properties and Methods', () => {
     });
 
     it(`has a getState method that returns the current game state`, () => {
-        const newGame = Game(gameDataForStateTest());
+        const newGame = Game(validGame());
         expect(newGame.getState()).to.deep.equal(expectedGameState());
     });
 
+    //TODO: and returns a new object deep-copy
     it(`getState returns an immutable object`, () => {
         const newGame = Game(validGame());
         const state = newGame.getState();
@@ -164,7 +165,7 @@ describe('Game Action - Start Encounter and New Encounter Game State', () => {
     });
 
     it(`resets the current game state for the new encounter`, () => {
-        const game = Game(gameDataForStateTest());
+        const game = Game(validGame());
         game.sendAction({action: 'startEncounter', encounterIndex: 1});
         expect(game.getState()).to.deep.equal(expectedGameState());
         expect(game.toJson().currentEncounterIndex).to.equal(1);
@@ -213,6 +214,20 @@ describe('Game Action - Add Unit', () => {
         expect(newState.units.length).to.equal(1);
         const unit = newState.units[0];
         expect(unit.name).to.equal(unitToAdd.getName());
+    });
+
+    it(`sets initial properties on the unit based on unit definition`, () => {
+        const game = validGameWithOneUnit();
+        const unit = game.getState().units[0];
+
+        console.log(unit);
+        expect(unit.id).to.be.an('undefined');
+        expect(unit.definitionId).to.be.a('string');
+        expect(unit.movementMax).to.equal(6);
+        expect(unit.movementRemaining).to.equal(6);
+        expect(unit.name).to.equal('Test');
+        expect(unit.positionX).to.equal(0);
+        expect(unit.positionY).to.equal(0);
     });
 
     it(`throws an error if the specified board location already contains a unit`, () => {
@@ -275,9 +290,37 @@ describe('Game Action - Move Unit', () => {
         expect(messageUnitConflict).to.throw(/Move Unit failed: destination is occupied/);
     });
 
-    //terrain is impassable
-    //unit is out of movement
-    //
+    it(`reduces the unit's movement remaining by one (by default)`, () => {
+        const game = validGameWithOneUnit();
+
+        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'se'});
+
+        const unit = game.getState().units[0];
+        expect(unit.movementMax).to.equal(6);
+        expect(unit.movementRemaining).to.equal(5);
+    });
+
+    it(`throws an error if the unit is out of movement`, () => {
+        const game = validGameWithOneUnit();
+
+        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'}); //5 remaining
+        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 's'}); //4
+        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'w'}); //3
+        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'n'}); //2
+        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'}); //1
+        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 's'}); //0 remaining
+
+        const unit = game.getState().units[0];
+        expect(unit.movementMax).to.equal(6);
+        expect(unit.movementRemaining).to.equal(0);
+
+        const messageNoMove = () => game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'w'});
+        expect(messageNoMove).to.throw(/Move Unit failed: unit lacks sufficient movement points/);
+    });
+
+    //terrain that takes more than one movement point (removes points)
+    //unit has some, but not enough movement for terrain that takes more than one
+    //terrain blocks all movement
 
     it(`Moves the unit to the specified tile`, () => {
         const game = validGameWithOneUnit();
@@ -306,7 +349,9 @@ function validGameDataWithIds() {
     return originalGameData;
 }
 
-function validGameWithOneUnit() {
+function
+
+validGameWithOneUnit() {
     const game = Game(validGame());
     const unitToAdd = game.getScenario().getEncounter(0).getUnits()[0];
     const unitId = unitToAdd.getId();

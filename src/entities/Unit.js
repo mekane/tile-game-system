@@ -22,6 +22,7 @@ function Unit(attributes) {
 
     return Object.freeze({
         getId: _ => id,
+        getMovement: _ => movement,
         getName: _ => name,
         getType: _ => typeName,
         toJson

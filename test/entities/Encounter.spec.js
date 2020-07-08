@@ -89,10 +89,6 @@ describe('The Encounter entity', () => {
         encounterData.units[1].id = 'unit_test1_1234';
         const newEncounter = Encounter(encounterData);
 
-        const expected = {
-            'unit_test1_1234': encounterData.units[1]
-        }
-
         const actualUnitsById = newEncounter.getUnitsById();
         expect(actualUnitsById['unit_test0_1234'].toJson()).to.deep.equal(encounterData.units[0]);
         expect(actualUnitsById['unit_test1_1234'].toJson()).to.deep.equal(encounterData.units[1]);

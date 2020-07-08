@@ -53,6 +53,11 @@ describe('The Unit entity', () => {
         expect(newUnit.getId()).to.equal(idString);
     });
 
+    it(`has a getName method that returns the unit's movement rate`, () => {
+        const newUnit = Unit(validUnit());
+        expect(newUnit.getMovement()).to.equal(6);
+    });
+
     it(`has a getName method that returns the unit's name`, () => {
         const newUnit = Unit(validUnit());
         expect(newUnit.getName()).to.equal('Test');
