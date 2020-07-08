@@ -17,6 +17,10 @@ function Game(attributes) {
     let currentEncounterIndex = attributes.currentEncounterIndex || 0;
     let state = attributes.state || intializeStateForEncounter(scenario.getEncounter(currentEncounterIndex));
 
+    function getCurrentEncounter() {
+        return scenario.getEncounter(currentEncounterIndex);
+    }
+
     function getState() {
         return state;
     }
@@ -39,6 +43,9 @@ function Game(attributes) {
             case 'addunit':
                 addUnit(message);
                 break;
+            case 'moveunit':
+                moveUnit(message);
+                break;
             case 'startencounter':
                 startEncounter(message);
         }
@@ -48,7 +55,7 @@ function Game(attributes) {
         if (!unitId)
             throw new Error('Add Unit failed: missing unit id');
 
-        const encounter = scenario.getEncounter(currentEncounterIndex);
+        const encounter = getCurrentEncounter();
         const unitDefs = encounter.getUnitsById();
 
         const unitDefinition = unitDefs[unitId];
@@ -74,6 +81,29 @@ function Game(attributes) {
         state.units.push(newUnit);
     }
 
+    function moveUnit({unitIndex, direction}) {
+        if (typeof unitIndex !== 'number')
+            throw new Error('Move Unit failed: missing unit index');
+
+        if (typeof direction !== 'string')
+            throw new Error('Move Unit failed: missing direction');
+
+        const unitToMove = state.units[unitIndex];
+        if (typeof unitToMove !== 'object')
+            throw new Error(`Move Unit failed: could not find unit with index ${unitIndex}`);
+
+        const unitX = unitToMove.positionY;
+        const unitY = unitToMove.positionY;
+        const encounter = getCurrentEncounter();
+        const {x, y} = util.adjustCoordinatesForDirection(unitX, unitY, direction);
+        const tile = encounter.getBoard().getTileAt({x, y});
+
+        console.log(tile);
+
+        if (tile === null)
+            throw new Error('Move Unit failed: destination is out of bounds');
+    }
+
     function startEncounter({encounterIndex}) {
         if (typeof encounterIndex !== 'number')
             throw new Error('Start Encounter failed: missing encounter index');
@@ -83,7 +113,7 @@ function Game(attributes) {
             throw new Error('Start Encounter failed: invalid encounter index');
 
         currentEncounterIndex = encounterIndex;
-        const encounter = scenario.getEncounter(encounterIndex);
+        const encounter = getCurrentEncounter();
         state = intializeStateForEncounter(encounter);
     }
 

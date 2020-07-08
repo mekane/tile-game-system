@@ -7,7 +7,7 @@
       "type": "string",
       "enum": [
         "addUnit",
-        "move",
+        "moveUnit",
         "startEncounter"
       ]
     },
@@ -33,12 +33,12 @@
     "encounterIndex": {
       "type": "number"
     },
-    "unit": {
-      "type": "number",
-      "minimum": 0
-    },
     "unitId": {
       "type": "string"
+    },
+    "unitIndex": {
+      "type": "number",
+      "minimum": 0
     }
   },
   "additionalProperties": false,

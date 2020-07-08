@@ -107,6 +107,23 @@ describe('The Board entity', () => {
         expect(newBoard.getDimensions()).to.deep.equal({width: 7, height: 4});
     });
 
+    it(`has a getTileAt method that returns tile definitions at a given x,y coordinate`, () => {
+        const newBoard = Board(validBoard());
+        expect(newBoard.getTileAt({x: 0, y: 0})).to.equal('A');
+        expect(newBoard.getTileAt({x: 1, y: 0})).to.equal('A');
+        expect(newBoard.getTileAt({x: 2, y: 0})).to.equal('B');
+        expect(newBoard.getTileAt({x: 0, y: 1})).to.equal('C');
+        expect(newBoard.getTileAt({x: 0, y: 2})).to.equal('D');
+    });
+
+    it(`returns null for invalid tile coordinates`, () => {
+        const newBoard = Board(validBoard());
+        expect(newBoard.getTileAt({x: -1, y: 0})).to.be.a('null');
+        expect(newBoard.getTileAt({x: -1, y: -1})).to.be.a('null');
+        expect(newBoard.getTileAt({x: 0, y: 99})).to.be.a('null');
+        expect(newBoard.getTileAt({x: 99, y: 0})).to.be.a('null');
+    });
+
     it(`has a getType function that returns the name of the entity type`, () => {
         const newBoard = Board(validBoard());
         expect(newBoard.getType()).to.equal('Board');

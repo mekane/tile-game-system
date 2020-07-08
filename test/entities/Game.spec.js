@@ -227,6 +227,74 @@ describe('Game Action - Add Unit', () => {
     });
 });
 
+describe('Game Action - Move Unit', () => {
+    it(`throws an error if no unit or direction is specified`, () => {
+        const game = validGameWithOneUnit();
+        const messageMissingUnit = () => game.sendAction({action: "moveUnit"});
+        expect(messageMissingUnit).to.throw(/Move Unit failed: missing unit index/);
+
+        const messageMissingDirection = () => game.sendAction({action: "moveUnit", unitIndex: 0});
+        expect(messageMissingDirection).to.throw(/Move Unit failed: missing direction/);
+    });
+
+    it(`throws an error if the specified unit does not exist in the list of units`, () => {
+        const game = validGameWithOneUnit();
+        const unitNotFound = () => game.sendAction({action: "moveUnit", unitIndex: 1, direction: 'n'});
+        expect(unitNotFound).to.throw(/Move Unit failed: could not find unit with index/);
+    });
+
+    it(`throws an error if the specified direction is invalid`, () => {
+        const game = validGameWithOneUnit();
+        const unitNotFound = () => game.sendAction({action: "moveUnit", unitIndex: 0, direction: 'Foo'});
+        expect(unitNotFound).to.throw(/Invalid action/);
+    });
+
+    it(`throws an error if the board location in the specified direction is invalid`, () => {
+        const game = validGameWithOneUnit();
+        const action = 'moveUnit';
+        const unitIndex = 0;
+
+        const moveOffBoardY = () => game.sendAction({action, unitIndex, direction: 'n'});
+        const moveOffBoardX = () => game.sendAction({action, unitIndex, direction: 'w'});
+        const moveOffBoardD = () => game.sendAction({action, unitIndex, direction: 'nw'});
+
+        expect(moveOffBoardY).to.throw(/Move Unit failed: destination is out of bounds/);
+        expect(moveOffBoardX).to.throw(/Move Unit failed: destination is out of bounds/);
+        expect(moveOffBoardD).to.throw(/Move Unit failed: destination is out of bounds/);
+    });
+
+    it(`throws an error if the specified board location already contains a unit`, () => {
+        const game = validGameWithOneUnit();
+        const unitToAdd = game.getScenario().getEncounter(0).getUnits()[0];
+        const unitId = unitToAdd.getId();
+        const addUnitAction = {action: 'addUnit', unitId, boardX: 1, boardY: 0};
+        game.sendAction(addUnitAction)
+
+        const moveUnitAction = {action: 'moveUnit', unitIndex: 0, direction: 'e'};
+        game.sendAction(moveUnitAction)
+
+        const messageUnitConflict = () => game.sendAction(moveUnitAction);
+        expect(messageUnitConflict).to.throw(/Move Unit failed: cannot move unit in specified direction/);
+    });
+
+    //terrain is impassable
+    //unit is out of movement
+    //
+
+    it.skip(`Moves the unit to the specified tile`, () => {
+        const game = validGameWithOneUnit();
+        const unitToMove = game.getScenario().getEncounter(0).getUnits()[0];
+        const unitId = unitToMove.getId();
+        game.sendAction({action: 'moveUnit', unitId, boardX: 0, boardY: 0});
+
+        const newState = game.getState();
+        expect(newState.units.length).to.equal(1);
+        const unit = newState.units[0];
+        expect(unit.name).to.equal(unitToMove.getName());
+    });
+});
+
+
 function validGameDataWithIds() {
     const originalGameData = validGame();
     originalGameData.id = 'Game_ID';
@@ -240,6 +308,15 @@ function validGameDataWithIds() {
     originalGameData.scenario.encounters[1].units[0].id = 'Unit0_ID1';
     originalGameData.scenario.encounters[1].units[1].id = 'Unit1_ID1';
     return originalGameData;
+}
+
+function validGameWithOneUnit() {
+    const game = Game(validGame());
+    const unitToAdd = game.getScenario().getEncounter(0).getUnits()[0];
+    const unitId = unitToAdd.getId();
+    const addUnitAction = {action: 'addUnit', unitId, boardX: 0, boardY: 0};
+    game.sendAction(addUnitAction)
+    return game;
 }
 
 const simpleBoard = {

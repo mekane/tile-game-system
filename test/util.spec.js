@@ -47,3 +47,24 @@ describe('The generateId function', () => {
         expect(matchedRegex, expectedMessage).to.equal(true);
     });
 });
+
+describe('The adjustCoordinatesForDirection function', () => {
+    it(`takes an x and y coordinate and a direction string and returns an {x,y} object`, () => {
+        expect(util.adjustCoordinatesForDirection(1, 1, 'nw')).to.deep.equal({x: 0, y: 0});
+    });
+
+    it(`returns the original coordinates for unknown directions`, () => {
+        expect(util.adjustCoordinatesForDirection(1, 1, 'bogus')).to.deep.equal({x: 1, y: 1});
+    });
+
+    it(`does the right thing for all the directions`, () => {
+        expect(util.adjustCoordinatesForDirection(0, 0, 'nw')).to.deep.equal({x: -1, y: -1});
+        expect(util.adjustCoordinatesForDirection(0, 0, 'n')).to.deep.equal({x: 0, y: -1});
+        expect(util.adjustCoordinatesForDirection(0, 0, 'ne')).to.deep.equal({x: 1, y: -1});
+        expect(util.adjustCoordinatesForDirection(0, 0, 'e')).to.deep.equal({x: 1, y: 0});
+        expect(util.adjustCoordinatesForDirection(0, 0, 'se')).to.deep.equal({x: 1, y: 1});
+        expect(util.adjustCoordinatesForDirection(0, 0, 's')).to.deep.equal({x: 0, y: 1});
+        expect(util.adjustCoordinatesForDirection(0, 0, 'sw')).to.deep.equal({x: -1, y: 1});
+        expect(util.adjustCoordinatesForDirection(0, 0, 'w')).to.deep.equal({x: -1, y: 0});
+    });
+});
