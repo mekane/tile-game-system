@@ -51,16 +51,34 @@ function Game(attributes) {
         }
     }
 
-    function addUnit({unitId, boardX, boardY}) {
-        if (!unitId)
-            throw new Error('Add Unit failed: missing unit id');
+    function addUnit({unitId, unitName, boardX, boardY}) {
+        if (!unitId && !unitName)
+            throw new Error('Add Unit failed: missing unit id or name');
 
         const encounter = getCurrentEncounter();
         const unitDefs = encounter.getUnitsById();
 
-        const unitDefinition = unitDefs[unitId];
-        if (typeof unitDefinition !== 'object')
-            throw new Error(`Add Unit failed: could not find unit with id ${unitId}`);
+        let unitDefinition = false;
+
+        if (unitId)
+            unitDefinition = unitDefs[unitId];
+        else {
+            const keys = Object.keys(unitDefs);
+            for (let i = 0; i < keys.length; i++) {
+                const unitDef = unitDefs[keys[i]];
+                if (unitDef.getName() === unitName) {
+                    unitDefinition = unitDef;
+                    break;
+                }
+            }
+        }
+
+        if (typeof unitDefinition !== 'object') {
+            if (unitId)
+                throw new Error(`Add Unit failed: could not find unit with id ${unitId}`);
+            else
+                throw new Error(`Add Unit failed: could not find unit with name ${unitName}`);
+        }
 
         if (typeof boardX === 'undefined' || typeof boardY === 'undefined')
             throw new Error('Add Unit failed: missing board coordinates');

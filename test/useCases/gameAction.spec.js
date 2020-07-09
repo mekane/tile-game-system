@@ -56,7 +56,6 @@ describe('The GameAction Use Case Function', () => {
         await gameAction(testId, {action: 'startEncounter', encounterIndex: 1});
 
         const game = gameRepository.getById(testId);
-        console.log(game);
         expect(game.currentEncounterIndex).to.equal(1);
     });
 

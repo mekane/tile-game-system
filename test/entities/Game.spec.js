@@ -249,6 +249,24 @@ describe('Game Action - Add Unit', () => {
         const messageUnitConflict = () => game.sendAction(addUnitAction);
         expect(messageUnitConflict).to.throw(/Add Unit failed: cannot add unit at specified coordinates/);
     });
+
+    it(`can add a unit by name`, () => {
+        const game = Game(validGame());
+        const addUnitAction = {action: 'addUnit', unitName: 'Goblin', boardX: 0, boardY: 0};
+        game.sendAction(addUnitAction);
+
+        const unit = game.getState().units[0];
+        expect(unit.definitionId).to.be.a('string');
+        expect(unit.name).to.equal('Goblin');
+        expect(unit.positionX).to.equal(0);
+        expect(unit.positionY).to.equal(0);
+    });
+
+    it(`throws an error if there is no unit with the given name`, () => {
+        const game = Game(validGame());
+        const unitNotFound = () => game.sendAction({action: "addUnit", unitName: "bogus", boardX: 0, boardY: 0});
+        expect(unitNotFound).to.throw(/Add Unit failed: could not find unit with name/);
+    });
 });
 
 describe('Game Action - Move Unit', () => {

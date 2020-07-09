@@ -39,6 +39,9 @@
     "unitIndex": {
       "type": "number",
       "minimum": 0
+    },
+    "unitName": {
+      "type": "string"
     }
   },
   "additionalProperties": false,
