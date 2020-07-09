@@ -120,6 +120,25 @@ describe('Game Entity Properties and Methods', () => {
     });
 });
 
+describe('Starting a new encounter', () => {
+    it(`has no effect if the encounter index is missing or bad`, () => {
+        const game = Game(validGame());
+
+        game.startEncounter();
+        game.startEncounter(-1);
+        game.startEncounter(999);
+
+        expect(game.toJson().currentEncounterIndex).to.equal(0);
+    });
+
+    it(`resets the current game state for the new encounter`, () => {
+        const game = Game(validGame());
+        game.startEncounter(1);
+        expect(game.getState()).to.deep.equal(expectedGameState());
+        expect(game.toJson().currentEncounterIndex).to.equal(1);
+    });
+});
+
 describe('Sending actions to the Game', () => {
     it(`has a sendAction method that takes a valid action message`, () => {
         const game = Game(validGame());
@@ -137,28 +156,6 @@ describe('Sending actions to the Game', () => {
         expect(sendBadMessageString).to.throw(/Invalid action/);
         expect(sendBadMessageArray).to.throw(/Invalid action/);
         expect(sendBadMessageObject).to.throw(/Invalid action/);
-    });
-});
-
-describe('Game Action - Start Encounter and New Encounter Game State', () => {
-    it(`throws an error if the encounter index is missing or bad`, () => {
-        const game = Game(validGame());
-        const action = "startEncounter";
-
-        const messageMissingEncounterIndex = () => game.sendAction({action});
-        const messageNegativeEncounterIndex = () => game.sendAction({action, encounterIndex: -1});
-        const messageEncounterIndexTooBig = () => game.sendAction({action, encounterIndex: 999});
-
-        expect(messageMissingEncounterIndex).to.throw(/Start Encounter failed: missing encounter index/);
-        expect(messageNegativeEncounterIndex).to.throw(/Start Encounter failed: invalid encounter index/);
-        expect(messageEncounterIndexTooBig).to.throw(/Start Encounter failed: invalid encounter index/);
-    });
-
-    it(`resets the current game state for the new encounter`, () => {
-        const game = Game(validGame());
-        game.sendAction({action: 'startEncounter', encounterIndex: 1});
-        expect(game.getState()).to.deep.equal(expectedGameState());
-        expect(game.toJson().currentEncounterIndex).to.equal(1);
     });
 });
 
@@ -221,7 +218,7 @@ describe('Game Action - Add Unit', () => {
 
     it(`throws an error if the terrain at the specified location blocks movement`, () => {
         const game = Game(gameDataWithMoreEncounterDetail());
-        game.sendAction({action: 'startEncounter', encounterIndex: 1});
+        game.startEncounter(1);
 
         const unitToAdd = game.getScenario().getEncounter(1).getUnits()[0];
         const addUnitToBlockedSpaceAction = {action: 'addUnit', unitId: unitToAdd.getId(), boardX: 0, boardY: 0};
@@ -328,7 +325,8 @@ describe('Game Action - Move Unit', () => {
 
     it(`reduces the unit's movement remaining by the defined amount on the tile`, () => {
         const game = Game(gameDataWithMoreEncounterDetail());
-        game.sendAction({action: 'startEncounter', encounterIndex: 1});
+        game.startEncounter(1);
+
         const unitToAdd = game.getScenario().getEncounter(1).getUnits()[0];
         game.sendAction({action: 'addUnit', unitId: unitToAdd.getId(), boardX: 1, boardY: 1});
 

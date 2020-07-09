@@ -147,13 +147,13 @@ function Game(attributes) {
     }
 
     //TODO: make this its own use case
-    function startEncounter({encounterIndex}) {
+    function startEncounter(encounterIndex) {
         if (typeof encounterIndex !== 'number')
-            throw new Error('Start Encounter failed: missing encounter index');
+            return;
 
         const maxEncounterIndex = scenario.getNumberOfEncounters();
         if (encounterIndex < 0 || encounterIndex > maxEncounterIndex)
-            throw new Error('Start Encounter failed: invalid encounter index');
+            return;
 
         currentEncounterIndex = encounterIndex;
         const encounter = getCurrentEncounter();
@@ -176,6 +176,7 @@ function Game(attributes) {
         getState,
         getType: _ => typeName,
         sendAction,
+        startEncounter,
         toJson
     });
 }
