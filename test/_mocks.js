@@ -7,13 +7,6 @@ function mockRepository() {
     }
 }
 
-function stubRepository() {
-    return {
-        getById: _ => ({sendAction: () => null}),
-        save: noop
-    }
-}
-
 function spyRepository() {
     return {
         getCalled: 0,
@@ -39,6 +32,5 @@ function inMemoryRepository(initialData) {
 module.exports = {
     inMemoryRepository,
     mockRepository,
-    spyRepository,
-    stubRepository
+    spyRepository
 }

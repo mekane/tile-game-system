@@ -128,6 +128,7 @@ function Game(attributes) {
         unitToMove.positionY = y;
     }
 
+    //TODO: make this its own use case
     function startEncounter({encounterIndex}) {
         if (typeof encounterIndex !== 'number')
             throw new Error('Start Encounter failed: missing encounter index');

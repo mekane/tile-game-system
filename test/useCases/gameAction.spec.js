@@ -2,8 +2,15 @@ const expect = require('chai').expect;
 const {mockRepository, spyRepository, inMemoryRepository, stubRepository} = require('../_mocks');
 const {validGame, validGameAction} = require('../_fixtures');
 
-const validator = require('../../src/validator');
 const GameActionUseCase = require('../../src/useCases/gameAction');
+
+const testId = 'test_id';
+
+function testGameRepository() {
+    const testGameData = validGame();
+    testGameData.id = testId;
+    return inMemoryRepository({[testId]: testGameData});
+}
 
 describe('The GameAction Use Case Initializer', () => {
     it(`exports an init function to inject the module with dependencies`, () => {
@@ -27,14 +34,8 @@ describe('The GameAction Use Case Function', () => {
     });
 
     it(`returns an error status if the game action is rejected`, async () => {
-        const gameRepository = mockRepository();
-        const rejectActionAsInvalid = _ => {
-            throw new Error('Invalid action')
-        };
-        gameRepository.getById = _ => ({sendAction: rejectActionAsInvalid});
-        const gameAction = GameActionUseCase({gameRepository});
-
-        const result = await gameAction('bad_id', validGameAction());
+        const gameAction = GameActionUseCase({gameRepository: testGameRepository()});
+        const result = await gameAction('test_id', {action: 'invalidGameAction'});
         expect(result).to.deep.equal({
             success: false,
             error: `Invalid action`
@@ -50,23 +51,18 @@ describe('The GameAction Use Case Function', () => {
     });
 
     it(`sends the action to the Game`, async () => {
-        const testAction = {action: 'startEncounter', encounterIndex: 1};
-
-        let sentAction = null;
-        const gameObjectSpy = {
-            sendAction: a => sentAction = a
-        }
-        const gameRepository = inMemoryRepository({'test_id': gameObjectSpy});
+        const gameRepository = testGameRepository();
         const gameAction = GameActionUseCase({gameRepository});
+        await gameAction(testId, {action: 'startEncounter', encounterIndex: 1});
 
-        await gameAction('test_id', testAction);
-
-        expect(sentAction).to.deep.equal(testAction);
+        const game = gameRepository.getById(testId);
+        console.log(game);
+        expect(game.currentEncounterIndex).to.equal(1);
     });
 
     it(`returns an OK status message if the action was accepted`, async () => {
-        const gameAction = GameActionUseCase({gameRepository: stubRepository()});
-        const result = await gameAction('bad_id', validGameAction());
+        const gameAction = GameActionUseCase({gameRepository: testGameRepository()});
+        const result = await gameAction(testId, {action: 'startEncounter', encounterIndex: 1});
         expect(result).to.deep.equal({
             success: true
         });
@@ -74,11 +70,11 @@ describe('The GameAction Use Case Function', () => {
 
     it(`saves the Game back to the repository`, async () => {
         const gameSpy = spyRepository();
-        gameSpy.getById = _ => ({sendAction: () => null}); //stub out a game so it gets to the save part
+        gameSpy.getById = _ => validGame(); //stub out a game so it gets to the save part
 
         const gameAction = GameActionUseCase({gameRepository: gameSpy});
-        await gameAction('a_game_id', validGameAction());
+        await gameAction('a_game_id', {action: 'startEncounter', encounterIndex: 1});
 
         expect(gameSpy.saveCalled).to.equal(1);
-    })
+    });
 });

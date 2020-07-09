@@ -2,24 +2,24 @@ const Game = require('../entities/Game');
 
 function init({gameRepository}) {
     return async function gameAction(gameId, gameAction) {
-        const game = await gameRepository.getById(gameId);
+        const gameData = await gameRepository.getById(gameId);
 
-        if (!game)
+        if (!gameData)
             return {
                 success: false,
                 error: `No Game found for id ${gameId}`
             }
 
         try {
+            const game = Game(gameData);
             game.sendAction(gameAction);
+            await gameRepository.save(game.toJson()); /* TODO: sort this out! */
         } catch (err) {
             return {
                 success: false,
                 error: err.message
             }
         }
-
-        await gameRepository.save(game);
 
         return {success: true};
     }
