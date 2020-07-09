@@ -2,7 +2,7 @@ const expect = require('chai').expect;
 const {validScenario} = require('../_fixtures');
 
 const validator = require('../../src/validator');
-const newGameInit = require('../../src/useCases/newGame');
+const NewGameUseCase = require('../../src/useCases/newGame');
 
 const mockGameRepository = {
     getGame: () => null,
@@ -39,11 +39,11 @@ function scenarioRepositorySpy() {
 
 describe('The NewGame Use Case Initializer', () => {
     it(`exports an init function to inject the module with dependencies`, () => {
-        expect(newGameInit).to.be.a('function');
+        expect(NewGameUseCase).to.be.a('function');
     });
 
     it('returns a constructor function from the initializer', () => {
-        const newGame = newGameInit({
+        const newGame = NewGameUseCase({
             gameRepository: {},
             scenarioRepository: {},
         });
@@ -54,7 +54,7 @@ describe('The NewGame Use Case Initializer', () => {
 describe('The NewGame Use Case function', () => {
     it(`uses the ScenarioRepository to find the referenced scenario`, () => {
         const scenarioSpy = scenarioRepositorySpy();
-        const newGame = newGameInit({
+        const newGame = NewGameUseCase({
             gameRepository: mockGameRepository,
             scenarioRepository: scenarioSpy
         });
@@ -63,7 +63,7 @@ describe('The NewGame Use Case function', () => {
     });
 
     it(`fetches the Scenario from the repository by id`, async () => {
-        const newGame = newGameInit({
+        const newGame = NewGameUseCase({
             gameRepository: mockGameRepository,
             scenarioRepository: mockScenarioRepository
         });
@@ -75,7 +75,7 @@ describe('The NewGame Use Case function', () => {
     });
 
     it(`returns the new Game instance`, async () => {
-        const newGame = newGameInit({
+        const newGame = NewGameUseCase({
             gameRepository: mockGameRepository,
             scenarioRepository: mockScenarioRepository
         });
@@ -89,7 +89,7 @@ describe('The NewGame Use Case function', () => {
 
     it(`puts the new Game instance into the Game repository`, () => {
         const gameSpy = gameRepositorySpy();
-        const newGame = newGameInit({
+        const newGame = NewGameUseCase({
             gameRepository: gameSpy,
             scenarioRepository: mockScenarioRepository
         });
