@@ -25,6 +25,18 @@ describe('The NewGame Use Case Initializer', () => {
 });
 
 describe('The NewGame Use Case function', () => {
+    it(`returns an error status if the scenario is not found by id`, async () => {
+        const newGame = NewGameUseCase({
+            gameRepository: mockRepository(),
+            scenarioRepository: mockRepository()
+        });
+        const result = await newGame({name: 'test', scenarioId: 'bad_id'});
+        expect(result).to.deep.equal({
+            success: false,
+            error: `No Scenario found with id bad_id`
+        });
+    });
+
     it(`uses the ScenarioRepository to find the referenced scenario`, () => {
         const scenarioSpy = spyRepository();
         const newGame = NewGameUseCase({
@@ -35,38 +47,24 @@ describe('The NewGame Use Case function', () => {
         expect(scenarioSpy.getCalled).to.equal(1);
     });
 
-    it(`fetches the Scenario from the repository by id`, async () => {
+    it(`returns an OK status message if the game was created`, async () => {
         const newGame = NewGameUseCase({
             gameRepository: mockRepository(),
             scenarioRepository: testScenarioRepository
         });
-        const game = await newGame({name: 'test', scenarioId: testScenarioID});
-        const scenario = game.getScenario();
-
-        expect(scenario.getType()).to.equal('Scenario');
-        expect(scenario.getId()).to.equal(testScenarioID);
-    });
-
-    it(`returns the new Game instance`, async () => {
-        const newGame = NewGameUseCase({
-            gameRepository: mockRepository(),
-            scenarioRepository: testScenarioRepository
+        const result = await newGame({name: 'Test', scenarioId: testScenarioID});
+        expect(result).to.deep.equal({
+            success: true
         });
-        const game = await newGame({name: 'Test', scenarioId: testScenarioID});
-
-        expect(game).to.be.an('object');
-        expect(game.getId().startsWith('game_test_')).to.equal(true);
-        expect(game.getType()).to.equal('Game');
-        expect(validator.validateAs(game.toJson(), game.getType())).to.equal(true);
     });
 
-    it(`puts the new Game instance into the Game repository`, () => {
+    it(`puts the new Game instance into the Game repository`, async () => {
         const gameSpy = spyRepository();
         const newGame = NewGameUseCase({
             gameRepository: gameSpy,
-            scenarioRepository: mockRepository()
+            scenarioRepository: testScenarioRepository
         });
-        newGame({name: 'test', scenarioId: 'test'});
+        await newGame({name: 'test', scenarioId: testScenarioID});
         expect(gameSpy.saveCalled).to.equal(1);
     });
 });
