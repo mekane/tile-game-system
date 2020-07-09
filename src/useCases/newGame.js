@@ -1,6 +1,6 @@
 const Game = require('../entities/Game');
 
-function init({gameRepository, scenarioRepository}) {
+function NewGameUseCase({gameRepository, scenarioRepository}) {
     return async function NewGame({name = '', scenarioId} = {}) {
         const newGame = Game({
             name,
@@ -12,4 +12,4 @@ function init({gameRepository, scenarioRepository}) {
     }
 }
 
-module.exports = init;
+module.exports = NewGameUseCase;
