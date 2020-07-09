@@ -125,13 +125,13 @@ describe('Starting a new encounter', () => {
         const game = Game(validGame());
 
         const startEncounterNoIndex = () => game.startEncounter();
-        expect(startEncounterNoIndex).to.throw(/Start Encounter failed: missing encounter index/);
+        expect(startEncounterNoIndex).to.throw(/missing encounter number/);
 
         const startEncounterNegative = () => game.startEncounter(-1);
         const startEncounterTooHigh = () => game.startEncounter(999);
 
-        expect(startEncounterNegative).to.throw(/Start Encounter failed: invalid encounter index/);
-        expect(startEncounterTooHigh).to.throw(/Start Encounter failed: invalid encounter index/);
+        expect(startEncounterNegative).to.throw(/invalid encounter number/);
+        expect(startEncounterTooHigh).to.throw(/invalid encounter number/);
     });
 
     it(`resets the current game state for the new encounter`, () => {

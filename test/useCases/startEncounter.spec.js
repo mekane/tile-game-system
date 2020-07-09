@@ -1,12 +1,17 @@
 const expect = require('chai').expect;
 const {mockRepository, spyRepository, inMemoryRepository} = require('../_mocks');
 const {validGame} = require('../_fixtures');
-const Game = require('../../src/entities/Game');
 
-const validator = require('../../src/validator');
 const StartEncounterUseCase = require('../../src/useCases/StartEncounter');
 
-/*
+const testId = 'test_id';
+
+function testGameRepository() {
+    const testGameData = validGame();
+    testGameData.id = testId;
+    return inMemoryRepository({[testId]: testGameData});
+}
+
 describe('The StartEncounter Use Case Initializer', () => {
     it(`exports an init function to inject the module with dependencies`, () => {
         expect(StartEncounterUseCase).to.be.a('function');
@@ -15,56 +20,65 @@ describe('The StartEncounter Use Case Initializer', () => {
     it('returns a constructor function from the initializer', () => {
         const StartEncounter = StartEncounterUseCase({
             gameRepository: mockRepository(),
-            scenarioRepository: mockRepository(),
         });
         expect(StartEncounter).to.be.a('function');
     });
 });
 
 describe('The StartEncounter Use Case function', () => {
-    it(`uses the ScenarioRepository to find the referenced scenario`, () => {
-        const scenarioSpy = spyRepository();
-        const StartEncounter = StartEncounterUseCase({
-            gameRepository: mockRepository(),
-            scenarioRepository: scenarioSpy
+    it(`returns an error status if the game is not found by id`, async () => {
+        const startEncounter = StartEncounterUseCase({gameRepository: testGameRepository()});
+        const result = await startEncounter('bad_id', 1);
+        expect(result).to.deep.equal({
+            success: false,
+            error: `No Game found for id bad_id`
         });
-        StartEncounter({name: 'test', scenarioId: 'test'});
-        expect(scenarioSpy.getCalled).to.equal(1);
     });
 
-    it(`fetches the Scenario from the repository by id`, async () => {
-        const StartEncounter = StartEncounterUseCase({
-            gameRepository: mockRepository(),
-            scenarioRepository: testScenarioRepository
-        });
-        const game = await StartEncounter({name: 'test', scenarioId: testScenarioID});
-        const scenario = game.getScenario();
+    it(`returns an error status if the encounter number is invalid`, async () => {
+        const startEncounter = StartEncounterUseCase({gameRepository: testGameRepository()});
 
-        expect(scenario.getType()).to.equal('Scenario');
-        expect(scenario.getId()).to.equal(testScenarioID);
+        const resultNoNumber = await startEncounter(testId);
+        expect(resultNoNumber).to.deep.equal({
+            success: false,
+            error: `missing encounter number`
+        });
+
+        const resultNegative = await startEncounter(testId, -1);
+        expect(resultNegative).to.deep.equal({
+            success: false,
+            error: `invalid encounter number`
+        });
+
+        const resultTooBig = await startEncounter(testId, 99);
+        expect(resultTooBig).to.deep.equal({
+            success: false,
+            error: `invalid encounter number`
+        });
     });
 
-    it(`returns the new Game instance`, async () => {
-        const StartEncounter = StartEncounterUseCase({
-            gameRepository: mockRepository(),
-            scenarioRepository: testScenarioRepository
-        });
-        const game = await StartEncounter({name: 'Test', scenarioId: testScenarioID});
-
-        expect(game).to.be.an('object');
-        expect(game.getId().startsWith('game_test_')).to.equal(true);
-        expect(game.getType()).to.equal('Game');
-        expect(validator.validateAs(game.toJson(), game.getType())).to.equal(true);
-    });
-
-    it(`puts the new Game instance into the Game repository`, () => {
+    it(`uses the GameRepository to find the game by id`, () => {
         const gameSpy = spyRepository();
-        const StartEncounter = StartEncounterUseCase({
-            gameRepository: gameSpy,
-            scenarioRepository: mockRepository()
+        const startEncounter = StartEncounterUseCase({gameRepository: gameSpy});
+
+        startEncounter('test', 1);
+        expect(gameSpy.getCalled).to.equal(1);
+    });
+
+    it(`returns an OK status message if the game was created`, async () => {
+        const startEncounter = StartEncounterUseCase({gameRepository: testGameRepository()});
+        const result = await startEncounter(testId, 1);
+        expect(result).to.deep.equal({
+            success: true
         });
-        StartEncounter({name: 'test', scenarioId: 'test'});
-        expect(gameSpy.saveCalled).to.equal(1);
+    });
+
+    it(`saves the Game instance back to the Game repository`, async () => {
+        const gameRepository = testGameRepository();
+        const startEncounter = StartEncounterUseCase({gameRepository});
+        await startEncounter(testId, 1);
+
+        const game = gameRepository.getById(testId);
+        expect(game.currentEncounterIndex).to.equal(1);
     });
 });
-*/
