@@ -77,7 +77,7 @@ function validScenario() {
 
 function validUnit() {
     return {
-        name: 'Test',
+        name: 'Goblin',
         movement: 6
     }
 }

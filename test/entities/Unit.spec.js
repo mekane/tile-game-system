@@ -33,7 +33,7 @@ describe('The Unit entity', () => {
         expect(_ => newUnit.name = 'Test Mutation').to.throw(/Cannot add property/);
     });
 
-    const validUnitId = /^unit_test_\d{6,8}/;
+    const validUnitId = /^unit_\w+_\d{6,8}/;
 
     it(`has an automatically generated ID`, () => {
         const newUnit = Unit(validUnit());
@@ -60,7 +60,7 @@ describe('The Unit entity', () => {
 
     it(`has a getName method that returns the unit's name`, () => {
         const newUnit = Unit(validUnit());
-        expect(newUnit.getName()).to.equal('Test');
+        expect(newUnit.getName()).to.equal('Goblin');
     });
 
     it(`has a getType function that returns the name of the entity type`, () => {

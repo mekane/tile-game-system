@@ -224,7 +224,7 @@ describe('Game Action - Add Unit', () => {
         expect(unit.definitionId).to.be.a('string');
         expect(unit.movementMax).to.equal(6);
         expect(unit.movementRemaining).to.equal(6);
-        expect(unit.name).to.equal('Test');
+        expect(unit.name).to.equal('Goblin');
         expect(unit.positionX).to.equal(0);
         expect(unit.positionY).to.equal(0);
     });
