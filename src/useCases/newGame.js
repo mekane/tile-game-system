@@ -4,10 +4,10 @@ function NewGameUseCase({gameRepository, scenarioRepository}) {
     return async function NewGame({name = '', scenarioId} = {}) {
         const newGame = Game({
             name,
-            scenario: scenarioRepository.getScenario(scenarioId)
+            scenario: scenarioRepository.getById(scenarioId)
         });
 
-        await gameRepository.putGame(newGame);
+        await gameRepository.save(newGame);
         return newGame;
     }
 }
