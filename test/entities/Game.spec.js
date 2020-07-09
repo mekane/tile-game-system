@@ -121,14 +121,17 @@ describe('Game Entity Properties and Methods', () => {
 });
 
 describe('Starting a new encounter', () => {
-    it(`has no effect if the encounter index is missing or bad`, () => {
+    it(`throws an error if the encounter index is missing or bad`, () => {
         const game = Game(validGame());
 
-        game.startEncounter();
-        game.startEncounter(-1);
-        game.startEncounter(999);
+        const startEncounterNoIndex = () => game.startEncounter();
+        expect(startEncounterNoIndex).to.throw(/Start Encounter failed: missing encounter index/);
 
-        expect(game.toJson().currentEncounterIndex).to.equal(0);
+        const startEncounterNegative = () => game.startEncounter(-1);
+        const startEncounterTooHigh = () => game.startEncounter(999);
+
+        expect(startEncounterNegative).to.throw(/Start Encounter failed: invalid encounter index/);
+        expect(startEncounterTooHigh).to.throw(/Start Encounter failed: invalid encounter index/);
     });
 
     it(`resets the current game state for the new encounter`, () => {

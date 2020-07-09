@@ -149,11 +149,11 @@ function Game(attributes) {
     //TODO: make this its own use case
     function startEncounter(encounterIndex) {
         if (typeof encounterIndex !== 'number')
-            return;
+            throw new Error('Start Encounter failed: missing encounter index');
 
         const maxEncounterIndex = scenario.getNumberOfEncounters();
         if (encounterIndex < 0 || encounterIndex > maxEncounterIndex)
-            return;
+            throw new Error('Start Encounter failed: invalid encounter index');
 
         currentEncounterIndex = encounterIndex;
         const encounter = getCurrentEncounter();
