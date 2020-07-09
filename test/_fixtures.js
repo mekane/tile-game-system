@@ -59,9 +59,10 @@ function validGame() {
 
 function validGameAction() {
     return {
-        action: 'moveUnit',
-        unitIndex: 0,
-        direction: 'e'
+        action: 'addUnit',
+        unitName: 'Goblin',
+        boardX: 0,
+        boardY: 0,
     }
 }
 

@@ -15,6 +15,17 @@
     "currentEncounterIndex": {
       "type": "number",
       "minimum": 0
+    },
+    "currentState": {
+      "type": "object",
+      "properties": {
+        "units": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
     }
   },
   "additionalProperties": false,

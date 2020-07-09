@@ -53,15 +53,15 @@ describe('The GameAction Use Case Function', () => {
     it(`sends the action to the Game`, async () => {
         const gameRepository = testGameRepository();
         const gameAction = GameActionUseCase({gameRepository});
-        await gameAction(testId, {action: 'startEncounter', encounterIndex: 1});
+        await gameAction(testId, validGameAction());
 
         const game = gameRepository.getById(testId);
-        expect(game.currentEncounterIndex).to.equal(1);
+        expect(game.currentState.units.length).to.equal(1);
     });
 
     it(`returns an OK status message if the action was accepted`, async () => {
         const gameAction = GameActionUseCase({gameRepository: testGameRepository()});
-        const result = await gameAction(testId, {action: 'startEncounter', encounterIndex: 1});
+        const result = await gameAction(testId, validGameAction());
         expect(result).to.deep.equal({
             success: true
         });
@@ -72,7 +72,7 @@ describe('The GameAction Use Case Function', () => {
         gameSpy.getById = _ => validGame(); //stub out a game so it gets to the save part
 
         const gameAction = GameActionUseCase({gameRepository: gameSpy});
-        await gameAction('a_game_id', {action: 'startEncounter', encounterIndex: 1});
+        await gameAction('a_game_id', validGameAction());
 
         expect(gameSpy.saveCalled).to.equal(1);
     });

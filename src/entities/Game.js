@@ -165,8 +165,8 @@ function Game(attributes) {
             id,
             name,
             scenario: scenario.toJson(),
-            currentEncounterIndex
-            //TODO add: currentState: state
+            currentEncounterIndex,
+            currentState: state
         }
     }
 

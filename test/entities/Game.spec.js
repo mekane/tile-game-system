@@ -22,17 +22,6 @@ describe('Game Entity Construction', () => {
     it(`expects the object to conform to the GameAttributes schema and returns null if not`, () => {
         expect(Game({})).to.be.a('null');
         expect(Game({test: 'test'})).to.be.a('null');
-
-        const badGameBadContentInSubArrays = {
-            name: 'Bad Game Non-string Items in Tiles Arrays',
-            tiles: [
-                [1],
-                [{}],
-                [false]
-            ],
-            terrain: {}
-        }
-        expect(Game(badGameBadContentInSubArrays)).to.be.a('null');
     });
 
     it(`returns a Game object if the attributes are valid`, () => {
@@ -49,7 +38,8 @@ describe('Game Entity Construction', () => {
         const newGame = Game(originalGameData);
 
         const newGameData = newGame.toJson();
-        expect(newGameData).to.deep.equal(originalGameData);
+        expect(newGameData.id).to.deep.equal(originalGameData.id);
+        expect(newGameData.name).to.deep.equal(originalGameData.name);
 
         const reconstructedGame = Game(newGameData);
         expect(reconstructedGame.toJson()).to.deep.equal(newGameData);
