@@ -53,9 +53,8 @@ describe('The NewGame Use Case function', () => {
             scenarioRepository: testScenarioRepository
         });
         const result = await newGame({name: 'Test', scenarioId: testScenarioID});
-        expect(result).to.deep.equal({
-            success: true
-        });
+        expect(result.success).to.equal(true);
+        expect(result.created).to.be.a('string');
     });
 
     it(`puts the new Game instance into the Game repository`, async () => {

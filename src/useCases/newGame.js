@@ -17,7 +17,8 @@ function NewGameUseCase({gameRepository, scenarioRepository}) {
 
         await gameRepository.save(newGame);
         return {
-            success: true
+            success: true,
+            created: newGame.getId()
         };
     }
 }
