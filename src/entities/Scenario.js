@@ -37,9 +37,9 @@ function Scenario(attributes) {
 
     return Object.freeze({
         getEncounter: index => encounters[index],
-        getId: _ => id,
-        getNumberOfEncounters: _ => encounters.length,
-        getType: _ => typeName,
+        getId: () => id,
+        getNumberOfEncounters: () => encounters.length,
+        getType: () => typeName,
         toJson
     });
 }

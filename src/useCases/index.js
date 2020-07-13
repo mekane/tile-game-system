@@ -1,6 +1,7 @@
 const GameActionUseCase = require('./gameAction');
 const ListScenariosUseCase = require('./listScenarios');
 const NewGameUseCase = require('./newGame');
+const SaveScenarioUseCase = require('./saveScenario');
 const StartEncounterUseCase = require('./startEncounter');
 
 function init({gameRepository, scenarioRepository}) {
@@ -13,12 +14,14 @@ function init({gameRepository, scenarioRepository}) {
     const gameAction = GameActionUseCase({gameRepository});
     const newGame = NewGameUseCase({gameRepository, scenarioRepository});
     const listScenarios = ListScenariosUseCase({scenarioRepository});
+    const saveScenario = SaveScenarioUseCase({scenarioRepository});
     const startEncounter = StartEncounterUseCase({gameRepository});
 
     return {
         gameAction,
         listScenarios,
         newGame,
+        saveScenario,
         startEncounter
     }
 }

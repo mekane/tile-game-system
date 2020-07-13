@@ -27,6 +27,7 @@ describe('The Use Case Module Index', () => {
         expect(useCases.gameAction).to.be.a('function');
         expect(useCases.listScenarios).to.be.a('function');
         expect(useCases.newGame).to.be.a('function');
+        expect(useCases.saveScenario).to.be.a('function');
         expect(useCases.startEncounter).to.be.a('function');
     });
 });
