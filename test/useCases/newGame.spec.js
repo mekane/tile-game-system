@@ -29,7 +29,7 @@ describe('The NewGame Use Case function', () => {
             gameRepository: mockRepository(),
             scenarioRepository: mockRepository()
         });
-        const result = await newGame({name: 'test', scenarioId: 'bad_id'});
+        const result = await newGame('test', 'bad_id');
         expect(result).to.deep.equal({
             success: false,
             error: `No Scenario found with id bad_id`
@@ -42,7 +42,7 @@ describe('The NewGame Use Case function', () => {
             gameRepository: mockRepository(),
             scenarioRepository: scenarioSpy
         });
-        newGame({name: 'test', scenarioId: 'test'});
+        newGame('test', 'test');
         expect(scenarioSpy.getCalled).to.equal(1);
     });
 
@@ -51,7 +51,7 @@ describe('The NewGame Use Case function', () => {
             gameRepository: mockRepository(),
             scenarioRepository: testScenarioRepository
         });
-        const result = await newGame({name: 'Test', scenarioId: testScenarioID});
+        const result = await newGame('Test', testScenarioID);
         expect(result.success).to.equal(true);
         expect(result.created).to.be.a('string');
     });
@@ -62,7 +62,7 @@ describe('The NewGame Use Case function', () => {
             gameRepository: gameSpy,
             scenarioRepository: testScenarioRepository
         });
-        await newGame({name: 'test', scenarioId: testScenarioID});
+        await newGame('test', testScenarioID);
         expect(gameSpy.saveCalled).to.equal(1);
     });
 });

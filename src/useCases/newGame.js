@@ -1,7 +1,7 @@
 const Game = require('../entities/Game');
 
 function NewGameUseCase({gameRepository, scenarioRepository}) {
-    return async function NewGame({name = '', scenarioId} = {}) {
+    return async function NewGame(name = 'New Game', scenarioId) {
         const scenarioData = await scenarioRepository.getById(scenarioId);
 
         if (!scenarioData)
@@ -15,7 +15,7 @@ function NewGameUseCase({gameRepository, scenarioRepository}) {
             scenario: scenarioData
         });
 
-        await gameRepository.save(newGame);
+        await gameRepository.save(newGame.toJson()); //TODO: standardize repostiory behavior
         return {
             success: true,
             created: newGame.getId()
