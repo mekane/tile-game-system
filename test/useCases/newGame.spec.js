@@ -2,7 +2,6 @@ const expect = require('chai').expect;
 const {mockRepository, spyRepository, inMemoryRepository} = require('../_mocks');
 const {validScenario} = require('../_fixtures');
 
-const validator = require('../../src/validator');
 const NewGameUseCase = require('../../src/useCases/newGame');
 
 const testScenario = validScenario();
@@ -15,7 +14,7 @@ describe('The NewGame Use Case Initializer', () => {
         expect(NewGameUseCase).to.be.a('function');
     });
 
-    it('returns a constructor function from the initializer', () => {
+    it('returns a function from the initializer that calls the use case', () => {
         const newGame = NewGameUseCase({
             gameRepository: mockRepository(),
             scenarioRepository: mockRepository(),

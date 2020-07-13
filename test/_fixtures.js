@@ -66,14 +66,14 @@ function validGameAction() {
     }
 }
 
-function validScenario() {
-    return {
+function validScenario(overrides) {
+    return Object.assign({
         name: 'Test',
         encounters: [
             validEncounter(),
             validEncounter()
         ]
-    }
+    }, overrides);
 }
 
 function validUnit() {
