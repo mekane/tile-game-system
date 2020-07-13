@@ -25,6 +25,7 @@ describe('The Use Case Module Index', () => {
         const useCases = UseCasesInit({gameRepository, scenarioRepository});
         expect(useCases).to.be.an('object');
         expect(useCases.gameAction).to.be.a('function');
+        expect(useCases.gameState).to.be.a('function');
         expect(useCases.listScenarios).to.be.a('function');
         expect(useCases.newGame).to.be.a('function');
         expect(useCases.saveScenario).to.be.a('function');

@@ -17,7 +17,7 @@ describe('The GameAction Use Case Initializer', () => {
         expect(GameActionUseCase).to.be.a('function');
     });
 
-    it('returns a constructor function from the initializer', () => {
+    it('returns a function from the initializer that calls the use case', () => {
         const gameAction = GameActionUseCase({gameRepository: mockRepository()});
         expect(gameAction).to.be.a('function');
     });
