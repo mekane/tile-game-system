@@ -15,7 +15,8 @@ function Game(attributes) {
     const scenario = Scenario(attributes.scenario);
 
     let currentEncounterIndex = attributes.currentEncounterIndex || 0;
-    let state = attributes.state || intializeStateForEncounter(scenario.getEncounter(currentEncounterIndex));
+
+    let state = attributes.currentState || intializeStateForEncounter(scenario.getEncounter(currentEncounterIndex));
 
     function getCurrentEncounter() {
         return scenario.getEncounter(currentEncounterIndex);

@@ -31,7 +31,8 @@ function inMemoryRepository(initialData) {
     return {
         getById: id => repo[id],
         list: () => Object.values(repo),
-        save: obj => repo[obj.id] = obj
+        save: obj => repo[obj.id] = obj,
+        debug: () => console.dir(repo)
     }
 }
 

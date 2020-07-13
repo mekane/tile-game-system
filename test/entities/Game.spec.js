@@ -32,30 +32,6 @@ describe('Game Entity Construction', () => {
         const newGame = Game(validGame());
         expect(_ => newGame.name = 'Test Mutation').to.throw(/Cannot add property/);
     });
-
-    it(`can re-create itself from the output of its toJson method`, () => {
-        const originalGameData = validGameDataWithIds();
-        const newGame = Game(originalGameData);
-
-        const newGameData = newGame.toJson();
-        expect(newGameData.id).to.deep.equal(originalGameData.id);
-        expect(newGameData.name).to.deep.equal(originalGameData.name);
-
-        const reconstructedGame = Game(newGameData);
-        expect(reconstructedGame.toJson()).to.deep.equal(newGameData);
-    });
-
-    it(`initializes the current game state using the first encounter if none is specified`, () => {
-        const newGame = Game(validGame());
-        expect(newGame.toJson().currentEncounterIndex).to.equal(0);
-    });
-
-    it(`initializes the current game state using another encounter if one is specified`, () => {
-        const gameData = validGameDataWithIds();
-        gameData.currentEncounterIndex = 1;
-        const newGame = Game(gameData);
-        expect(newGame.toJson().currentEncounterIndex).to.equal(1);
-    });
 });
 
 describe('Game Entity Properties and Methods', () => {
@@ -385,6 +361,41 @@ describe('Game Action - Move Unit', () => {
     });
 });
 
+describe('Serializing and Deserializing Games', () => {
+    it(`can re-create itself from the output of its toJson method`, () => {
+        const originalGameData = validGameDataWithIds();
+        const newGame = Game(originalGameData);
+
+        const newGameData = newGame.toJson();
+        expect(newGameData.id).to.deep.equal(originalGameData.id);
+        expect(newGameData.name).to.deep.equal(originalGameData.name);
+
+        const reconstructedGame = Game(newGameData);
+        expect(reconstructedGame.toJson()).to.deep.equal(newGameData);
+    });
+
+    it(`initializes the current game state using the first encounter if none is specified`, () => {
+        const newGame = Game(validGame());
+        expect(newGame.toJson().currentEncounterIndex).to.equal(0);
+    });
+
+    it(`initializes the current game state using another encounter if one is specified`, () => {
+        const gameData = validGameDataWithIds();
+        gameData.currentEncounterIndex = 1;
+        const newGame = Game(gameData);
+        expect(newGame.toJson().currentEncounterIndex).to.equal(1);
+    });
+
+    it(`restores the encounter state`, () => {
+        const game = validGameWithOneUnit();
+        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'});
+
+        const originalJson = game.toJson();
+
+        const newGame = Game(originalJson);
+        expect(newGame.toJson()).to.deep.equal(originalJson);
+    });
+});
 
 function validGameDataWithIds() {
     const originalGameData = validGame();
