@@ -1,6 +1,6 @@
 const Game = require('../entities/Game');
 
-function StartEncounterUseCase({gameRepository}) {
+function StartEncounter({gameRepository}) {
     return async function StartEncounter(gameId, encounterNumber) {
         const gameData = await gameRepository.getById(gameId);
 
@@ -25,4 +25,6 @@ function StartEncounterUseCase({gameRepository}) {
     }
 }
 
-module.exports = StartEncounterUseCase;
+module.exports = {
+     StartEncounter
+};

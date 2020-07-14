@@ -2,7 +2,7 @@ const expect = require('chai').expect;
 const {mockRepository, spyRepository, inMemoryRepository} = require('../_mocks');
 const {validGame} = require('../_fixtures');
 
-const StartEncounterUseCase = require('../../src/useCases/StartEncounter');
+const {StartEncounter} = require('../../src/useCases/StartEncounter');
 
 const testId = 'test_id';
 
@@ -14,20 +14,20 @@ function testGameRepository() {
 
 describe('The StartEncounter Use Case Initializer', () => {
     it(`exports an init function to inject the module with dependencies`, () => {
-        expect(StartEncounterUseCase).to.be.a('function');
+        expect(StartEncounter).to.be.a('function');
     });
 
     it('returns a constructor function from the initializer', () => {
-        const StartEncounter = StartEncounterUseCase({
+        const startEncounter = StartEncounter({
             gameRepository: mockRepository(),
         });
-        expect(StartEncounter).to.be.a('function');
+        expect(startEncounter).to.be.a('function');
     });
 });
 
 describe('The StartEncounter Use Case function', () => {
     it(`returns an error status if the game is not found by id`, async () => {
-        const startEncounter = StartEncounterUseCase({gameRepository: testGameRepository()});
+        const startEncounter = StartEncounter({gameRepository: testGameRepository()});
         const result = await startEncounter('bad_id', 1);
         expect(result).to.deep.equal({
             success: false,
@@ -36,7 +36,7 @@ describe('The StartEncounter Use Case function', () => {
     });
 
     it(`returns an error status if the encounter number is invalid`, async () => {
-        const startEncounter = StartEncounterUseCase({gameRepository: testGameRepository()});
+        const startEncounter = StartEncounter({gameRepository: testGameRepository()});
 
         const resultNoNumber = await startEncounter(testId);
         expect(resultNoNumber).to.deep.equal({
@@ -59,14 +59,14 @@ describe('The StartEncounter Use Case function', () => {
 
     it(`uses the GameRepository to find the game by id`, () => {
         const gameSpy = spyRepository();
-        const startEncounter = StartEncounterUseCase({gameRepository: gameSpy});
+        const startEncounter = StartEncounter({gameRepository: gameSpy});
 
         startEncounter('test', 1);
         expect(gameSpy.getCalled).to.equal(1);
     });
 
     it(`returns an OK status message if the game was created`, async () => {
-        const startEncounter = StartEncounterUseCase({gameRepository: testGameRepository()});
+        const startEncounter = StartEncounter({gameRepository: testGameRepository()});
         const result = await startEncounter(testId, 1);
         expect(result).to.deep.equal({
             success: true
@@ -75,7 +75,7 @@ describe('The StartEncounter Use Case function', () => {
 
     it(`saves the Game instance back to the Game repository`, async () => {
         const gameRepository = testGameRepository();
-        const startEncounter = StartEncounterUseCase({gameRepository});
+        const startEncounter = StartEncounter({gameRepository});
         await startEncounter(testId, 1);
 
         const game = gameRepository.getById(testId);

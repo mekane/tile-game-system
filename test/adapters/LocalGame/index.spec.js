@@ -1,11 +1,11 @@
 const expect = require('chai').expect;
 const {validScenario} = require('../../_fixtures');
 
-const LocalGameAdapterInit = require('../../../src/adapters/LocalGame');
+const LocalGameAdapter = require('../../../src/adapters/LocalGame');
 
 describe('The LocalGameAdapter', () => {
     it(`exports an object with use case functions`, () => {
-        const localGameAdapter = LocalGameAdapterInit();
+        const localGameAdapter = LocalGameAdapter();
 
         expect(localGameAdapter).to.be.an('object');
         expect(localGameAdapter.gameAction).to.be.a('function');
@@ -16,7 +16,7 @@ describe('The LocalGameAdapter', () => {
 
 describe('A realistic test using the Local Game Adapter to make a new game', () => {
     it('creates, manipulates, and gets state for a Game', async () => {
-        const localGameAdapter = LocalGameAdapterInit();
+        const localGameAdapter = LocalGameAdapter();
 
         await populateSomeScenarios(localGameAdapter);
         const list = await localGameAdapter.listScenarios();

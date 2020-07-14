@@ -1,10 +1,12 @@
 const Scenario = require('../entities/Scenario');
 
-function ListScenariosUseCase({scenarioRepository}) {
+function ListScenarios({scenarioRepository}) {
     return async function ListScenarios() {
         const scenarioData = await scenarioRepository.list();
         return scenarioData.map(Scenario);
     }
 }
 
-module.exports = ListScenariosUseCase;
+module.exports = {
+    ListScenarios
+};

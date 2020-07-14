@@ -2,15 +2,15 @@ const expect = require('chai').expect;
 const {mockRepository, inMemoryRepository} = require('../_mocks');
 const {validScenario} = require('../_fixtures');
 
-const SaveScenariosUseCase = require('../../src/useCases/saveScenario');
+const {SaveScenario} = require('../../src/useCases/saveScenario');
 
 describe('The SaveScenario Use Case Initializer', () => {
     it(`exports an init function to inject the module with dependencies`, () => {
-        expect(SaveScenariosUseCase).to.be.a('function');
+        expect(SaveScenario).to.be.a('function');
     });
 
     it('returns a function from the initializer that calls the use case', () => {
-        const saveScenario = SaveScenariosUseCase({scenarioRepository: mockRepository()});
+        const saveScenario = SaveScenario({scenarioRepository: mockRepository()});
         expect(saveScenario).to.be.a('function');
     });
 });
@@ -20,7 +20,7 @@ describe('The SaveScenario Use Case function', () => {
 
     it(`stores the Scenario data in the repository`, () => {
         const scenarioRepository = inMemoryRepository();
-        const saveScenario = SaveScenariosUseCase({scenarioRepository});
+        const saveScenario = SaveScenario({scenarioRepository});
         const scenarioData = validScenario();
         scenarioData.id = testId;
         saveScenario(scenarioData);
@@ -30,7 +30,7 @@ describe('The SaveScenario Use Case function', () => {
     });
 
     it(`returns an OK message and the new id if this was a new scenario`, async () => {
-        const saveScenario = SaveScenariosUseCase({scenarioRepository: inMemoryRepository()});
+        const saveScenario = SaveScenario({scenarioRepository: inMemoryRepository()});
         const scenarioData = validScenario();
 
         const result = await saveScenario(scenarioData);
@@ -39,7 +39,7 @@ describe('The SaveScenario Use Case function', () => {
     });
 
     it(`returns an OK message and the existing id if this was not a new scenario`, async () => {
-        const saveScenario = SaveScenariosUseCase({scenarioRepository: inMemoryRepository()});
+        const saveScenario = SaveScenario({scenarioRepository: inMemoryRepository()});
         const scenarioData = validScenario();
         scenarioData.id = testId;
 

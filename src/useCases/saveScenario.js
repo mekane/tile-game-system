@@ -1,6 +1,6 @@
 const Scenario = require('../entities/Scenario');
 
-function SaveScenarioUseCase({scenarioRepository}) {
+function SaveScenario({scenarioRepository}) {
     return async function SaveScenario(scenarioData) {
 
         if (typeof scenarioData.id !== 'string') {
@@ -17,4 +17,6 @@ function SaveScenarioUseCase({scenarioRepository}) {
     }
 }
 
-module.exports = SaveScenarioUseCase;
+module.exports = {
+    SaveScenario
+};

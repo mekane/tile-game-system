@@ -1,6 +1,6 @@
 const Game = require('../entities/Game');
 
-function GameStateUseCase({gameRepository}) {
+function GameState({gameRepository}) {
     return async function gameState(gameId) {
         const gameData = await gameRepository.getById(gameId);
 
@@ -19,4 +19,6 @@ function GameStateUseCase({gameRepository}) {
     }
 }
 
-module.exports = GameStateUseCase;
+module.exports = {
+    GameState
+};

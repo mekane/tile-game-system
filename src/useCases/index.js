@@ -1,9 +1,9 @@
-const GameActionUseCase = require('./gameAction');
-const GameStateUseCase = require('./gameState');
-const ListScenariosUseCase = require('./listScenarios');
-const NewGameUseCase = require('./newGame');
-const SaveScenarioUseCase = require('./saveScenario');
-const StartEncounterUseCase = require('./startEncounter');
+const {GameAction} = require('./gameAction');
+const {GameState} = require('./gameState');
+const {ListScenarios} = require('./listScenarios');
+const {NewGame} = require('./newGame');
+const {SaveScenario} = require('./saveScenario');
+const {StartEncounter} = require('./startEncounter');
 
 function init({gameRepository, scenarioRepository}) {
     if (isInvalid(gameRepository))
@@ -12,12 +12,12 @@ function init({gameRepository, scenarioRepository}) {
     if (isInvalid(scenarioRepository))
         throw new Error('Error initializing Controller: missing repository scenarioRepository');
 
-    const gameAction = GameActionUseCase({gameRepository});
-    const gameState = GameStateUseCase({gameRepository});
-    const newGame = NewGameUseCase({gameRepository, scenarioRepository});
-    const listScenarios = ListScenariosUseCase({scenarioRepository});
-    const saveScenario = SaveScenarioUseCase({scenarioRepository});
-    const startEncounter = StartEncounterUseCase({gameRepository});
+    const gameAction = GameAction({gameRepository});
+    const gameState = GameState({gameRepository});
+    const newGame = NewGame({gameRepository, scenarioRepository});
+    const listScenarios = ListScenarios({scenarioRepository});
+    const saveScenario = SaveScenario({scenarioRepository});
+    const startEncounter = StartEncounter({gameRepository});
 
     return {
         gameAction,

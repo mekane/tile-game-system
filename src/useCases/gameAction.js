@@ -1,6 +1,6 @@
 const Game = require('../entities/Game');
 
-function init({gameRepository}) {
+function GameAction({gameRepository}) {
     return async function gameAction(gameId, gameAction) {
         const gameData = await gameRepository.getById(gameId);
 
@@ -25,4 +25,6 @@ function init({gameRepository}) {
     }
 }
 
-module.exports = init;
+module.exports = {
+    GameAction
+};

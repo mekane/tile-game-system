@@ -2,7 +2,7 @@ const expect = require('chai').expect;
 const {mockRepository, spyRepository, inMemoryRepository, stubRepository} = require('../_mocks');
 const {validGame, validGameAction} = require('../_fixtures');
 
-const GameActionUseCase = require('../../src/useCases/gameAction');
+const {GameAction} = require('../../src/useCases/gameAction');
 
 const testId = 'test_id';
 
@@ -14,18 +14,18 @@ function testGameRepository() {
 
 describe('The GameAction Use Case Initializer', () => {
     it(`exports an init function to inject the module with dependencies`, () => {
-        expect(GameActionUseCase).to.be.a('function');
+        expect(GameAction).to.be.a('function');
     });
 
     it('returns a function from the initializer that calls the use case', () => {
-        const gameAction = GameActionUseCase({gameRepository: mockRepository()});
+        const gameAction = GameAction({gameRepository: mockRepository()});
         expect(gameAction).to.be.a('function');
     });
 });
 
 describe('The GameAction Use Case Function', () => {
     it(`returns an error status if the game is not found by id`, async () => {
-        const gameAction = GameActionUseCase({gameRepository: mockRepository()});
+        const gameAction = GameAction({gameRepository: mockRepository()});
         const result = await gameAction('bad_id', validGameAction());
         expect(result).to.deep.equal({
             success: false,
@@ -34,7 +34,7 @@ describe('The GameAction Use Case Function', () => {
     });
 
     it(`returns an error status if the game action is rejected`, async () => {
-        const gameAction = GameActionUseCase({gameRepository: testGameRepository()});
+        const gameAction = GameAction({gameRepository: testGameRepository()});
         const result = await gameAction('test_id', {action: 'invalidGameAction'});
         expect(result).to.deep.equal({
             success: false,
@@ -44,7 +44,7 @@ describe('The GameAction Use Case Function', () => {
 
     it(`uses the GameRepository to find the Game by id`, async () => {
         const gameSpy = spyRepository();
-        const gameAction = GameActionUseCase({gameRepository: gameSpy});
+        const gameAction = GameAction({gameRepository: gameSpy});
         await gameAction('a_game_id', validGameAction());
 
         expect(gameSpy.getCalled).to.equal(1);
@@ -52,7 +52,7 @@ describe('The GameAction Use Case Function', () => {
 
     it(`sends the action to the Game`, async () => {
         const gameRepository = testGameRepository();
-        const gameAction = GameActionUseCase({gameRepository});
+        const gameAction = GameAction({gameRepository});
         await gameAction(testId, validGameAction());
 
         const game = gameRepository.getById(testId);
@@ -60,7 +60,7 @@ describe('The GameAction Use Case Function', () => {
     });
 
     it(`returns an OK status message if the action was accepted`, async () => {
-        const gameAction = GameActionUseCase({gameRepository: testGameRepository()});
+        const gameAction = GameAction({gameRepository: testGameRepository()});
         const result = await gameAction(testId, validGameAction());
         expect(result).to.deep.equal({
             success: true
@@ -71,7 +71,7 @@ describe('The GameAction Use Case Function', () => {
         const gameSpy = spyRepository();
         gameSpy.getById = _ => validGame(); //stub out a game so it gets to the save part
 
-        const gameAction = GameActionUseCase({gameRepository: gameSpy});
+        const gameAction = GameAction({gameRepository: gameSpy});
         await gameAction('a_game_id', validGameAction());
 
         expect(gameSpy.saveCalled).to.equal(1);
