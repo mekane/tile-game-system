@@ -36,7 +36,19 @@ function inMemoryRepository(initialData) {
     }
 }
 
+function inMemoryDataStore(initialData) {
+    let repo = initialData || {};
+
+    return {
+        get: id => repo[id],
+        list: () => Object.values(repo),
+        put: obj => repo[obj.id] = obj,
+        debug: () => console.dir(repo)
+    }
+}
+
 module.exports = {
+    inMemoryDataStore,
     inMemoryRepository,
     mockRepository,
     spyRepository

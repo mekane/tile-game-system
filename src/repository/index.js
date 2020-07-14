@@ -1,4 +1,4 @@
-const requiredDataStoreMethods = ['get', 'list', 'save'];
+const requiredDataStoreMethods = ['get', 'list', 'put'];
 
 function Repository(dataStore) {
 
@@ -7,10 +7,17 @@ function Repository(dataStore) {
             throw new Error(`Invalid DataStore: missing required method ${method}`);
     });
 
+    function save(item) {
+        if (!item || typeof item.id === 'undefined') {
+            throw new Error('Error saving to repository: no id property on ' + item);
+        }
+        dataStore.put(item);
+    }
+
     return {
-        getById: _ => _,
-        list: () => '',
-        save: _ => _,
+        getById: id => dataStore.get(id),
+        list: dataStore.list,
+        save,
     }
 }
 
