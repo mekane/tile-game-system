@@ -1,6 +1,6 @@
-const UseCasesInit = require('./useCases/index');
+const UseCasesInit = require('../../useCases/index');
 
-const {inMemoryRepository} = require('../test/_mocks'); //TODO: make a different in-memory repo with tests
+const {inMemoryRepository} = require('../../../test/_mocks'); //TODO: make a different in-memory repo with tests
 
 /**
  * This wraps the use cases, injects in-memory repositories, and exports an
