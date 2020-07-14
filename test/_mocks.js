@@ -1,11 +1,9 @@
+const {Repository} = require('../src/repository');
+
 const noop = () => null;
 
 function mockRepository() {
-    return {
-        getById: noop,
-        list: noop,
-        save: noop
-    }
+    return Repository({get: noop, list: noop, put: noop});
 }
 
 function spyRepository() {
@@ -26,14 +24,7 @@ function spyRepository() {
 }
 
 function inMemoryRepository(initialData) {
-    let repo = initialData || {};
-
-    return {
-        getById: id => repo[id],
-        list: () => Object.values(repo),
-        save: obj => repo[obj.id] = obj,
-        debug: () => console.dir(repo)
-    }
+    return Repository(inMemoryDataStore(initialData));
 }
 
 function inMemoryDataStore(initialData) {
