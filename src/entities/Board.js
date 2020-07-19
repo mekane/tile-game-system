@@ -57,10 +57,17 @@ function Board(attributes) {
     const terrain = JSON.parse(JSON.stringify(attributes.terrain));
 
     function getDimensions() {
-        const rows = tiles.length;
-        const cols = tiles[0].length;
-        const width = cols;
-        const height = rows;
+        const numberOfRows = tiles.length;
+
+        let numberOfColumns = -1;
+        tiles.forEach(row => {
+            if (row.length > numberOfColumns)
+                numberOfColumns = row.length;
+        });
+
+        const width = numberOfColumns;
+        const height = numberOfRows;
+
         return {width, height};
     }
 
@@ -76,18 +83,16 @@ function Board(attributes) {
     }
 
     function getTileAt({x, y}) {
-        return isValidTile(x, y) ? tiles[y][x] : null;
-    }
-
-    function isValidTile(x, y) {
         if (x < 0 || y < 0)
-            return false;
+            return null;
 
-        const {width, height} = getDimensions();
-        if (x >= width || y >= height)
-            return false;
+        if (y >= tiles.length)
+            return null;
 
-        return true;
+        if (x > tiles[y].length)
+            return null;
+
+        return tiles[y][x];
     }
 
     function toJson() {

@@ -92,12 +92,12 @@ describe('The Board entity', () => {
         expect(newBoard.getDimensions()).to.deep.equal({width: 3, height: 3});
     });
 
-    it(`uses the first row as the width for getDimensions`, () => {
+    it(`finds the widest row for the width for getDimensions`, () => {
         const boardData = {
             name: 'Test',
             tiles: [
-                ['A', 'A', 'A', 'A', 'A', 'A', 'A'],
                 ['A', 'A'],
+                ['A', 'A', 'A', 'A', 'A', 'A', 'A'],
                 ['A', 'A', 'A'],
                 ['A', 'A']
             ],
