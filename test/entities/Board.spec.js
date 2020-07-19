@@ -131,17 +131,13 @@ describe('The Board entity', () => {
         });
     });
 
-    it(`returns defaults for unknown tiles`, () => {
-        const expectedDefault = {
-            name: 'Unknown',
-            movementRequired: 1,
-            blocksMovement: false
-        };
+    it(`returns empty for unknown tiles`, () => {
+        const expected = {empty: true};
         const newBoard = Board(validBoard());
-        expect(newBoard.getTerrainAt({x: -1, y: 0})).to.deep.equal(expectedDefault);
-        expect(newBoard.getTerrainAt({x: 0, y: -1})).to.deep.equal(expectedDefault);
-        expect(newBoard.getTerrainAt({x: -1, y: -1})).to.deep.equal(expectedDefault);
-        expect(newBoard.getTerrainAt({x: 99, y: 99})).to.deep.equal(expectedDefault);
+        expect(newBoard.getTerrainAt({x: -1, y: 0})).to.deep.equal(expected);
+        expect(newBoard.getTerrainAt({x: 0, y: -1})).to.deep.equal(expected);
+        expect(newBoard.getTerrainAt({x: -1, y: -1})).to.deep.equal(expected);
+        expect(newBoard.getTerrainAt({x: 99, y: 99})).to.deep.equal(expected);
     });
 
     it(`has a getTileAt method that returns tile definitions at a given x,y coordinate`, () => {
@@ -166,6 +162,64 @@ describe('The Board entity', () => {
         expect(newBoard.getType()).to.equal('Board');
     });
 
+    it(`has a getViewData function that returns JSON data suitable for a view`, () => {
+        let boardData = {
+            name: 'Test',
+            tiles: [
+                ['A', 'A'],
+                ['A', 'B'],
+                ['A', 'C'],
+                ['A', 'A']
+            ],
+            terrain: {
+                A: {name: 'Grass'},
+                B: {name: 'Rocks', movementRequired: 2},
+                C: {name: 'Walls', blocksMovement: true}
+            }
+        }
+        let newBoard = Board(boardData);
+
+        const grass = {name: 'Grass', movementRequired: 1, blocksMovement: false};
+        const rocks = {name: 'Rocks', movementRequired: 2, blocksMovement: false};
+        const walls = {name: 'Walls', movementRequired: 1, blocksMovement: true};
+        const expectedViewData = [
+            [grass, grass],
+            [grass, rocks],
+            [grass, walls],
+            [grass, grass]
+        ];
+
+        expect(newBoard.getViewData()).to.deep.equal(expectedViewData);
+    });
+
+    it(`fills in null tiles with empty spaces`, () => {
+        const boardData = {
+            name: 'Test',
+            tiles: [
+                ['A', 'A'],
+                ['A', 'A', 'A', 'A', 'A'],
+                ['A', 'A', 'A'],
+                ['A', 'A']
+            ],
+            terrain: {A: {name: 'Grass'}}
+        }
+        const newBoard = Board(boardData);
+
+        const grass = {name: 'Grass', movementRequired: 1, blocksMovement: false};
+        const empty = {empty: true};
+
+        const expectedViewData = [
+            [grass, grass, empty, empty, empty],
+            [grass, grass, grass, grass, grass],
+            [grass, grass, grass, empty, empty],
+            [grass, grass, empty, empty, empty]
+        ];
+
+        const actualData = newBoard.getViewData();
+        console.dir(actualData);
+        expect(actualData).to.deep.equal(expectedViewData);
+    });
+
     it(`has a toJson method that returns the raw data for the Board`, () => {
         const newBoard = Board(validBoard());
         expect(validator.validateAs(newBoard.toJson(), newBoard.getType())).to.equal(true);
@@ -182,5 +236,3 @@ describe('The Board entity', () => {
         expect(json.terrain, 'Terrain JSON').to.not.equal(originalBoardData.terrain);
     });
 });
-
-

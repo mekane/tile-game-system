@@ -45,6 +45,7 @@ const terrainDefaults = Object.freeze({
     movementRequired: 1,
     blocksMovement: false
 });
+const empty = {empty: true};
 
 function Board(attributes) {
 
@@ -79,7 +80,7 @@ function Board(attributes) {
             return Object.assign({}, terrainDefaults, terrainProperties);
         }
 
-        return terrainDefaults;
+        return empty;
     }
 
     function getTileAt({x, y}) {
@@ -89,10 +90,25 @@ function Board(attributes) {
         if (y >= tiles.length)
             return null;
 
-        if (x > tiles[y].length)
+        if (x >= tiles[y].length)
             return null;
 
         return tiles[y][x];
+    }
+
+    function getViewData() {
+        const {width, height} = getDimensions();
+
+        const tileData = [];
+        for (let y = 0; y < height; y++) {
+            let nextRow = [];
+            for (let x = 0; x < width; x++) {
+                nextRow.push(getTerrainAt({x, y}));
+            }
+            tileData.push(nextRow);
+        }
+
+        return tileData;
     }
 
     function toJson() {
@@ -110,6 +126,7 @@ function Board(attributes) {
         getTerrainAt,
         getTileAt,
         getType: _ => typeName,
+        getViewData,
         toJson
     });
 }
