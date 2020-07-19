@@ -49,12 +49,12 @@ function validEncounter() {
     }
 }
 
-function validGame() {
-    return {
+function validGame(overrides) {
+    return Object.assign({
         name: 'Test',
         scenario: validScenario(),
         currentEncounterIndex: 0
-    }
+    }, overrides);
 }
 
 function validGameAction() {

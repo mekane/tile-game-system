@@ -53,6 +53,23 @@ describe('Game Entity Properties and Methods', () => {
         expect(newGame.getId()).to.equal(idString);
     });
 
+    it(`has a getCurrentBoard method that returns the board for the current encounter`, () => {
+        const encounterData0 = gameDataWithMoreEncounterDetail().scenario.encounters[0];
+        const encounterData1 = gameDataWithMoreEncounterDetail().scenario.encounters[1];
+
+        const expectedBoard0 = encounterData0.board;
+        const expectedBoard1 = encounterData1.board;
+
+        const game = Game(gameDataWithMoreEncounterDetail());
+        const actualBoard0 = game.getCurrentBoard().toJson();
+        game.startEncounter(0);
+        expect(actualBoard0).to.deep.equal(expectedBoard0);
+
+        game.startEncounter(1);
+        const actualBoard1 = game.getCurrentBoard().toJson();
+        expect(actualBoard1).to.deep.equal(expectedBoard1);
+    });
+
     it(`has a getType function that returns the name of the entity type`, () => {
         const newGame = Game(validGame());
         expect(newGame.getType()).to.equal('Game');

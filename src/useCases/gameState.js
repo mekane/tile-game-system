@@ -12,9 +12,13 @@ function GameState({gameRepository}) {
 
         const game = Game(gameData);
 
+        const boardData = game.getCurrentBoard().toJson();
+        delete boardData.id;
+
         return {
             success: true,
-            state: game.getState()
+            state: game.getState(),
+            board: boardData
         };
     }
 }

@@ -147,7 +147,6 @@ function Game(attributes) {
         unitToMove.positionY = y;
     }
 
-    //TODO: make this its own use case
     function startEncounter(encounterIndex) {
         if (typeof encounterIndex !== 'number')
             throw new Error('missing encounter number');
@@ -173,9 +172,10 @@ function Game(attributes) {
 
     return Object.freeze({
         getId: _ => id,
-        getScenario: _ => scenario,
+        getCurrentBoard: () => getCurrentEncounter().getBoard(),
+        getScenario: () => scenario,
         getState,
-        getType: _ => typeName,
+        getType: () => typeName,
         sendAction,
         startEncounter,
         toJson

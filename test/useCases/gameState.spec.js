@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 const {mockRepository, spyRepository, inMemoryRepository, stubRepository} = require('../_mocks');
-const {validGame, validGameState} = require('../_fixtures');
+const {validBoard, validGame} = require('../_fixtures');
 
 const {GameState} = require('../../src/useCases/gameState');
 
@@ -48,7 +48,8 @@ describe('The GameState Use Case Function', () => {
             success: true,
             state: {
                 units: []
-            }
+            },
+            board: validBoard()
         });
     });
 });
