@@ -17,9 +17,9 @@ async function initGame() {
                     "id": "board_test_06356206",
                     "name": "Test",
                     "tiles": [
-                        ["A", "A", "B", "B"],
+                        ["A", "A", "B"],
                         ["C", "A", "B", "B"],
-                        ["D", "A", "A", 'A'],
+                        ["D", "A", "A"],
                     ],
                     "terrain": {
                         "A": {"name": "Grass"},

@@ -1,0 +1,15 @@
+.tile.grass {
+    background: #cfc;
+}
+
+.tile.trees {
+    background: #393;
+}
+
+.tile.hills {
+    background: #662;
+}
+
+.tile.stones {
+    background: #777;
+}

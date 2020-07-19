@@ -1,0 +1,11 @@
+tile.hallway {
+    background: #666;
+}
+
+tile.room {
+    background: #888;
+}
+
+tile.wall {
+    background: #444;
+}

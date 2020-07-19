@@ -1,17 +1,24 @@
 const h = require('snabbdom/h').default;
-
+const {cssSafeString} = require('../browserView/htmlHelpers');
 const tileSize = 100;
 
 function GameView(state) {
     console.log('GaveView render');
     const tiles = [];
 
-    const rowWidth = state.board.tiles[0].length; //TODO: compute this better and include in board state
+    const rowWidth = state.tiles[0].length; //TODO: compute this better and include in board state
 
-    state.board.tiles.forEach(row => {
-        row.forEach(terrainName => {
-            const tile = h('div.tile', terrainName);
-            tiles.push(tile);
+    state.tiles.forEach(row => {
+        row.forEach(tileData => {
+            if (tileData.empty) {
+                const tile = h(`div.tile.empty`, '');
+                tiles.push(tile);
+            }
+            else {
+                const terrain = cssSafeString(tileData.name).toLowerCase();
+                const tile = h(`div.tile.${terrain}`, tileData.name);
+                tiles.push(tile);
+            }
         });
     });
 
