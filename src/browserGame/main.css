@@ -1,3 +1,20 @@
 .game {
-    color: red;
+    border: 2px solid blue;
+    display: inline-grid;
+    grid-gap: 0;
+    padding-right: 1px; /* fixes weird grid outer border */
+}
+
+.tile {
+    background: #ccc;
+    border: 1px solid #666;
+    height: 100px;
+    width: 100px;
+}
+
+/* centering everything in the tile */
+.tile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
