@@ -1,17 +1,26 @@
 const h = require('snabbdom/h').default;
 const {cssSafeString} = require('../browserView/htmlHelpers');
-const tileSize = 100;
 
-function TileView(tileData) {
+function TileView(tileData, tileX, tileY) {
     if (tileData.empty) {
         return h(`div.tile.empty`, '');
     }
     else {
         const terrain = cssSafeString(tileData.name).toLowerCase();
-        return h(`div.tile.${terrain}`, '');
+        const element = `div.tile.${terrain}`;
+
+        const elData = {
+            on: {
+                click: e => console.log(`tile click (${tileX},${tileY})`)
+            }
+        };
+
+        //console.log(`compute tile view (${tileX},${tileY})`);
+        return h(element, elData, []);
     }
 }
 
 module.exports = {
-    TileView
+    TileView,
+    TILE_SIZE: 100
 }
