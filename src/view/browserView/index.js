@@ -11,8 +11,42 @@ const patch = snabbdom.init([ // Init patch function with chosen modules
 const {GameView} = require('./GameView');
 
 async function BrowserView(domElement, gameId, gameAdapter) {
-    console.log('Init virtual DOM on', domElement);
     let vnode = toVNode(domElement);
+
+    initGlobalControls();
+    const nextState = await gameAdapter.gameState(gameId);
+    render(nextState);
+
+    async function action(actionType, properties) {
+        console.log('game action ' + actionType, properties);
+        const moveAction = {action: 'moveUnit', unitIndex: 0, direction: properties.dir};
+        const moveResult = await gameAdapter.gameAction(gameId, moveAction);
+        console.log(`move ${properties.dir}`, moveResult);
+        const nextState = await gameAdapter.gameState(gameId);
+        render(nextState);
+    }
+
+    function initGlobalControls() {
+        const body = document.querySelector('body');
+        body.addEventListener('keyup', e => {
+            switch (e.key) {
+                case 'ArrowUp':
+                    action('move', {dir: 'n'});
+                    break;
+                case 'ArrowRight':
+                    action('move', {dir: 'e'});
+                    break;
+                case 'ArrowDown':
+                    action('move', {dir: 's'});
+                    break;
+                case 'ArrowLeft':
+                    action('move', {dir: 'w'});
+                    break;
+                default:
+                    console.log(e.key);
+            }
+        });
+    }
 
     function render(nextState) {
         console.log('render', nextState);
@@ -20,8 +54,6 @@ async function BrowserView(domElement, gameId, gameAdapter) {
         vnode = patch(vnode, nextView);
     }
 
-    const nextState = await gameAdapter.gameState(gameId);
-    render(nextState);
 }
 
 module.exports = {
