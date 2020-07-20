@@ -1,8 +1,11 @@
+* {
+    box-sizing: border-box;
+}
+
 .game {
-    border: 2px solid blue;
+    border: 2px solid black;
     display: inline-grid;
     grid-gap: 0;
-    padding-right: 1px; /* fixes weird grid outer border */
 }
 
 .tile {

@@ -1,5 +1,5 @@
 const h = require('snabbdom/h').default;
-const {cssSafeString} = require('../browserView/htmlHelpers');
+const {TileView} = require('./TileView');
 const tileSize = 100;
 
 function GameView(state) {
@@ -10,15 +10,7 @@ function GameView(state) {
 
     state.tiles.forEach(row => {
         row.forEach(tileData => {
-            if (tileData.empty) {
-                const tile = h(`div.tile.empty`, '');
-                tiles.push(tile);
-            }
-            else {
-                const terrain = cssSafeString(tileData.name).toLowerCase();
-                const tile = h(`div.tile.${terrain}`, tileData.name);
-                tiles.push(tile);
-            }
+            tiles.push(TileView(tileData));
         });
     });
 
