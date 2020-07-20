@@ -1,18 +1,29 @@
 const h = require('snabbdom/h').default;
 const {TileView, TILE_SIZE} = require('./TileView');
 
-function GameView(state) {
-    const rowWidth = state.tiles[0].length; //TODO: compute this better and include in board state
+function GameView(viewData) {
+    const rowWidth = viewData.tiles[0].length; //TODO: compute this better and include in board state
 
-    const tiles = state.tiles.flatMap(makeTileViews);
+    const tiles = viewData.tiles.flatMap(makeTileViews);
 
     const style = {
         gridTemplateColumns: `repeat(${rowWidth}, ${TILE_SIZE}px)`
     };
 
-    console.log(tiles);
+    viewData.state.units.forEach(unitData => {
+        const element = `div.unit.${unitData.name}`;
+        const unitView = h(element, {}, unitData.name);
+        console.log(unitData);
+
+        const tileNumber = getTileNumber(unitData.positionX, unitData.positionY);
+        tiles[tileNumber].children.push(unitView);
+    });
 
     return h('div.game', {style}, tiles);
+
+    function getTileNumber(x, y) {
+        return y * rowWidth + x;
+    }
 }
 
 function makeTileViews(row, rowNumber) {
@@ -22,3 +33,4 @@ function makeTileViews(row, rowNumber) {
 module.exports = {
     GameView
 }
+

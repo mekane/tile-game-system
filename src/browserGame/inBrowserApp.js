@@ -68,7 +68,7 @@ async function initGame() {
     // set to 0 for the woods encounter
     // set to 1 for the space ship encounter
     await gameAdapter.startEncounter(gameId, 1);
-    await gameAdapter.gameAction(gameId, {action: 'addUnit', unitName: 'Goblin', boardX: 0, boardY: 0});
+    await gameAdapter.gameAction(gameId, {action: 'addUnit', unitName: 'Goblin', boardX: 1, boardY: 1});
     return gameId;
 }
 
