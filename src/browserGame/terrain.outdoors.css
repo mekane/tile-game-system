@@ -13,3 +13,8 @@
 .tile.stones {
     background: #777;
 }
+
+.unit.goblin {
+    background-color: #66dd88;
+    border-color: #118822;
+}
