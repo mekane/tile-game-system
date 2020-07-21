@@ -2,7 +2,7 @@
     box-sizing: border-box;
 }
 
-.game {
+.board {
     border: 2px solid black;
     display: inline-grid;
     grid-gap: 0;
