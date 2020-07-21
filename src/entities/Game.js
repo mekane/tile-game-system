@@ -44,11 +44,12 @@ function Game(attributes) {
             case 'addunit':
                 addUnit(message);
                 break;
+            case 'doneactivating':
+                doneActivating(message);
+                break;
             case 'moveunit':
                 moveUnit(message);
                 break;
-            case 'startencounter':
-                startEncounter(message);
         }
     }
 
@@ -107,6 +108,17 @@ function Game(attributes) {
             positionY: boardY,
         };
         state.units.push(newUnit);
+    }
+
+    function doneActivating({unitIndex}) {
+        if (typeof unitIndex !== 'number')
+            throw new Error('missing unit index');
+
+        const unitToMark = state.units[unitIndex];
+        if (typeof unitToMark !== 'object')
+            throw new Error(`could not find unit with index ${unitIndex}`);
+
+        unitToMark.doneActivating = true;
     }
 
     function moveUnit({unitIndex, direction}) {

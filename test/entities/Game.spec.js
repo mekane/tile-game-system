@@ -378,6 +378,27 @@ describe('Game Action - Move Unit', () => {
     });
 });
 
+describe('Game Action - Unit Done Activating', () => {
+    it(`throws an error if no unit is specified`, () => {
+        const game = validGameWithOneUnit();
+        const messageMissingUnit = () => game.sendAction({action: "doneActivating"});
+        expect(messageMissingUnit).to.throw(/missing unit index/);
+    });
+
+    it(`throws an error if the specified unit does not exist in the list of units`, () => {
+        const game = validGameWithOneUnit();
+        const unitNotFound = () => game.sendAction({action: "doneActivating", unitIndex: 1});
+        expect(unitNotFound).to.throw(/could not find unit with index/);
+    });
+
+    it(`marks the unit as done activating`, () => {
+        const game = validGameWithOneUnit();
+        game.sendAction({action: "doneActivating", unitIndex: 0});
+        const newState = game.getState();
+        expect(newState.units[0].doneActivating).to.equal(true);
+    });
+});
+
 describe('Serializing and Deserializing Games', () => {
     it(`can re-create itself from the output of its toJson method`, () => {
         const originalGameData = validGameDataWithIds();
