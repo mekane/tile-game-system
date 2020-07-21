@@ -4,6 +4,7 @@ const viewBundles = {
     entry: {
         browserApp: './src/browserGame/inBrowserApp.js',
     },
+    devtool: 'eval-cheap-source-map',
     mode: 'development',
     target: 'web',
     output: {
