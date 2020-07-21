@@ -21,6 +21,12 @@
         "$ref": "http://martykane.org/schemas/UnitAttributes.schema.json"
       },
       "minItems": 1
+    },
+    "init": {
+      "type": "array",
+      "item": {
+        "$ref": "http://martykane.org/schemas/GameAction.schema.json"
+      }
     }
   },
   "additionalProperties": false,

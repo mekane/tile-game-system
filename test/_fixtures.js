@@ -37,8 +37,8 @@ function validCharacter() {
     }
 }
 
-function validEncounter() {
-    return {
+function validEncounter(overrides) {
+    return Object.assign({
         name: 'Test',
         description: 'A cool encounter',
         board: validBoard(),
@@ -46,7 +46,16 @@ function validEncounter() {
             validUnit(),
             validUnit()
         ]
-    }
+    }, overrides);
+}
+
+function validEncounterWithInitialUnit() {
+    return validEncounter({
+        name: 'Test Encounter With Initial Unit',
+        init: [
+            {action: 'addUnit'}
+        ]
+    });
 }
 
 function validGame(overrides) {
@@ -87,6 +96,7 @@ module.exports = {
     validBoard,
     validCharacter,
     validEncounter,
+    validEncounterWithInitialUnit,
     validGame,
     validGameAction,
     validScenario,

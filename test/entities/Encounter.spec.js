@@ -1,6 +1,6 @@
 'use strict'
 const expect = require('chai').expect;
-const validEncounter = require('../_fixtures').validEncounter;
+const {validEncounter, validEncounterWithInitialUnit} = require('../_fixtures');
 const validator = require('../../src/validator');
 
 const Encounter = require('../../src/entities/Encounter');
@@ -35,8 +35,9 @@ describe('The Encounter entity', () => {
         expect(Encounter(badEncounterInvalidUnitDefs)).to.be.a('null');
     });
 
-    it(`returns a Encounter object if the attributes are valid`, () => {
+    it(`returns an Encounter object if the attributes are valid`, () => {
         expect(Encounter(validEncounter())).to.be.an('object');
+        expect(Encounter(validEncounterWithInitialUnit())).to.be.an('object');
     });
 
     it(`returns an immutable object`, () => {
@@ -118,4 +119,3 @@ describe('The Encounter entity', () => {
         expect(json.units, 'Units JSON').to.not.equal(originalEncounterData.units);
     });
 });
-
