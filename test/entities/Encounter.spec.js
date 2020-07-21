@@ -72,6 +72,15 @@ describe('The Encounter entity', () => {
         expect(board.getType()).to.equal('Board');
     });
 
+    it(`has a getInit method that returns a copy of the initial actions`, () => {
+        const encounterData = validEncounterWithInitialUnit();
+        const newEncounter = Encounter(encounterData);
+
+        expect(newEncounter.getInit()).to.not.equal(encounterData.init);
+        expect(newEncounter.getInit()[0]).to.not.equal(encounterData.init[0]);
+        expect(newEncounter.getInit()).to.deep.equal(encounterData.init);
+    });
+
     it(`has a getType function that returns the name of the entity type`, () => {
         const newEncounter = Encounter(validEncounter());
         expect(newEncounter.getType()).to.equal('Encounter');
@@ -117,5 +126,19 @@ describe('The Encounter entity', () => {
         expect(json).to.not.equal(originalEncounterData);
         expect(json.board, 'Board JSON').to.not.equal(originalEncounterData.board);
         expect(json.units, 'Units JSON').to.not.equal(originalEncounterData.units);
+    });
+
+    it(`can re-create itself from the output of its toJson method`, () => {
+        const originalData = validEncounterWithInitialUnit({id: 'test-id'});
+        originalData.board.id = 'board_test_1234';
+        originalData.units[0].id = 'unit_test_1234';
+        originalData.units[1].id = 'unit_test_1235';
+        const newEncounter = Encounter(originalData);
+
+        const newData = newEncounter.toJson();
+        expect(newData).to.deep.equal(originalData);
+
+        const reconstructedEncounter = Encounter(newData);
+        expect(reconstructedEncounter.toJson()).to.deep.equal(newData);
     });
 });

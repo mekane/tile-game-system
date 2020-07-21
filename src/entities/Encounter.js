@@ -21,6 +21,7 @@ function Encounter(attributes) {
     const {name, description} = attributes;
     const board = Board(attributes.board);
     const units = attributes.units.map(Unit);
+    const init = attributes.init || [];
 
     function getUnitsById() {
         const unitsById = {};
@@ -34,13 +35,15 @@ function Encounter(attributes) {
             name,
             description,
             board: board.toJson(),
-            units: units.map(u => u.toJson())
+            units: units.map(u => u.toJson()),
+            init
         }
     }
 
     return Object.freeze({
         getBoard: _ => board,
         getId: _ => id,
+        getInit: () => init.map(i => Object.assign({}, i)),
         getType: _ => typeName,
         getUnits: _ => units.slice(),
         getUnitsById,

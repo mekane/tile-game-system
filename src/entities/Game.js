@@ -170,6 +170,8 @@ function Game(attributes) {
         currentEncounterIndex = encounterIndex;
         const encounter = getCurrentEncounter();
         state = intializeStateForEncounter(encounter);
+
+        encounter.getInit().forEach(sendAction);
     }
 
     function toJson() {

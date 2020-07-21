@@ -49,13 +49,14 @@ function validEncounter(overrides) {
     }, overrides);
 }
 
-function validEncounterWithInitialUnit() {
-    return validEncounter({
+function validEncounterWithInitialUnit(overrides) {
+    const encounterWithInit = validEncounter({
         name: 'Test Encounter With Initial Unit',
         init: [
-            {action: 'addUnit'}
+            validGameAction()
         ]
     });
+    return Object.assign(encounterWithInit, overrides);
 }
 
 function validGame(overrides) {

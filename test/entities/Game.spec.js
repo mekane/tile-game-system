@@ -1,6 +1,6 @@
 'use strict'
 const expect = require('chai').expect;
-const validGame = require('../_fixtures').validGame;
+const {validEncounterWithInitialUnit, validGame} = require('../_fixtures');
 const validator = require('../../src/validator');
 
 const Game = require('../../src/entities/Game');
@@ -132,6 +132,17 @@ describe('Starting a new encounter', () => {
         game.startEncounter(1);
         expect(game.getState()).to.deep.equal(expectedGameState());
         expect(game.toJson().currentEncounterIndex).to.equal(1);
+    });
+
+    it(`executes actions to initialize the encounter`, () => {
+        const gameData = validGame();
+        const encounterWithInit = validEncounterWithInitialUnit();
+        gameData.scenario.encounters.push(encounterWithInit);
+        const game = Game(gameData);
+        game.startEncounter(2);
+
+        expect(game.getState().units).to.have.length(1);
+        //TODO: this would be a good use of the "action log" on the game
     });
 });
 

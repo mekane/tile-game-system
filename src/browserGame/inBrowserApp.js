@@ -6,7 +6,7 @@ const main = document.querySelector('#main');
 const gameAdapter = LocalGameAdapter();
 
 async function initGame() {
-    await gameAdapter.saveScenario({
+    const scenario = await gameAdapter.saveScenario({
             "id": "scenario_test_85756276",
             "name": "Test",
             "encounters": [{
@@ -32,7 +32,10 @@ async function initGame() {
                     "id": "unit_goblin_55818862",
                     "name": "Goblin",
                     "movement": 6
-                }]
+                }],
+                "init": [
+                    {"action": "addUnit", "unitName": "Goblin", "boardX": 1, "boardY": 1}
+                ]
             }, {
                 "id": "encounter_test_84134828",
                 "name": "Hulking Space Ship",
@@ -58,7 +61,10 @@ async function initGame() {
                     "id": "unit_goblin_68470464",
                     "name": "Goblin",
                     "movement": 6
-                }]
+                }],
+                "init": [
+                    {"action": "addUnit", "unitName": "Goblin", "boardX": 1, "boardY": 1}
+                ]
             }]
         }
     );
@@ -67,8 +73,7 @@ async function initGame() {
     const gameId = result.created;
     // set to 0 for the woods encounter
     // set to 1 for the space ship encounter
-    await gameAdapter.startEncounter(gameId, 1);
-    await gameAdapter.gameAction(gameId, {action: 'addUnit', unitName: 'Goblin', boardX: 1, boardY: 1});
+    await gameAdapter.startEncounter(gameId, 0);
     return gameId;
 }
 
