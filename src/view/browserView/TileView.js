@@ -22,5 +22,5 @@ function TileView(tileData, tileX, tileY) {
 
 module.exports = {
     TileView,
-    TILE_SIZE: 100
+    TILE_SIZE: 64
 }

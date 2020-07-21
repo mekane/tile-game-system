@@ -3,12 +3,15 @@ const {TileView, TILE_SIZE} = require('./TileView');
 const {UnitView} = require('./UnitView');
 
 function GameView(viewData) {
+    const rowHeight = viewData.tiles.length; //TODO: include in board state
     const rowWidth = viewData.tiles[0].length; //TODO: compute this better and include in board state
 
     const tiles = viewData.tiles.flatMap(makeTileViews);
 
     const style = {
-        gridTemplateColumns: `repeat(${rowWidth}, ${TILE_SIZE}px)`
+        gridTemplateColumns: `repeat(${rowWidth}, ${TILE_SIZE}px)`,
+        gridTemplateRows: `repeat(${rowHeight}, ${TILE_SIZE}px)`,
+        fontSize: `${TILE_SIZE / 4}px`
     };
 
     viewData.state.units.forEach(makeUnitView);
