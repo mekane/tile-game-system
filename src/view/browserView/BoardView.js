@@ -2,7 +2,7 @@ const h = require('snabbdom/h').default;
 const {TileView, TILE_SIZE} = require('./TileView');
 const {UnitView} = require('./UnitView');
 
-function BoardView(tileData, units) {
+function BoardView(tileData, units, lastUnitMove = {}) {
     /*PROFILE*/window.profileGameView['BoardView']++;
 
     const rowHeight = tileData.length; //TODO: include in board state
@@ -27,7 +27,9 @@ function BoardView(tileData, units) {
 
     function makeUnitView(unitData, unitNumber) {
         const tileNumber = getTileNumber(unitData.positionX, unitData.positionY);
-        tiles[tileNumber].children.push(UnitView(unitData, unitNumber));
+        const lastMove = lastUnitMove.unitIndex === unitNumber ? lastUnitMove.direction : '';
+        const unitView = UnitView(unitData, unitNumber, TILE_SIZE, lastMove);
+        tiles[tileNumber].children.push(unitView);
     }
 }
 

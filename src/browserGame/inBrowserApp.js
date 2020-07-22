@@ -54,7 +54,7 @@ async function initGame() {
                 }
             },
             "units": [
-                {"id": "unit_marine_17516600", "name": "Space Marine", "movement": 4},
+                {"id": "unit_marine_17516600", "name": "Space Marine", "movement": 40},
                 {"id": "unit_genestealer_17516600", "name": "Genestealer", "movement": 6}
             ],
             "init": [

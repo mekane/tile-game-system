@@ -10,6 +10,8 @@ const patch = snabbdom.init([ // Init patch function with chosen modules
 
 const {GameView} = require('./GameView');
 
+let lastUnitMove = {};
+
 async function BrowserView(domElement, gameId, gameAdapter) {
     let vnode = toVNode(domElement);
 
@@ -19,11 +21,19 @@ async function BrowserView(domElement, gameId, gameAdapter) {
 
     async function action(actionType, properties) {
         console.log('game action ' + actionType, properties);
+
         const moveAction = {action: 'moveUnit', unitIndex: 0, direction: properties.dir};
         const moveResult = await gameAdapter.gameAction(gameId, moveAction);
-        console.log(`move ${properties.dir}`, moveResult);
-        const nextState = await gameAdapter.gameState(gameId);
-        render(nextState);
+        if (moveResult.success) {
+            lastUnitMove = moveAction;
+            const nextState = await gameAdapter.gameState(gameId);
+            nextState.lastUnitMove = lastUnitMove;
+            render(nextState);
+        }
+        else {
+            console.log(moveResult.error);
+            lastUnitMove = {};
+        }
     }
 
     function initGlobalControls() {

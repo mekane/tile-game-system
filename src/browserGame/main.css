@@ -35,3 +35,9 @@
     justify-content: center;
     align-items: center;
 }
+
+
+/* Unit List */
+.unit-list {
+    display: inline-grid;
+}
