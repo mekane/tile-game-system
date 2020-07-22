@@ -27,6 +27,9 @@ function Scenario(attributes) {
     const name = attributes.name;
     const encounters = attributes.encounters.map(Encounter);
 
+    if (encounters.some(e => e === null))
+        console.log('Warning, one or more encounters were invalid', attributes.encounters);
+
     function toJson() {
         return {
             id,

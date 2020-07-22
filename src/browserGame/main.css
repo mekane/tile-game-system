@@ -23,8 +23,9 @@
     background: #999;
     border: 1px solid #222;
     border-radius: 50%;
-    width: 80%;
     height: 80%;
+    width: 80%;
+    text-align: center;
 }
 
 /* centering content */

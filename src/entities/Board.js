@@ -75,7 +75,7 @@ function Board(attributes) {
     function getTerrainAt({x, y}) {
         const terrainType = getTileAt({x, y});
 
-        if (terrainType !== null) {
+        if (typeof terrainType === 'string' && terrainType !== '' && terrainType !== ' ') {
             const terrainProperties = terrain[terrainType];
             return Object.assign({}, terrainDefaults, terrainProperties);
         }

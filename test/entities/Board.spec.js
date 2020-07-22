@@ -192,14 +192,14 @@ describe('The Board entity', () => {
         expect(newBoard.getViewData()).to.deep.equal(expectedViewData);
     });
 
-    it(`fills in null tiles with empty spaces`, () => {
+    it(`fills in undefined tiles or spaces ('' or " ") with empty spaces`, () => {
         const boardData = {
             name: 'Test',
             tiles: [
-                ['A', 'A'],
+                [, 'A', 'A'],
                 ['A', 'A', 'A', 'A', 'A'],
-                ['A', 'A', 'A'],
-                ['A', 'A']
+                ['', 'A', 'A'],
+                [' ', 'A', 'A']
             ],
             terrain: {A: {name: 'Grass'}}
         }
@@ -209,14 +209,13 @@ describe('The Board entity', () => {
         const empty = {empty: true};
 
         const expectedViewData = [
-            [grass, grass, empty, empty, empty],
+            [empty, grass, grass, empty, empty],
             [grass, grass, grass, grass, grass],
-            [grass, grass, grass, empty, empty],
-            [grass, grass, empty, empty, empty]
+            [empty, grass, grass, empty, empty],
+            [empty, grass, grass, empty, empty]
         ];
 
         const actualData = newBoard.getViewData();
-        console.dir(actualData);
         expect(actualData).to.deep.equal(expectedViewData);
     });
 

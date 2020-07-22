@@ -2,6 +2,10 @@
     background: #666;
 }
 
+.tile.hallway2 {
+    background: #777;
+}
+
 .tile.room {
     background: #888;
 }

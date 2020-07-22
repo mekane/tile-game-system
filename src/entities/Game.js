@@ -16,7 +16,7 @@ function Game(attributes) {
 
     let currentEncounterIndex = attributes.currentEncounterIndex || 0;
 
-    let state = attributes.currentState || intializeStateForEncounter(scenario.getEncounter(currentEncounterIndex));
+    let state = attributes.currentState || initializeStateForEncounter(scenario.getEncounter(currentEncounterIndex));
 
     function getCurrentEncounter() {
         return scenario.getEncounter(currentEncounterIndex);
@@ -26,7 +26,7 @@ function Game(attributes) {
         return state;
     }
 
-    function intializeStateForEncounter(currentEncounter) {
+    function initializeStateForEncounter(currentEncounter) {
         const boardDefinition = currentEncounter.getBoard().toJson();
 
         const newState = {
@@ -169,7 +169,7 @@ function Game(attributes) {
 
         currentEncounterIndex = encounterIndex;
         const encounter = getCurrentEncounter();
-        state = intializeStateForEncounter(encounter);
+        state = initializeStateForEncounter(encounter);
 
         encounter.getInit().forEach(sendAction);
     }
