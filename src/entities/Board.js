@@ -93,7 +93,11 @@ function Board(attributes) {
         if (x >= tiles[y].length)
             return null;
 
-        return tiles[y][x];
+        const tileValue = tiles[y][x];
+        if (tileValue === '' || tileValue === ' ')
+            return null;
+
+        return tileValue;
     }
 
     function getViewData() {

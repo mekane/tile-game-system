@@ -10,7 +10,7 @@ function UnitView(unitData, unitNumber, TILE_SIZE, lastMoveDirection) {
     const viewData = {
         style: {
             transform: getTransformForDirection(lastMoveDirection),
-            transition: 'transform .5s',
+            transition: `transform ${getTransitionSpeed(unitData.movementMax)}`,
             delayed: {
                 transform: 'translate(0, 0)',
             }
@@ -37,6 +37,10 @@ function UnitView(unitData, unitNumber, TILE_SIZE, lastMoveDirection) {
             default:
                 return '';
         }
+    }
+
+    function getTransitionSpeed(moveRate) {
+        return moveRate < 5 ? '1s' : '.3s';
     }
 }
 

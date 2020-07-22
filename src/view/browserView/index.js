@@ -42,18 +42,33 @@ async function BrowserView(domElement, gameId, gameAdapter) {
             switch (e.key) {
                 case 'ArrowUp':
                     action('move', {dir: 'n'});
+                    e.preventDefault();
                     break;
                 case 'ArrowRight':
                     action('move', {dir: 'e'});
+                    e.preventDefault();
                     break;
                 case 'ArrowDown':
                     action('move', {dir: 's'});
+                    e.preventDefault();
                     break;
                 case 'ArrowLeft':
                     action('move', {dir: 'w'});
+                    e.preventDefault();
                     break;
                 default:
                     console.log(e.key);
+            }
+        });
+
+        body.addEventListener('keydown', e => {
+            switch (e.key) {
+                case 'ArrowUp':
+                case 'ArrowRight':
+                case 'ArrowDown':
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    break;
             }
         });
     }

@@ -157,6 +157,16 @@ describe('The Board entity', () => {
         expect(newBoard.getTileAt({x: 99, y: 0})).to.be.a('null');
     });
 
+    it(`counts spaces ('' or ' ') as null (undefined) tiles`, () => {
+        const boardData = validBoard();
+        boardData.tiles[0][1] = '';
+        boardData.tiles[1][0] = ' ';
+        const newBoard = Board(boardData);
+
+        expect(newBoard.getTileAt({x: 1, y: 0})).to.be.a('null');
+        expect(newBoard.getTileAt({x: 0, y: 1})).to.be.a('null');
+    });
+
     it(`has a getType function that returns the name of the entity type`, () => {
         const newBoard = Board(validBoard());
         expect(newBoard.getType()).to.equal('Board');
