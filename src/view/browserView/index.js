@@ -50,10 +50,25 @@ async function BrowserView(domElement, gameId, gameAdapter) {
 
     function render(nextState) {
         console.log('render', nextState);
-        const nextView = GameView(nextState);
-        vnode = patch(vnode, nextView);
-    }
 
+        window.profileGameView = {
+            'BoardView': 0,
+            'GameView': 0,
+            'TileView': 0,
+            'UnitListView': 0,
+            'UnitView': 0
+        };
+
+        console.time("compute next view");
+        const nextView = GameView(nextState);
+        console.timeEnd("compute next view");
+
+        console.time("patch DOM");
+        vnode = patch(vnode, nextView);
+        console.timeEnd("patch DOM");
+
+        console.log('Game View Profile:', window.profileGameView);
+    }
 }
 
 module.exports = {

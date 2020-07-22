@@ -3,6 +3,8 @@ const {TileView, TILE_SIZE} = require('./TileView');
 const {UnitView} = require('./UnitView');
 
 function BoardView(tileData, units) {
+    /*PROFILE*/window.profileGameView['BoardView']++;
+
     const rowHeight = tileData.length; //TODO: include in board state
     const rowWidth = tileData[0].length; //TODO: compute this better and include in board state
 

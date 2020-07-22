@@ -3,6 +3,8 @@ const h = require('snabbdom/h').default;
 const block = 'unit-list'
 
 function UnitListView(units) {
+    /*PROFILE*/window.profileGameView['UnitListView']++;
+
     const header = h(`header.${block}__header`, 'Units');
     const list = makeUnitList(units);
 
