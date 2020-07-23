@@ -470,6 +470,16 @@ function validGameWithOneUnit() {
     return game;
 }
 
+function validGameWithVarietyOfUnits() {
+    const gameData = validGame();
+    const enc = gameData.scenario.encounters[0];
+    enc.units = [
+        {name: 'Marine', movement: 4},
+        {name: 'Alien', movement: 6},
+        {name: 'Blob', movement: 6},
+    ]
+}
+
 function gameDataWithMoreEncounterDetail() {
     const simpleBoard = {
         id: 'board_simple_1234',

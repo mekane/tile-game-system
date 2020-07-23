@@ -63,22 +63,30 @@ describe('The Unit entity', () => {
         expect(newUnit.getName()).to.equal('Goblin');
     });
 
+    it(`has a getTurnOrder function that returns the unit's turn order`, () => {
+        const newUnit = Unit(validUnit());
+        expect(newUnit.getTurnOrder()).to.equal(1);
+    });
+
     it(`has a getType function that returns the name of the entity type`, () => {
         const newUnit = Unit(validUnit());
         expect(newUnit.getType()).to.equal('Unit');
     });
 
     it(`has a toJson method that returns the raw data for the Unit`, () => {
-        const newUnit = Unit(validUnit());
+        const unitData = validUnit();
+        unitData.id = 'test_unit_1';
+        const newUnit = Unit(unitData);
+
+        expect(newUnit.toJson()).to.deep.equal(unitData);
         expect(validator.validateAs(newUnit.toJson(), newUnit.getType())).to.equal(true);
     });
 
     it(`returns copies from toJson, not original objects`, () => {
         const originalUnitData = validUnit();
         originalUnitData.id = 'unit_test_1234';
-
         const newUnit = Unit(originalUnitData);
-        const json = newUnit.toJson();
-        expect(json).to.not.equal(originalUnitData);
+
+        expect(newUnit.toJson()).to.not.equal(originalUnitData);
     });
 });

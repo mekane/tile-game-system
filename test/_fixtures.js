@@ -89,7 +89,8 @@ function validScenario(overrides) {
 function validUnit() {
     return {
         name: 'Goblin',
-        movement: 6
+        movement: 6,
+        turnOrder: 1
     }
 }
 

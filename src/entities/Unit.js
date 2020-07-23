@@ -10,21 +10,23 @@ function Unit(attributes) {
         return null;
 
     const id = attributes.id || util.generateId('unit', attributes.name);
-    const {name, movement} = attributes;
+    const {name, movement, turnOrder} = attributes;
 
     function toJson() {
         return {
             id,
             name,
-            movement
+            movement,
+            turnOrder
         }
     }
 
     return Object.freeze({
-        getId: _ => id,
-        getMovement: _ => movement,
-        getName: _ => name,
-        getType: _ => typeName,
+        getId: () => id,
+        getMovement: () => movement,
+        getName: () => name,
+        getTurnOrder: () => turnOrder,
+        getType: () => typeName,
         toJson
     });
 }
