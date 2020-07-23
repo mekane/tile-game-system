@@ -27,7 +27,6 @@ function Game(attributes) {
     }
 
     function initializeStateForEncounter(currentEncounter) {
-        const boardDefinition = currentEncounter.getBoard().toJson();
 
         const newState = {
             units: []
@@ -99,6 +98,8 @@ function Game(attributes) {
                 throw new Error('Add Unit failed: cannot add unit at specified coordinates');
         });
 
+        const unitTurnOrder = unitDefinition.getTurnOrder();
+
         const newUnit = {
             definitionId: unitDefinition.getId(),
             movementMax: unitDefinition.getMovement(),
@@ -106,6 +107,7 @@ function Game(attributes) {
             name: unitDefinition.getName(),
             positionX: boardX,
             positionY: boardY,
+            turnOrder: typeof unitTurnOrder === 'number' ? unitTurnOrder : 99
         };
         state.units.push(newUnit);
     }

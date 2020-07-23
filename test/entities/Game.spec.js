@@ -221,6 +221,17 @@ describe('Game Action - Add Unit', () => {
         expect(unit.name).to.equal('Goblin');
         expect(unit.positionX).to.equal(0);
         expect(unit.positionY).to.equal(0);
+        expect(unit.turnOrder).to.equal(1);
+    });
+
+    it(`sets default values for optional properties not set on the unit definition`, () => {
+        const gameData = validGame();
+        delete gameData.scenario.encounters[0].units[0].turnOrder;
+        const game = Game(gameData);
+        game.sendAction({action: 'addUnit', unitName: 'Goblin', boardX: 1, boardY: 1});
+
+        const unit = game.getState().units[0];
+        expect(unit.turnOrder).to.equal(99);
     });
 
     it(`throws an error if the terrain at the specified location blocks movement`, () => {
