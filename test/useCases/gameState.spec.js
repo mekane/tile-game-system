@@ -47,7 +47,10 @@ describe('The GameState Use Case Function', () => {
         expect(actualState).to.deep.equal({
             success: true,
             state: {
-                units: []
+                activeGroup: null,
+                activeUnit: null,
+                units: [],
+                unitsGroupedByTurnOrder: []
             },
             tiles: Board(validBoard()).getViewData()
         });

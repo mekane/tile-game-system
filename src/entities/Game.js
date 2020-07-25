@@ -29,10 +29,13 @@ function Game(attributes) {
     function initializeStateForEncounter(currentEncounter) {
 
         const newState = {
-            units: []
+            units: [],
+            unitsGroupedByTurnOrder: [],
+            activeGroup: null,
+            activeUnit: null
         };
 
-        return Object.freeze(newState);
+        return newState;
     }
 
     function sendAction(message) {
@@ -110,6 +113,24 @@ function Game(attributes) {
             turnOrder: typeof unitTurnOrder === 'number' ? unitTurnOrder : 99
         };
         state.units.push(newUnit);
+        state.unitsGroupedByTurnOrder = groupUnitsByTurnOrder(state.units);
+
+        state.activeGroup = 0;
+        state.activeUnit = 0;
+    }
+
+    function groupUnitsByTurnOrder(originalUnits) {
+        const units = originalUnits.slice();
+        const turnOrderMap = {};
+
+        units.forEach((unit, index) => {
+            if (typeof turnOrderMap[unit.turnOrder] === 'undefined') {
+                turnOrderMap[unit.turnOrder] = [];
+            }
+            turnOrderMap[unit.turnOrder].push(index);
+        });
+        const keys = Object.keys(turnOrderMap);
+        return keys.map(key => turnOrderMap[key]);
     }
 
     function doneActivating({unitIndex}) {
@@ -133,6 +154,9 @@ function Game(attributes) {
         const unitToMove = state.units[unitIndex];
         if (typeof unitToMove !== 'object')
             throw new Error(`Move Unit failed: could not find unit with index ${unitIndex}`);
+
+        if (unitToMove.doneActivating)
+            throw new Error(`Move Unit failed: unit is already done activating`);
 
         const unitX = unitToMove.positionX;
         const unitY = unitToMove.positionY;
