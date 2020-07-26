@@ -135,6 +135,77 @@ describe('Starting a new encounter', () => {
         expect(game.getState().units).to.have.length(1);
         //TODO: this would be a good use of the "action log" on the game
     });
+
+    it(`sorts the units by turn order and sets initial active values`, () => {
+        const gameData = validGameWithVarietyOfUnits();
+        gameData.scenario.encounters[1].init = [
+            {action: 'addUnit', unitName: 'Marine', boardX: 1, boardY: 1},
+            {action: 'addUnit', unitName: 'Marine', boardX: 2, boardY: 1},
+            {action: 'addUnit', unitName: 'Marine', boardX: 3, boardY: 1},
+            {action: 'addUnit', unitName: 'Alien', boardX: 1, boardY: 2},
+            {action: 'addUnit', unitName: 'Alien', boardX: 2, boardY: 2},
+            {action: 'addUnit', unitName: 'Blob', boardX: 1, boardY: 3}
+        ];
+        const game = Game(gameData);
+        game.startEncounter(1);
+
+        //TODO: could copy this test for a more detailed "reset" test and use this line:
+        //[0, 1, 2, 3, 4, 5].forEach(i => game.sendAction({action: 'doneActivating', unitIndex: i}));
+        const state = game.getState();
+
+        const expectedGroups = [
+            [0, 1, 2],
+            [3, 4],
+            [5]
+        ];
+        expect(state.unitsGroupedByTurnOrder).to.deep.equal(expectedGroups);
+        expect(state.activeGroup).to.equal(0);
+        expect(state.activeUnit).to.equal(0);
+    });
+
+    it(`sets the activeUnitIndex to the first unit in the list in the first group`, () => {
+        const gameData = validGameWithVarietyOfUnits();
+        gameData.scenario.encounters[1].init = [
+            {action: 'addUnit', unitName: 'Blob', boardX: 1, boardY: 3},
+            {action: 'addUnit', unitName: 'Alien', boardX: 1, boardY: 2},
+            {action: 'addUnit', unitName: 'Marine', boardX: 1, boardY: 1},
+            {action: 'addUnit', unitName: 'Alien', boardX: 2, boardY: 2},
+            {action: 'addUnit', unitName: 'Marine', boardX: 2, boardY: 1},
+            {action: 'addUnit', unitName: 'Marine', boardX: 3, boardY: 1}
+        ];
+        const game = Game(gameData);
+        game.startEncounter(1);
+
+        const expectedGroups = [
+            [2, 4, 5],
+            [1, 3],
+            [0]
+        ];
+        const state = game.getState();
+        expect(state.unitsGroupedByTurnOrder).to.deep.equal(expectedGroups);
+        expect(state.activeGroup).to.equal(0);
+        expect(state.activeUnit).to.equal(2);
+    });
+
+    it(`sorts in the the turn order groups correctly according to the original unit turn order`, () => {
+        const gameData = validGameWithUnitsForOrderTest();
+        gameData.scenario.encounters[1].init = [
+            {action: 'addUnit', unitName: 'U29', boardX: 3, boardY: 1},
+            {action: 'addUnit', unitName: 'U20', boardX: 2, boardY: 1},
+            {action: 'addUnit', unitName: 'U11', boardX: 2, boardY: 2},
+            {action: 'addUnit', unitName: 'U10', boardX: 1, boardY: 1},
+            {action: 'addUnit', unitName: 'U09', boardX: 1, boardY: 2},
+            {action: 'addUnit', unitName: 'U01', boardX: 1, boardY: 3}
+        ];
+        const game = Game(gameData);
+        game.startEncounter(1);
+
+        const expectedGroups = [[5], [4], [3], [2], [1], [0]];
+        const state = game.getState();
+        expect(state.unitsGroupedByTurnOrder).to.deep.equal(expectedGroups);
+        expect(state.activeGroup).to.equal(0);
+        expect(state.activeUnit).to.equal(5);
+    });
 });
 
 describe('Sending actions to the Game', () => {
@@ -202,7 +273,7 @@ describe('Game Action - Add Unit', () => {
     });
 
     it(`sets initial properties on the unit based on unit definition`, () => {
-        const game = validGameWithOneUnit();
+        const game = constructGameWithOneUnit();
         const unit = game.getState().units[0];
 
         expect(unit.id).to.be.an('undefined');
@@ -286,21 +357,20 @@ describe('Game Action - Add Unit', () => {
     });
 
     it(`adds additional unit groups for different turn orders`, () => {
-        const game = validGameWithVarietyOfUnits();
+        const game = Game(validGameWithVarietyOfUnits());
+        game.startEncounter(1);
         game.sendAction({action: 'addUnit', unitName: 'Marine', boardX: 1, boardY: 1});
         game.sendAction({action: 'addUnit', unitName: 'Marine', boardX: 2, boardY: 1});
         game.sendAction({action: 'addUnit', unitName: 'Alien', boardX: 3, boardY: 1});
 
         const state = game.getState();
         expect(state.unitsGroupedByTurnOrder).to.deep.equal([[0, 1], [2]]);
-        expect(state.activeGroup).to.equal(0);
-        expect(state.activeUnit).to.equal(0);
     });
 });
 
 describe('Game Action - Move Unit', () => {
     it(`throws an error if no unit or direction is specified`, () => {
-        const game = validGameWithOneUnit();
+        const game = constructGameWithOneUnit();
         const messageMissingUnit = () => game.sendAction({action: "moveUnit"});
         expect(messageMissingUnit).to.throw(/Move Unit failed: missing unit index/);
 
@@ -309,26 +379,26 @@ describe('Game Action - Move Unit', () => {
     });
 
     it(`throws an error if the specified unit does not exist in the list of units`, () => {
-        const game = validGameWithOneUnit();
+        const game = constructGameWithOneUnit();
         const unitNotFound = () => game.sendAction({action: "moveUnit", unitIndex: 1, direction: 'n'});
         expect(unitNotFound).to.throw(/Move Unit failed: could not find unit with index/);
     });
 
     it(`throws an error if the unit is done`, () => {
-        const game = validGameWithOneUnit();
+        const game = constructGameWithOneUnit();
         game.sendAction({action: 'doneActivating', unitIndex: 0});
         const unitIsDone = () => game.sendAction({action: "moveUnit", unitIndex: 0, direction: 'e'});
         expect(unitIsDone).to.throw(/unit is already done activating/);
     });
 
     it(`throws an error if the specified direction is invalid`, () => {
-        const game = validGameWithOneUnit();
+        const game = constructGameWithOneUnit();
         const unitNotFound = () => game.sendAction({action: "moveUnit", unitIndex: 0, direction: 'Foo'});
         expect(unitNotFound).to.throw(/Invalid action/);
     });
 
     it(`throws an error if the board location in the specified direction is invalid`, () => {
-        const game = validGameWithOneUnit();
+        const game = constructGameWithOneUnit();
         const action = 'moveUnit';
         const unitIndex = 0;
 
@@ -342,7 +412,7 @@ describe('Game Action - Move Unit', () => {
     });
 
     it(`throws an error if the specified board location already contains a unit`, () => {
-        const game = validGameWithOneUnit();
+        const game = constructGameWithOneUnit();
         const unitToAdd = game.getScenario().getEncounter(0).getUnits()[0];
         const unitId = unitToAdd.getId();
         const addUnitAction = {action: 'addUnit', unitId, boardX: 1, boardY: 0};
@@ -355,7 +425,7 @@ describe('Game Action - Move Unit', () => {
 
     it(`throws an error if the terrain of the destination tile blocks movement`, () => {
         const moveSouth = {action: 'moveUnit', unitIndex: 0, direction: 's'};
-        const game = validGameWithOneUnit();
+        const game = constructGameWithOneUnit();
         game.sendAction(moveSouth);
 
         const movementBlocked = () => game.sendAction(moveSouth);
@@ -363,7 +433,7 @@ describe('Game Action - Move Unit', () => {
     });
 
     it(`reduces the unit's movement remaining by one (by default)`, () => {
-        const game = validGameWithOneUnit();
+        const game = constructGameWithOneUnit();
 
         game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'se'});
 
@@ -386,7 +456,7 @@ describe('Game Action - Move Unit', () => {
     });
 
     it(`throws an error if the unit is out of movement`, () => {
-        const game = validGameWithOneUnit();
+        const game = constructGameWithOneUnit();
 
         game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'}); //5 remaining
         game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'w'}); //4
@@ -404,7 +474,7 @@ describe('Game Action - Move Unit', () => {
     });
 
     it(`throws an error if the unit doesn't have enough movement`, () => {
-        const game = validGameWithOneUnit();
+        const game = constructGameWithOneUnit();
 
         game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'}); //5 remaining
         game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'w'}); //4
@@ -421,7 +491,7 @@ describe('Game Action - Move Unit', () => {
     });
 
     it(`Moves the unit to the specified tile`, () => {
-        const game = validGameWithOneUnit();
+        const game = constructGameWithOneUnit();
         const moveUnitAction = {action: 'moveUnit', unitIndex: 0, direction: 'e'};
         game.sendAction(moveUnitAction);
 
@@ -433,85 +503,84 @@ describe('Game Action - Move Unit', () => {
 
 describe('Game Action - Unit Done Activating', () => {
     it(`throws an error if no unit is specified`, () => {
-        const game = validGameWithOneUnit();
+        const game = constructGameWithOneUnit();
         const messageMissingUnit = () => game.sendAction({action: "doneActivating"});
         expect(messageMissingUnit).to.throw(/missing unit index/);
     });
 
     it(`throws an error if the specified unit does not exist in the list of units`, () => {
-        const game = validGameWithOneUnit();
+        const game = constructGameWithOneUnit();
         const unitNotFound = () => game.sendAction({action: "doneActivating", unitIndex: 1});
         expect(unitNotFound).to.throw(/could not find unit with index/);
     });
 
+    it(`throws an error if the unit was already done activating`, () => {
+        const game = constructGameWithOneUnit();
+        game.sendAction({action: "doneActivating", unitIndex: 0});
+
+        const unitAlreadyDone = () => game.sendAction({action: "doneActivating", unitIndex: 0});
+        expect(unitAlreadyDone).to.throw(/unit at index 0 is already done/);
+    });
+
     it(`marks the unit as done activating`, () => {
-        const game = validGameWithOneUnit();
+        const game = constructGameWithOneUnit();
         game.sendAction({action: 'doneActivating', unitIndex: 0});
         const newState = game.getState();
         expect(newState.units[0].doneActivating).to.equal(true);
     });
 
-    it(`advances the activeUnit index to the next one in the active group`);
-
-    it(`advances the activeGroup index when all units in the current group are done`);
-
-    it(`resets the encounter (round) when all units are done`);
-
-
-    it(`resets the units by turn order and resets initial active values`, () => {
-        const game = validGameWithVarietyOfUnits();
-        const action = 'addUnit';
-        game.sendAction({action, unitName: 'Marine', boardX: 1, boardY: 1});
-        game.sendAction({action, unitName: 'Marine', boardX: 2, boardY: 1});
-        game.sendAction({action, unitName: 'Marine', boardX: 3, boardY: 1});
-        game.sendAction({action, unitName: 'Alien', boardX: 1, boardY: 2});
-        game.sendAction({action, unitName: 'Alien', boardX: 2, boardY: 2});
-        game.sendAction({action, unitName: 'Blob', boardX: 1, boardY: 3});
-        [0, 1, 2, 3, 4, 5].forEach(i => game.sendAction({action: 'doneActivating', unitIndex: i}));
+    it(`advances the activeUnit index to the next one in the active group`, () => {
+        const game = Game(validGameWithVarietyOfUnits());
+        game.startEncounter(1);
+        game.sendAction({action: 'addUnit', unitName: 'Marine', boardX: 1, boardY: 1});
+        game.sendAction({action: 'addUnit', unitName: 'Alien', boardX: 1, boardY: 2});
+        game.sendAction({action: 'addUnit', unitName: 'Marine', boardX: 2, boardY: 1});
+        game.sendAction({action: 'doneActivating', unitIndex: 0});
         const state = game.getState();
+        expect(state.unitsGroupedByTurnOrder).to.deep.equal([[0, 2], [1]]);
+        expect(state.activeGroup).to.equal(0);
+        expect(state.activeUnit).to.equal(2);
+    });
 
-        const expectedGroups = [
-            [0, 1, 2],
-            [3, 4],
-            [5]
-        ];
-        expect(state.unitsGroupedByTurnOrder).to.deep.equal(expectedGroups);
+    it(`advances the activeGroup index when all units in the current group are done`, () => {
+        const game = Game(validGameWithVarietyOfUnits());
+        game.startEncounter(1);
+        game.sendAction({action: 'addUnit', unitName: 'Marine', boardX: 1, boardY: 1});
+        game.sendAction({action: 'addUnit', unitName: 'Alien', boardX: 1, boardY: 2});
+        game.sendAction({action: 'addUnit', unitName: 'Marine', boardX: 2, boardY: 1});
+        game.sendAction({action: 'addUnit', unitName: 'Alien', boardX: 2, boardY: 2});
+
+        const state = game.getState();
+        expect(state.unitsGroupedByTurnOrder).to.deep.equal([[0, 2], [1, 3]]);
+
+        game.sendAction({action: 'doneActivating', unitIndex: 0});
+        expect(game.getState().activeUnit).to.equal(2);
+        expect(game.getState().activeGroup).to.equal(0);
+
+        game.sendAction({action: 'doneActivating', unitIndex: 2});
+        expect(game.getState().activeUnit).to.equal(1);
+        expect(game.getState().activeGroup).to.equal(1);
+
+        game.sendAction({action: 'doneActivating', unitIndex: 1});
+        expect(game.getState().activeUnit).to.equal(3);
+        expect(game.getState().activeGroup).to.equal(1);
+    });
+
+    it(`resets the encounter (round) when all units are done`, () => {
+        const game = Game(validGameWithVarietyOfUnits());
+        game.startEncounter(1);
+        game.sendAction({action: 'addUnit', unitName: 'Marine', boardX: 1, boardY: 1});
+        game.sendAction({action: 'addUnit', unitName: 'Alien', boardX: 1, boardY: 2});
+        game.sendAction({action: 'addUnit', unitName: 'Marine', boardX: 2, boardY: 1});
+        game.sendAction({action: 'addUnit', unitName: 'Alien', boardX: 2, boardY: 2});
+        game.sendAction({action: 'doneActivating', unitIndex: 0});
+        game.sendAction({action: 'doneActivating', unitIndex: 2});
+        game.sendAction({action: 'doneActivating', unitIndex: 1});
+        game.sendAction({action: 'doneActivating', unitIndex: 3});
+        const state = game.getState();
+        expect(state.unitsGroupedByTurnOrder).to.deep.equal([[0, 2], [1, 3]]);
         expect(state.activeGroup).to.equal(0);
         expect(state.activeUnit).to.equal(0);
-    });
-
-    it(`sets the activeUnitIndex to the first unit in the list in the first group`, () => {
-        const game = validGameWithVarietyOfUnits();
-        const action = 'addUnit';
-        game.sendAction({action, unitName: 'Blob', boardX: 1, boardY: 3});
-        game.sendAction({action, unitName: 'Alien', boardX: 1, boardY: 2});
-        game.sendAction({action, unitName: 'Marine', boardX: 1, boardY: 1});
-        game.sendAction({action, unitName: 'Alien', boardX: 2, boardY: 2});
-        game.sendAction({action, unitName: 'Marine', boardX: 2, boardY: 1});
-        game.sendAction({action, unitName: 'Marine', boardX: 3, boardY: 1});
-
-        const expectedGroups = [
-            [2, 4, 5],
-            [1, 3],
-            [0]
-        ];
-        const state = game.getState();
-        expect(state.unitsGroupedByTurnOrder).to.deep.equal(expectedGroups);
-    });
-
-    it(`sorts in the the turn order groups correctly according to the original unit turn order`, () => {
-        const game = validGameWithUnitsForOrderTest();
-        const action = 'addUnit';
-        game.sendAction({action, unitName: 'U29', boardX: 3, boardY: 1});
-        game.sendAction({action, unitName: 'U20', boardX: 2, boardY: 1});
-        game.sendAction({action, unitName: 'U11', boardX: 2, boardY: 2});
-        game.sendAction({action, unitName: 'U10', boardX: 1, boardY: 1});
-        game.sendAction({action, unitName: 'U09', boardX: 1, boardY: 2});
-        game.sendAction({action, unitName: 'U01', boardX: 1, boardY: 3});
-
-        const expectedGroups = [[5], [4], [3], [2], [1], [0]];
-        const state = game.getState();
-        expect(state.unitsGroupedByTurnOrder).to.deep.equal(expectedGroups);
     });
 });
 
@@ -541,7 +610,7 @@ describe('Serializing and Deserializing Games', () => {
     });
 
     it(`restores the encounter state`, () => {
-        const game = validGameWithOneUnit();
+        const game = constructGameWithOneUnit();
         game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'});
 
         const originalJson = game.toJson();
@@ -566,7 +635,7 @@ function validGameDataWithIds() {
     return originalGameData;
 }
 
-function validGameWithOneUnit() {
+function constructGameWithOneUnit() {
     const game = Game(validGame());
     const unitToAdd = game.getScenario().getEncounter(0).getUnits()[0];
     const unitId = unitToAdd.getId();
@@ -583,9 +652,7 @@ function validGameWithVarietyOfUnits() {
         {name: 'Alien', movement: 6, turnOrder: 3},
         {name: 'Blob', movement: 6, turnOrder: 5},
     ];
-    const game = Game(gameData);
-    game.startEncounter(1);
-    return game;
+    return gameData;
 }
 
 function validGameWithUnitsForOrderTest() {
@@ -599,9 +666,7 @@ function validGameWithUnitsForOrderTest() {
         {name: 'U20', movement: 6, turnOrder: 20}, //1
         {name: 'U29', movement: 6, turnOrder: 29}, //0
     ];
-    const game = Game(gameData);
-    game.startEncounter(1);
-    return game;
+    return gameData;
 }
 
 function gameDataWithMoreEncounterDetail() {

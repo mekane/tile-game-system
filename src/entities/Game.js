@@ -115,6 +115,7 @@ function Game(attributes) {
         state.units.push(newUnit);
         state.unitsGroupedByTurnOrder = groupUnitsByTurnOrder(state.units);
 
+        //TODO: a test that invalidates this dumb code (start encounter, mark done then add unit)
         state.activeGroup = 0;
         state.activeUnit = 0;
     }
@@ -141,7 +142,26 @@ function Game(attributes) {
         if (typeof unitToMark !== 'object')
             throw new Error(`could not find unit with index ${unitIndex}`);
 
+        if (unitToMark.doneActivating)
+            throw new Error(`unit at index ${unitIndex} is already done`);
+
         unitToMark.doneActivating = true;
+        const currentGroup = state.unitsGroupedByTurnOrder[state.activeGroup];
+        const groupIndex = currentGroup.findIndex(i => i === unitIndex);
+        state.activeUnit = currentGroup[groupIndex + 1];
+
+        if (typeof state.activeUnit === 'undefined') {
+            state.activeGroup++;
+            const nextGroup = state.unitsGroupedByTurnOrder[state.activeGroup];
+
+            if (nextGroup)
+                state.activeUnit = nextGroup[0];
+            else {
+                state.unitsGroupedByTurnOrder = groupUnitsByTurnOrder(state.units);
+                state.activeGroup = 0;
+                state.activeUnit = state.unitsGroupedByTurnOrder[0][0];
+            }
+        }
     }
 
     function moveUnit({unitIndex, direction}) {
@@ -198,6 +218,11 @@ function Game(attributes) {
         state = initializeStateForEncounter(encounter);
 
         encounter.getInit().forEach(sendAction);
+
+        if (state.units.length) {
+            state.activeGroup = 0;
+            state.activeUnit = state.unitsGroupedByTurnOrder[0][0];
+        }
     }
 
     function toJson() {

@@ -26,7 +26,7 @@ describe('A realistic test using the Local Game Adapter to make a new game', () 
         const gameId = result.created;
 
         result = await localGameAdapter.startEncounter(gameId, 0);
-        expect(result.success).to.equal(true);
+        expect(result.success, `${result.error}`).to.equal(true);
 
         const addUnitAction = {action: 'addUnit', unitName: 'Goblin', boardX: 0, boardY: 0};
         result = await localGameAdapter.gameAction(gameId, addUnitAction);
