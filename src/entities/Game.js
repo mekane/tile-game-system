@@ -115,9 +115,10 @@ function Game(attributes) {
         state.units.push(newUnit);
         state.unitsGroupedByTurnOrder = groupUnitsByTurnOrder(state.units);
 
-        //TODO: a test that invalidates this dumb code (start encounter, mark done then add unit)
-        state.activeGroup = 0;
-        state.activeUnit = 0;
+        if (state.activeGroup === null) {
+            state.activeGroup = 0;
+            state.activeUnit = 0;
+        }
     }
 
     function groupUnitsByTurnOrder(originalUnits) {
