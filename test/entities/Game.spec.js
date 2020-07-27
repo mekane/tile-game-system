@@ -606,21 +606,20 @@ describe('Game Action - Unit Done Activating', () => {
         expect(state.activeUnit).to.equal(2);
     });
 
-    /* TODO: will need to test that it still activates the other units in the group, even if
-     * their index is behind the one that was activated. And that the auto-advancing then skips
-     * over units in the group that have already activated.
-     *
-     * Decide if it would be easier to delete indexes from the groups that have already gone
-     * (and treat it like a "unit remaining" list) Adding new ones would then be more complicated -
-     * would need to re-sort all, and then filter / delete anything before the current group.
-     * or just do all the checks each time through.
-     */
-    it.skip(`checks to see if there are any units in the current activation group that need to go`, () => {
-        //Add three units of Marines
-        //Add one unit of Alien
-        //M0 marked done
-        //M2 marked done
-        // * assert that M1 is active, not moved on to second group
+    it(`checks to see if there are any units in the current activation group that need to go`, () => {
+        const game = Game(validGameWithVarietyOfUnits());
+        game.startEncounter(1);
+        game.sendAction({action: 'addUnit', unitName: 'Marine', boardX: 1, boardY: 1});//0
+        game.sendAction({action: 'addUnit', unitName: 'Marine', boardX: 1, boardY: 2});//1
+        game.sendAction({action: 'addUnit', unitName: 'Marine', boardX: 2, boardY: 1});//2
+        game.sendAction({action: 'addUnit', unitName: 'Alien', boardX: 2, boardY: 2});//3
+        game.sendAction({action: 'doneActivating', unitIndex: 0});
+        game.sendAction({action: 'doneActivating', unitIndex: 2});
+        const state = game.getState();
+
+        expect(state.unitsGroupedByTurnOrder).to.deep.equal([[0, 1, 2], [3]]);
+        expect(state.activeGroup).to.equal(0);
+        expect(state.activeUnit).to.equal(1);
     });
 
     it(`advances the activeGroup index when all units in the current group are done`, () => {

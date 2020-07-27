@@ -169,8 +169,8 @@ function Game(attributes) {
 
         unitToMark.doneActivating = true;
         const currentGroup = state.unitsGroupedByTurnOrder[state.activeGroup];
-        const groupIndex = currentGroup.findIndex(i => i === unitIndex);
-        state.activeUnit = currentGroup[groupIndex + 1];
+
+        state.activeUnit = findNextUnitInGroup(currentGroup);
 
         if (typeof state.activeUnit === 'undefined') {
             state.activeGroup++;
@@ -182,6 +182,16 @@ function Game(attributes) {
                 state.unitsGroupedByTurnOrder = groupUnitsByTurnOrder(state.units);
                 state.activeGroup = 0;
                 state.activeUnit = state.unitsGroupedByTurnOrder[0][0];
+            }
+        }
+
+
+        function findNextUnitInGroup(group) {
+            for (let i = 0; i < group.length; i++) {
+                const unitIndex = group[i];
+                const unit = state.units[unitIndex];
+                if (!unit.doneActivating)
+                    return unitIndex;
             }
         }
     }
