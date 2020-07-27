@@ -6,8 +6,8 @@ function GameView(viewData) {
     /*PROFILE*/window.profileGameView['GameView']++;
 
     return h('div.game', [
-        BoardView(viewData.tiles, viewData.state.units, viewData.lastUnitMove),
-        UnitListView(viewData.state.units)
+        BoardView(viewData),
+        UnitListView(viewData.state)
     ]);
 }
 

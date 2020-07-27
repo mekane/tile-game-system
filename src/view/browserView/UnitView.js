@@ -1,12 +1,18 @@
 const h = require('snabbdom/h').default;
 const {cssSafeString} = require('../browserView/htmlHelpers');
 
-function UnitView(unitData, unitNumber, TILE_SIZE, lastMoveDirection) {
+function UnitView(unitData, unitNumber, isActive, TILE_SIZE, lastMoveDirection) {
     /*PROFILE*/
     window.profileGameView['UnitView']++;
 
     const unitName = cssSafeString(unitData.name).toLowerCase();
-    const element = `div.unit.${unitName}`;
+    const classes = ['div', 'unit', unitName];
+
+    if (isActive)
+        classes.push('active');
+
+    const element = classes.join('.');
+
     const viewData = {
         style: {
             transform: getTransformForDirection(lastMoveDirection),
@@ -17,10 +23,6 @@ function UnitView(unitData, unitNumber, TILE_SIZE, lastMoveDirection) {
         }
     }
 
-    if (lastMoveDirection) {
-        console.log('Unit View ' + unitNumber + ' ' + lastMoveDirection)
-        console.log(viewData.style);
-    }
     return h(element, viewData, `${unitData.name} ${unitNumber}`);
 
 

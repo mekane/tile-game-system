@@ -2,13 +2,15 @@ const h = require('snabbdom/h').default;
 const {TileView, TILE_SIZE} = require('./TileView');
 const {UnitView} = require('./UnitView');
 
-function BoardView(tileData, units, lastUnitMove = {}) {
-    /*PROFILE*/window.profileGameView['BoardView']++;
+function BoardView({tiles, state, lastUnitMove = {}}) {
+    /*PROFILE*/
+    window.profileGameView['BoardView']++;
+    const units = state.units;
 
-    const rowHeight = tileData.length; //TODO: include in board state
-    const rowWidth = tileData[0].length; //TODO: compute this better and include in board state
+    const rowHeight = tiles.length; //TODO: include in board state
+    const rowWidth = tiles[0].length; //TODO: compute this better and include in board state
 
-    const tiles = tileData.flatMap(makeTileViews);
+    const tileViews = tiles.flatMap(makeTileViews);
 
     const style = {
         gridTemplateColumns: `repeat(${rowWidth}, ${TILE_SIZE}px)`,
@@ -18,7 +20,7 @@ function BoardView(tileData, units, lastUnitMove = {}) {
 
     units.forEach(makeUnitView);
 
-    return h('div.board', {style}, tiles);
+    return h('div.board', {style}, tileViews);
 
 
     function getTileNumber(x, y) {
@@ -27,9 +29,10 @@ function BoardView(tileData, units, lastUnitMove = {}) {
 
     function makeUnitView(unitData, unitNumber) {
         const tileNumber = getTileNumber(unitData.positionX, unitData.positionY);
+        const isActive = (unitNumber === state.activeUnit);
         const lastMove = lastUnitMove.unitIndex === unitNumber ? lastUnitMove.direction : '';
-        const unitView = UnitView(unitData, unitNumber, TILE_SIZE, lastMove);
-        tiles[tileNumber].children.push(unitView);
+        const unitView = UnitView(unitData, unitNumber, isActive, TILE_SIZE, lastMove);
+        tileViews[tileNumber].children.push(unitView);
     }
 }
 
