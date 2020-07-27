@@ -33,7 +33,7 @@ describe('A realistic test using the Local Game Adapter to make a new game', () 
         expect(result.success, `${result.error}`).to.equal(true);
 
         result = await localGameAdapter.gameAction(gameId, {action: 'moveUnit', unitIndex: 0, direction: 'e'});
-        expect(result.success).to.equal(true);
+        expect(result.success, `${result.error}`).to.equal(true);
 
         result = await localGameAdapter.gameState(gameId);
         expect(result.success).to.equal(true);

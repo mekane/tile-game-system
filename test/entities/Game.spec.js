@@ -504,7 +504,7 @@ describe('Game Action - Move Unit', () => {
         expect(messageNoMove).to.throw(/Move Unit failed: unit lacks sufficient movement points/);
     });
 
-    it(`Moves the unit to the specified tile`, () => {
+    it(`moves the unit to the specified tile`, () => {
         const game = constructGameWithOneUnit();
         const moveUnitAction = {action: 'moveUnit', unitIndex: 0, direction: 'e'};
         game.sendAction(moveUnitAction);
@@ -512,6 +512,14 @@ describe('Game Action - Move Unit', () => {
         const unit = game.getState().units[0];
         expect(unit.positionX).to.equal(1);
         expect(unit.positionY).to.equal(0);
+    });
+
+    it(`marks the unit as having acted (but not done)`, () => {
+        const game = constructGameWithOneUnit();
+        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'});
+
+        expect(game.getState().units[0].hasActivated).to.equal(true);
+        expect(game.getState().units[0].doneActivating).to.be.an('undefined');
     });
 });
 
@@ -563,6 +571,26 @@ describe('Game Action - Activate Unit', () => {
         expect(state.activeGroup).to.equal(0);
         expect(state.activeUnit).to.equal(1);
     });
+
+    /** NOTE: this would be a good candidate for a Game option,
+     * because not all games are going to want to enforce that each unit can only activate once.
+     * However, this is basically the way to prevent arbitrary interleaving of turns.
+     */
+    it(`marks the previously active unit done if it had activated`, () => {
+        const gameData = validGameWithVarietyOfUnits();
+        gameData.scenario.encounters[1].init = [
+            {action: 'addUnit', unitName: 'Marine', boardX: 1, boardY: 1},
+            {action: 'addUnit', unitName: 'Marine', boardX: 2, boardY: 1}
+        ];
+        const game = Game(gameData);
+        game.startEncounter(1);
+        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 's'});
+        game.sendAction({action: 'activateUnit', unitIndex: 1});
+
+        const state = game.getState();
+        expect(state.units[0].doneActivating).to.equal(true);
+        expect(state.units[1].doneActivating).to.be.an('undefined');
+    });
 });
 
 describe('Game Action - Unit Done Activating', () => {
@@ -586,11 +614,12 @@ describe('Game Action - Unit Done Activating', () => {
         expect(unitAlreadyDone).to.throw(/unit at index 0 is already done/);
     });
 
-    it(`marks the unit as done activating`, () => {
+    it(`marks the unit as done activating (and has acted)`, () => {
         const game = constructGameWithOneUnit();
         game.sendAction({action: 'doneActivating', unitIndex: 0});
         const newState = game.getState();
         expect(newState.units[0].doneActivating).to.equal(true);
+        expect(newState.units[0].hasActivated).to.equal(true);
     });
 
     it(`advances the activeUnit index to the next one in the active group`, () => {

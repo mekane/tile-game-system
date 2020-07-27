@@ -73,6 +73,10 @@ function Game(attributes) {
         if (unitToActivate.doneActivating)
             throw new Error(`unit at index ${unitIndex} is already done`);
 
+        const currentActiveUnit = state.units[state.activeUnit];
+        if (currentActiveUnit && currentActiveUnit.hasActivated)
+            currentActiveUnit.doneActivating = true;
+
         state.activeUnit = unitIndex;
     }
 
@@ -167,6 +171,7 @@ function Game(attributes) {
         if (unitToMark.doneActivating)
             throw new Error(`unit at index ${unitIndex} is already done`);
 
+        unitToMark.hasActivated = true;
         unitToMark.doneActivating = true;
         const currentGroup = state.unitsGroupedByTurnOrder[state.activeGroup];
 
@@ -232,6 +237,7 @@ function Game(attributes) {
         if (unitToMove.movementRemaining < terrainDef.movementRequired)
             throw new Error('Move Unit failed: unit lacks sufficient movement points');
 
+        unitToMove.hasActivated = true;
         unitToMove.movementRemaining -= terrainDef.movementRequired;
         unitToMove.positionX = x;
         unitToMove.positionY = y;
