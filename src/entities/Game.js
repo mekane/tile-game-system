@@ -43,6 +43,9 @@ function Game(attributes) {
             throw new Error('Invalid action');
 
         switch (message.action.toLowerCase()) {
+            case 'activateunit':
+                activateUnit(message);
+                break;
             case 'addunit':
                 addUnit(message);
                 break;
@@ -53,6 +56,24 @@ function Game(attributes) {
                 moveUnit(message);
                 break;
         }
+    }
+
+    function activateUnit({unitIndex}) {
+        if (typeof unitIndex !== 'number')
+            throw new Error('missing unit index');
+
+        const unitToActivate = state.units[unitIndex];
+        if (typeof unitToActivate !== 'object')
+            throw new Error(`could not find unit with index ${unitIndex}`);
+
+        const currentActivationGroup = state.unitsGroupedByTurnOrder[state.activeGroup];
+        if (currentActivationGroup.indexOf(unitIndex) < 0)
+            throw new Error(`unit at index ${unitIndex} cannot activate now`);
+
+        if (unitToActivate.doneActivating)
+            throw new Error(`unit at index ${unitIndex} is already done`);
+
+        state.activeUnit = unitIndex;
     }
 
     function addUnit({unitId, unitName, boardX, boardY}) {

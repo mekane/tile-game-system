@@ -26,20 +26,22 @@ types.forEach(type => {
     schemaValidator.addSchema(schema, id);
 });
 
-function validateAs(data, type) {
+function validateAs(data, type, showMessages = false) {
     if (typeof data === 'undefined')
         return false;
 
     const schema = schemaForType[type];
 
     if (!schema) {
-        //console.error(`Unknown schema type ${type}`);
+        if (showMessages)
+            console.error(`Unknown schema type ${type}`);
         return false;
     }
 
     const result = schemaValidator.validate(data, schema);
     if (result.errors[0]) {
-        console.error('Invalid attributes: ' + result.errors[0].stack);
+        if (showMessages)
+            console.error('Invalid attributes: ' + result.errors[0].stack);
         return false;
     }
 

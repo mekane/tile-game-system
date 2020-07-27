@@ -10,13 +10,13 @@
 
 .tile {
     background: #ccc;
-    border: 1px solid #666;
+    border: 1px solid #393939;
     font-size: 70%;
 }
 
 .tile.empty {
-    background: #333;
-    border: 1px solid #333;
+    background: #252525;
+    border: 1px solid #292929;
 }
 
 .unit {

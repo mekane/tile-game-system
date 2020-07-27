@@ -1,15 +1,15 @@
 .tile.hallway {
-    background: #666;
+    background: #545454;
 }
 
 .tile.hallway2 {
-    background: #777;
+    background: #5e5e5e;
 }
 
 .tile.room {
-    background: #888;
+    background: #777;
 }
 
 .tile.wall {
-    background: #444;
+    background: #404040;
 }

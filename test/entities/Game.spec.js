@@ -515,39 +515,54 @@ describe('Game Action - Move Unit', () => {
     });
 });
 
-describe.skip('Game Action - Activate Unit', () => {
+describe('Game Action - Activate Unit', () => {
     it(`throws an error if no unit is specified`, () => {
         const game = constructGameWithOneUnit();
-        const messageMissingUnit = () => game.sendAction({action: "activateUnit"});
+        const messageMissingUnit = () => game.sendAction({action: 'activateUnit'});
         expect(messageMissingUnit).to.throw(/missing unit index/);
     });
 
     it(`throws an error if the specified unit does not exist in the list of units`, () => {
         const game = constructGameWithOneUnit();
-        const unitNotFound = () => game.sendAction({action: "activateUnit", unitIndex: 1});
+        const unitNotFound = () => game.sendAction({action: 'activateUnit', unitIndex: 1});
         expect(unitNotFound).to.throw(/could not find unit with index/);
+    });
+
+    it(`throws an error if the unit is not in the current activation group`, () => {
+        const gameData = validGameWithVarietyOfUnits();
+        gameData.scenario.encounters[1].init = [
+            {action: 'addUnit', unitName: 'Marine', boardX: 1, boardY: 1}, // group 0
+            {action: 'addUnit', unitName: 'Alien', boardX: 2, boardY: 2} // group 1
+        ];
+        const game = Game(gameData);
+        game.startEncounter(1);
+
+        const unitNotEligible = () => game.sendAction({action: 'activateUnit', unitIndex: 1});
+        expect(unitNotEligible).to.throw(/unit at index 1 cannot activate now/);
     });
 
     it(`throws an error if the unit is done`, () => {
         const game = constructGameWithOneUnit();
         game.sendAction({action: 'doneActivating', unitIndex: 0});
         const unitIsDone = () => game.sendAction({action: "activateUnit", unitIndex: 0});
-        expect(unitIsDone).to.throw(/Unit is already done activating/);
+        expect(unitIsDone).to.throw(/unit at index 0 is already done/);
     });
 
-    it(`rejects if the unit is not in the current activation group`);
+    it(`sets the activeUnitIndex value`, () => {
+        const gameData = validGameWithVarietyOfUnits();
+        gameData.scenario.encounters[1].init = [
+            {action: 'addUnit', unitName: 'Marine', boardX: 1, boardY: 1}, // group 0
+            {action: 'addUnit', unitName: 'Marine', boardX: 2, boardY: 1}, // group 0
+            {action: 'addUnit', unitName: 'Alien', boardX: 2, boardY: 2} // group 1
+        ];
+        const game = Game(gameData);
+        game.startEncounter(1);
+        game.sendAction({action: 'activateUnit', unitIndex: 1});
 
-    it(`sets the activeUnitIndex value`);
-
-    /* TODO: will need to test that it still activates the other units in the group, even if
-     * their index is behind the one that was activated. And that the auto-advancing then skips
-     * over units in the group that have already activated.
-     *
-     * Decide if it would be easier to delete indexes from the groups that have already gone
-     * (and treat it like a "unit remaining" list) Adding new ones would then be more complicated -
-     * would need to re-sort all, and then filter / delete anything before the current group.
-     * or just do all the checks each time through.
-     */
+        const state = game.getState();
+        expect(state.activeGroup).to.equal(0);
+        expect(state.activeUnit).to.equal(1);
+    });
 });
 
 describe('Game Action - Unit Done Activating', () => {
@@ -589,6 +604,23 @@ describe('Game Action - Unit Done Activating', () => {
         expect(state.unitsGroupedByTurnOrder).to.deep.equal([[0, 2], [1]]);
         expect(state.activeGroup).to.equal(0);
         expect(state.activeUnit).to.equal(2);
+    });
+
+    /* TODO: will need to test that it still activates the other units in the group, even if
+     * their index is behind the one that was activated. And that the auto-advancing then skips
+     * over units in the group that have already activated.
+     *
+     * Decide if it would be easier to delete indexes from the groups that have already gone
+     * (and treat it like a "unit remaining" list) Adding new ones would then be more complicated -
+     * would need to re-sort all, and then filter / delete anything before the current group.
+     * or just do all the checks each time through.
+     */
+    it.skip(`checks to see if there are any units in the current activation group that need to go`, () => {
+        //Add three units of Marines
+        //Add one unit of Alien
+        //M0 marked done
+        //M2 marked done
+        // * assert that M1 is active, not moved on to second group
     });
 
     it(`advances the activeGroup index when all units in the current group are done`, () => {
@@ -685,11 +717,12 @@ function validGameDataWithIds() {
 }
 
 function constructGameWithOneUnit() {
-    const game = Game(validGame());
-    const unitToAdd = game.getScenario().getEncounter(0).getUnits()[0];
-    const unitId = unitToAdd.getId();
-    const addUnitAction = {action: 'addUnit', unitId, boardX: 0, boardY: 0};
-    game.sendAction(addUnitAction)
+    const gameData = validGame();
+    gameData.scenario.encounters[0].init = [
+        {action: 'addUnit', unitName: 'Goblin', boardX: 0, boardY: 0}
+    ];
+    const game = Game(gameData);
+    game.startEncounter(0);
     return game;
 }
 
