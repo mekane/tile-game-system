@@ -33,11 +33,21 @@ function UnitListView(state) {
         ];
 
         if (isActive) {
-            content.push(h('button.done', 'Done')); //TODO: make this do something
+            const data = {
+                on: {
+                    'click': e => viewAction('unitDone', unitIndex)
+                }
+            }
+            content.push(h('button.done', data, 'Done')); //TODO: make this do something
         }
 
-        if (!isActive && !unit.doneActivating) {
-            content.push(h('button.activate', 'Activate')); //TODO: make this do something
+        if (!isActive && !unit.doneActivating) { //TODO: && "couldActivate" (is in activeGroup)
+            const data = {
+                on: {
+                    'click': e => viewAction('activateUnit', unitIndex)
+                }
+            }
+            content.push(h('button.activate', data, 'Activate')); //TODO: make this do something
         }
 
         return h(classes.join('.'), {}, content);

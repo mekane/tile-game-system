@@ -10,33 +10,48 @@ const patch = snabbdom.init([ // Init patch function with chosen modules
 
 const {GameView} = require('./GameView');
 
-let lastUnitMove = {};
-
 async function BrowserView(domElement, gameId, gameAdapter) {
     let vnode = toVNode(domElement);
+    let activeUnitIndex = null;
+    let lastUnitMove = {};
 
     initGlobalControls();
     const nextState = await gameAdapter.gameState(gameId);
+    activeUnitIndex = nextState.state.activeUnit;
     render(nextState);
 
     async function action(actionType, properties) {
         console.log('game action ' + actionType, properties);
 
-        const moveAction = {action: 'moveUnit', unitIndex: 0, direction: properties.dir};
-        const moveResult = await gameAdapter.gameAction(gameId, moveAction);
-        if (moveResult.success) {
-            lastUnitMove = moveAction;
+        let result = false;
+        lastUnitMove = {};
+
+        if (actionType === 'move') {
+            const moveAction = {action: 'moveUnit', unitIndex: activeUnitIndex, direction: properties.dir};
+            result = await gameAdapter.gameAction(gameId, moveAction);
+            if (result.success)
+                lastUnitMove = moveAction;
+        }
+        else if (actionType === 'unitDone') {
+            result = await gameAdapter.gameAction(gameId, {action: 'doneActivating', unitIndex: properties});
+        }
+        else if (actionType === 'activateUnit') {
+            result = await gameAdapter.gameAction(gameId, {action: 'activateUnit', unitIndex: properties})
+        }
+
+        if (result.success) {
             const nextState = await gameAdapter.gameState(gameId);
-            nextState.lastUnitMove = lastUnitMove;
+            activeUnitIndex = nextState.state.activeUnit;
             render(nextState);
         }
         else {
-            console.log(moveResult.error);
-            lastUnitMove = {};
+            console.log(result.error);
         }
     }
 
     function initGlobalControls() {
+        window.viewAction = action;
+
         const body = document.querySelector('body');
         body.addEventListener('keyup', e => {
             switch (e.key) {
@@ -84,15 +99,16 @@ async function BrowserView(domElement, gameId, gameAdapter) {
             'UnitView': 0
         };
 
-        console.time("compute next view");
-        const nextView = GameView(nextState);
-        console.timeEnd("compute next view");
+        //console.time("compute next view");
+        const stateToRender = Object.assign({lastUnitMove}, nextState);
+        const nextView = GameView(stateToRender);
+        //console.timeEnd("compute next view");
 
-        console.time("patch DOM");
+        //console.time("patch DOM");
         vnode = patch(vnode, nextView);
-        console.timeEnd("patch DOM");
+        //console.timeEnd("patch DOM");
 
-        console.log('Game View Profile:', window.profileGameView);
+        //console.log('Game View Profile:', window.profileGameView);
     }
 }
 
