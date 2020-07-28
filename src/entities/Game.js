@@ -187,6 +187,11 @@ function Game(attributes) {
                 state.unitsGroupedByTurnOrder = groupUnitsByTurnOrder(state.units);
                 state.activeGroup = 0;
                 state.activeUnit = state.unitsGroupedByTurnOrder[0][0];
+                state.units.forEach(u => {
+                    u.hasActivated = false;
+                    u.doneActivating = false;
+                    u.movementRemaining = u.movementMax;
+                });
             }
         }
 
