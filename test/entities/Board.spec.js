@@ -1,6 +1,6 @@
 'use strict'
 const expect = require('chai').expect;
-const validBoard = require('../_fixtures').validBoard;
+const {validBoard} = require('../_fixtures');
 const validator = require('../../src/validator');
 
 const Board = require('../../src/entities/Board');
@@ -245,3 +245,131 @@ describe('The Board entity', () => {
         expect(json.terrain, 'Terrain JSON').to.not.equal(originalBoardData.terrain);
     });
 });
+
+describe('The line of sight method', () => {
+    it('has a lineOfSight method that takes a unit instance', () => {
+        const board = Board(validBoard())
+        expect(board.lineOfSightFor).to.be.a('function');
+    })
+
+    it('returns an empty array for bad arguments', () => {
+        const board = Board(validBoard())
+        expect(board.lineOfSightFor()).to.deep.equal([]);
+        expect(board.lineOfSightFor(false)).to.deep.equal([]);
+        expect(board.lineOfSightFor('foo')).to.deep.equal([]);
+        expect(board.lineOfSightFor({})).to.deep.equal([]);
+    })
+
+    it('returns a result array of the same dimensions as the Board', () => {
+        const board3x3 = Board(validBoard());
+        const actual3x3 = board3x3.lineOfSightFor(unitInstance());
+        expect(actual3x3.length).to.equal(3);
+        expect(actual3x3[0].length).to.equal(3);
+        expect(actual3x3[1].length).to.equal(3);
+        expect(actual3x3[2].length).to.equal(3);
+
+        const board2x4 = makeBoard(makeFloorTiles(4, 2));
+        const actual2x4 = board2x4.lineOfSightFor(unitInstance());
+        expect(actual2x4.length).to.equal(2);
+        expect(actual2x4[0].length).to.equal(4);
+        expect(actual2x4[1].length).to.equal(4);
+    })
+})
+
+describe('Tracing line of sight for a unit', () => {
+    it(`can always see its own square`, () => {
+        const board = makeBoard(makeFloorTiles(1, 1));
+        const expected = [[true]];
+        expect(board.lineOfSightFor(unitInstance())).to.deep.equal(expected);
+    })
+
+    it(`can see down a single open square in one direction`, () => {
+        const boardNorth = makeBoard(makeFloorTiles(1, 2));
+        const unitNorth = unitInstance();
+        unitNorth.positionY = 1;
+        const expectedNorth = [[true], [true]];
+        expect(boardNorth.lineOfSightFor(unitNorth)).to.deep.equal(expectedNorth);
+
+        const boardEast = makeBoard(makeFloorTiles(2, 1));
+        const expectedEast = [[true, true]];
+        expect(boardEast.lineOfSightFor(unitInstance())).to.deep.equal(expectedEast);
+
+        const boardSouth = makeBoard(makeFloorTiles(1, 2));
+        const expectedSouth = [[true], [true]];
+        expect(boardSouth.lineOfSightFor(unitInstance())).to.deep.equal(expectedSouth);
+
+        const boardWest = makeBoard(makeFloorTiles(2, 1));
+        const unitWest = unitInstance();
+        unitWest.positionY = 1;
+        const expectedWest = [[true, true]];
+        expect(boardWest.lineOfSightFor(unitInstance())).to.deep.equal(expectedWest);
+    })
+
+    it(`can see down a single "hallway" in one direction`, () => {
+        const boardNorth = makeBoard(makeFloorTiles(1, 4));
+        const unitNorth = unitInstance();
+        unitNorth.positionY = 1;
+        const expectedNorth = [[true], [true], [true], [true]];
+        expect(boardNorth.lineOfSightFor(unitNorth)).to.deep.equal(expectedNorth);
+
+        const boardEast = makeBoard(makeFloorTiles(4, 1));
+        const expectedEast = [[true, true, true, true]];
+        expect(boardEast.lineOfSightFor(unitInstance())).to.deep.equal(expectedEast);
+
+        const boardSouth = makeBoard(makeFloorTiles(1, 4));
+        const expectedSouth = [[true], [true], [true], [true]];
+        expect(boardSouth.lineOfSightFor(unitInstance())).to.deep.equal(expectedSouth);
+
+        const boardWest = makeBoard(makeFloorTiles(4, 1));
+        const unitWest = unitInstance();
+        unitWest.positionY = 1;
+        const expectedWest = [[true, true, true, true]];
+        expect(boardWest.lineOfSightFor(unitInstance())).to.deep.equal(expectedWest);
+    })
+
+    it(`can see diagonally in each direction`)
+
+    it(`can see all of an open 2x2 room`)
+
+    it(`can see all of an open 3x3 room`)
+
+    it(`can see all of an open 4x4 room`)
+
+    it(`is blocked by walls in each direction`)
+
+    it(`is blocked by walls diagonally`)
+
+    it(`is blocked by double corners diagonally`)
+
+    //take a list of directions to ignore
+
+    //more interesting cases
+})
+
+//TODO: might be nice to have a (static) Game function to "stamp out" an instance from a definition
+function unitInstance({x, y} = {x: 0, y: 0}) {
+    return {
+        definitionId: 'unit_id_123',
+        movementMax: 6,
+        movementRemaining: 6,
+        name: 'Name',
+        positionX: x,
+        positionY: y,
+        turnOrder: 1
+    }
+}
+
+function makeFloorTiles(width, height) {
+    const result = [];
+    for (let h = 0; h < height; h++) {
+        result.push(Array(width).fill('F'))
+    }
+    return result;
+}
+
+function makeBoard(tiles) {
+    const boardData = validBoard();
+    if (tiles)
+        boardData.tiles = tiles;
+    return Board(boardData)
+}

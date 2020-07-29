@@ -115,6 +115,23 @@ function Board(attributes) {
         return tileData;
     }
 
+    function lineOfSightFor(unit) {
+        if (typeof unit !== 'object' || typeof unit.positionX !== 'number' || typeof unit.positionY !== 'number')
+            return [];
+
+        console.log(`compute line of sight for `, getDimensions())
+        const {width, height} = getDimensions();
+
+        const result = [];
+        for (let h = 0; h < height; h++) {
+            result.push(Array(width).fill(false))
+        }
+
+        const unitTile = {x: unit.positionX, y: unit.positionY};
+        result[unitTile.y][unitTile.x] = true;
+        return result;
+    }
+
     function toJson() {
         return {
             id,
@@ -131,6 +148,7 @@ function Board(attributes) {
         getTileAt,
         getType: _ => typeName,
         getViewData,
+        lineOfSightFor,
         toJson
     });
 }
