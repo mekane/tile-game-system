@@ -287,49 +287,46 @@ describe('Tracing line of sight for a unit', () => {
         const boardNorth = makeBoard(makeFloorTiles(1, 2));
         const unitNorth = unitInstance();
         unitNorth.positionY = 1;
-        const expectedNorth = [[true], [true]];
-        expect(boardNorth.lineOfSightFor(unitNorth)).to.deep.equal(expectedNorth);
+        expect(boardNorth.lineOfSightFor(unitNorth), 'One North').to.deep.equal([[true], [true]]);
 
         const boardEast = makeBoard(makeFloorTiles(2, 1));
-        const expectedEast = [[true, true]];
-        expect(boardEast.lineOfSightFor(unitInstance())).to.deep.equal(expectedEast);
+        expect(boardEast.lineOfSightFor(unitInstance()), 'One East').to.deep.equal([[true, true]]);
 
         const boardSouth = makeBoard(makeFloorTiles(1, 2));
-        const expectedSouth = [[true], [true]];
-        expect(boardSouth.lineOfSightFor(unitInstance())).to.deep.equal(expectedSouth);
+        expect(boardSouth.lineOfSightFor(unitInstance()), 'One South').to.deep.equal([[true], [true]]);
 
         const boardWest = makeBoard(makeFloorTiles(2, 1));
         const unitWest = unitInstance();
-        unitWest.positionY = 1;
-        const expectedWest = [[true, true]];
-        expect(boardWest.lineOfSightFor(unitInstance())).to.deep.equal(expectedWest);
+        unitWest.positionX = 1;
+        expect(boardWest.lineOfSightFor(unitWest), 'One West').to.deep.equal([[true, true]]);
     })
 
     it(`can see down a single "hallway" in one direction`, () => {
         const boardNorth = makeBoard(makeFloorTiles(1, 4));
         const unitNorth = unitInstance();
-        unitNorth.positionY = 1;
+        unitNorth.positionY = 3;
         const expectedNorth = [[true], [true], [true], [true]];
-        expect(boardNorth.lineOfSightFor(unitNorth)).to.deep.equal(expectedNorth);
+        expect(boardNorth.lineOfSightFor(unitNorth), 'Three North').to.deep.equal(expectedNorth);
 
         const boardEast = makeBoard(makeFloorTiles(4, 1));
         const expectedEast = [[true, true, true, true]];
-        expect(boardEast.lineOfSightFor(unitInstance())).to.deep.equal(expectedEast);
+        expect(boardEast.lineOfSightFor(unitInstance()), 'Three East').to.deep.equal(expectedEast);
 
         const boardSouth = makeBoard(makeFloorTiles(1, 4));
         const expectedSouth = [[true], [true], [true], [true]];
-        expect(boardSouth.lineOfSightFor(unitInstance())).to.deep.equal(expectedSouth);
+        expect(boardSouth.lineOfSightFor(unitInstance()), 'Three South').to.deep.equal(expectedSouth);
 
         const boardWest = makeBoard(makeFloorTiles(4, 1));
         const unitWest = unitInstance();
-        unitWest.positionY = 1;
+        unitWest.positionX = 3;
         const expectedWest = [[true, true, true, true]];
-        expect(boardWest.lineOfSightFor(unitInstance())).to.deep.equal(expectedWest);
+        expect(boardWest.lineOfSightFor(unitWest), 'Three West').to.deep.equal(expectedWest);
     })
+
+    it(`can see all of an open 2x2 room`)
 
     it(`can see diagonally in each direction`)
 
-    it(`can see all of an open 2x2 room`)
 
     it(`can see all of an open 3x3 room`)
 

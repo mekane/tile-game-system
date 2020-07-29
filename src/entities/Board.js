@@ -119,7 +119,6 @@ function Board(attributes) {
         if (typeof unit !== 'object' || typeof unit.positionX !== 'number' || typeof unit.positionY !== 'number')
             return [];
 
-        console.log(`compute line of sight for `, getDimensions())
         const {width, height} = getDimensions();
 
         const result = [];
@@ -129,6 +128,43 @@ function Board(attributes) {
 
         const unitTile = {x: unit.positionX, y: unit.positionY};
         result[unitTile.y][unitTile.x] = true;
+
+        //check north
+        let current = {x: unitTile.x, y: unitTile.y - 1};
+        let currentTile = getTileAt(current);
+        while (currentTile !== null && !currentTile.empty) {
+            result[current.y][current.x] = true;
+            current.y--;
+            currentTile = getTileAt(current);
+        }
+
+        //check east
+        current = {x: unitTile.x + 1, y: unitTile.y};
+        currentTile = getTileAt(current);
+        while (currentTile !== null && !currentTile.empty) {
+            result[current.y][current.x] = true;
+            current.x++;
+            currentTile = getTileAt(current)
+        }
+
+        //check south
+        current = {x: unitTile.x, y: unitTile.y + 1};
+        currentTile = getTileAt(current);
+        while (currentTile !== null && !currentTile.empty) {
+            result[current.y][current.x] = true;
+            current.y++;
+            currentTile = getTileAt(current)
+        }
+
+        //check west
+        current = {x: unitTile.x - 1, y: unitTile.y};
+        currentTile = getTileAt(current);
+        while (currentTile !== null && !currentTile.empty) {
+            result[current.y][current.x] = true;
+            current.x--;
+            currentTile = getTileAt(current);
+        }
+
         return result;
     }
 
