@@ -1,5 +1,10 @@
+
 * {
     box-sizing: border-box;
+}
+
+html {
+    font-family: Raleway, arial, sans-serif;
 }
 
 .board {
@@ -40,4 +45,43 @@
 /* Unit List */
 .unit-list {
     display: inline-grid;
+
+}
+
+.unit-list__header {
+    font-weight: bold;
+}
+
+.unit-list__body {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.unit-list__unit {
+    border: 1px solid #333;
+    border-radius: 8px;
+    margin-top: 8px;
+    padding: 8px;
+
+}
+
+.unit-list__unit.active {
+
+}
+
+.unit-list__unit-details {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 8px;
+}
+
+.unit-list__unit-details > button {
+    margin-left: 12px;
+}
+
+button {
+    border: 1px solid #999;
+    font-family: 'Orbitron', arial, sans-serif;
+    padding: 8px;
 }

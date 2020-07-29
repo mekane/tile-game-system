@@ -20,17 +20,14 @@ function UnitListView(state) {
 
     function makeUnitListItem(unit, unitIndex) {
         const isActive = (unitIndex === activeUnit);
-        const unitMovement = `Move: ${unit.movementRemaining} / ${unit.movementMax}`;
 
         const classes = ['li', 'unit-list__unit'];
 
         if (isActive)
             classes.push('active');
 
-        const content = [
-            h(`div.${block}__unit-name`, unit.name),
-            h(`div.${block}__unit-details`, unitMovement)
-        ];
+        const unitMovement = h('div.unit-list__unit-move',`Move: ${unit.movementRemaining} / ${unit.movementMax}`);
+        const unitDetails = [unitMovement]
 
         if (isActive) {
             const data = {
@@ -38,7 +35,7 @@ function UnitListView(state) {
                     'click': e => viewAction('unitDone', unitIndex)
                 }
             }
-            content.push(h('button.done', data, 'Done')); //TODO: make this do something
+            unitDetails.push(h('button.done', data, 'Done'));
         }
 
         if (!isActive && !unit.doneActivating) { //TODO: && "couldActivate" (is in activeGroup)
@@ -47,8 +44,13 @@ function UnitListView(state) {
                     'click': e => viewAction('activateUnit', unitIndex)
                 }
             }
-            content.push(h('button.activate', data, 'Activate')); //TODO: make this do something
+            unitDetails.push(h('button.activate', data, 'Activate'));
         }
+
+        const content = [
+            h(`div.${block}__unit-name`, `${unit.name} ${unitIndex}`),
+            h(`div.${block}__unit-details`, unitDetails)
+        ];
 
         return h(classes.join('.'), {}, content);
     }
