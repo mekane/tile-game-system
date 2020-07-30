@@ -68,3 +68,9 @@ describe('The adjustCoordinatesForDirection function', () => {
         expect(util.adjustCoordinatesForDirection(0, 0, 'w')).to.deep.equal({x: -1, y: 0});
     });
 });
+
+describe('The directions constant', () => {
+    it('exports an array of direction keys', () => {
+        expect(util.DIRECTIONS).to.deep.equal(['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']);
+    });
+});

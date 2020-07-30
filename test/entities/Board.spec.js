@@ -323,12 +323,24 @@ describe('Tracing line of sight for a unit', () => {
         expect(boardWest.lineOfSightFor(unitWest), 'Three West').to.deep.equal(expectedWest);
     })
 
-    it(`can see all of an open 2x2 room`)
-
-    it(`can see diagonally in each direction`)
-
-
-    it(`can see all of an open 3x3 room`)
+    it(`can see all of an open 3x3 room (can see diagonally)`, () => {
+        const board3x3 = makeBoard(makeFloorTiles(3, 3));
+        const unitCentered = unitInstance();
+        unitCentered.positionX = 1;
+        unitCentered.positionY = 1;
+        const expected = [
+            [true, true, true],
+            [true, true, true],
+            [true, true, true]
+        ];
+        //reminder that these raw result coordinates (e.g. [0][2]) are in [y][x] form (row,column)
+        const result = board3x3.lineOfSightFor(unitCentered);
+        expect(result[0][2], 'Can see NE').to.equal(true);
+        expect(result[2][2], 'Can see SE').to.equal(true);
+        expect(result[2][0], 'Can see SW').to.equal(true);
+        expect(result[0][0], 'Can see NW').to.equal(true);
+        expect(result, 'Can see All').to.deep.equal(expected);
+    })
 
     it(`can see all of an open 4x4 room`)
 

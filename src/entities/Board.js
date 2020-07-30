@@ -129,43 +129,21 @@ function Board(attributes) {
         const unitTile = {x: unit.positionX, y: unit.positionY};
         result[unitTile.y][unitTile.x] = true;
 
-        //check north
-        let current = {x: unitTile.x, y: unitTile.y - 1};
-        let currentTile = getTileAt(current);
-        while (currentTile !== null && !currentTile.empty) {
-            result[current.y][current.x] = true;
-            current.y--;
-            currentTile = getTileAt(current);
-        }
-
-        //check east
-        current = {x: unitTile.x + 1, y: unitTile.y};
-        currentTile = getTileAt(current);
-        while (currentTile !== null && !currentTile.empty) {
-            result[current.y][current.x] = true;
-            current.x++;
-            currentTile = getTileAt(current)
-        }
-
-        //check south
-        current = {x: unitTile.x, y: unitTile.y + 1};
-        currentTile = getTileAt(current);
-        while (currentTile !== null && !currentTile.empty) {
-            result[current.y][current.x] = true;
-            current.y++;
-            currentTile = getTileAt(current)
-        }
-
-        //check west
-        current = {x: unitTile.x - 1, y: unitTile.y};
-        currentTile = getTileAt(current);
-        while (currentTile !== null && !currentTile.empty) {
-            result[current.y][current.x] = true;
-            current.x--;
-            currentTile = getTileAt(current);
-        }
+        util.DIRECTIONS.forEach(dir => lineOfSightSearch(unitTile, dir));
 
         return result;
+
+        function lineOfSightSearch({x, y}, direction) {
+            let current = util.adjustCoordinatesForDirection(x, y, direction);
+            let currentTile = getTileAt(current);
+
+            while (currentTile !== null) {
+                result[current.y][current.x] = true;
+                current = util.adjustCoordinatesForDirection(current.x, current.y, direction);
+                currentTile = getTileAt(current);
+                //console.log(`search ${direction}: (${current.x}, ${current.y})`, currentTile);
+            }
+        }
     }
 
     function toJson() {
