@@ -139,6 +139,14 @@ function Board(attributes) {
             //console.log(`Search ${direction} from (${x},${y}): ${blocked ? '[blocked]' : 'visible'}`)
             while (!blocked(getTerrainAt(current))) {
                 result[current.y][current.x] = true;
+
+                if (isDiagonal(direction)) {
+                    const [side1, side2] = getCoordinatesForDiagonal(current.x, current.y, direction);
+                    //console.log(`checking (${current.x}, ${current.y})`, side1, side2);
+                    if (blocked(getTerrainAt(side1)) && blocked(getTerrainAt(side2)))
+                        result[current.y][current.x] = false;
+                }
+
                 current = util.adjustCoordinatesForDirection(current.x, current.y, direction);
                 //blocked = currentTerrain.empty || currentTerrain.blocksMovement;
                 //console.log(`Search ${direction} from (${current.x},${current.y}): ${blocked ? '[blocked]' : 'visible'}`)
@@ -148,6 +156,18 @@ function Board(attributes) {
 
     function blocked(terrain) {
         return terrain === null || terrain.empty || terrain.blocksMovement;
+    }
+
+    function isDiagonal(direction) {
+        return direction.length > 1;
+    }
+
+    function getCoordinatesForDiagonal(x, y, direction) {
+        const adjustForDir = util.directionAdjustmentsByDirection[direction];
+        const xRev = adjustForDir.x * -1;
+        const yRev = adjustForDir.y * -1;
+
+        return [{x, y: y + yRev}, {x: x + xRev, y}]
     }
 
     function toJson() {

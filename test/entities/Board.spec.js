@@ -372,15 +372,68 @@ describe('Tracing line of sight for a unit', () => {
         expect(boardWest.lineOfSightFor(unitWest), 'Wall West').to.deep.equal(expectedWest);
     })
 
-    it(`is not blocked by a single wall tangential to diagonal path`)
+    it(`is not blocked by a single wall tangential to diagonal path`, () => {
+        let tiles = [
+            ['F', 'F', 'F'],
+            ['W', 'F', 'W'],
+            ['F', 'F', 'F']
+        ];
+        const board = makeBoard(tiles);
+        const unitCentered = unitInstance();
+        unitCentered.positionX = 1;
+        unitCentered.positionY = 1;
 
-    it(`is blocked by two walls in diagonal path`)
+        const expected = [
+            [true, true, true],
+            [false, true, false],
+            [true, true, true]
+        ];
+        expect(board.lineOfSightFor(unitCentered), 'Walls East and South').to.deep.equal(expected);
+    });
 
-    it(`is blocked by walls in each direction`)
+    it(`is blocked by two walls in diagonal path`, () => {
+        let tiles = [
+            ['F', 'W', 'F'],
+            ['W', 'F', 'W'],
+            ['F', 'W', 'F']
+        ];
+        const board = makeBoard(tiles);
+        const unitCentered = unitInstance();
+        unitCentered.positionX = 1;
+        unitCentered.positionY = 1;
 
-    it(`is blocked by walls diagonally`)
+        const expected = [
+            [false, false, false],
+            [false, true, false],
+            [false, false, false]
+        ];
+        expect(board.lineOfSightFor(unitCentered), 'Walls block diagonals').to.deep.equal(expected);
+    })
 
-    it(`is blocked by double corners diagonally`)
+    it.skip(`can see all of an open 5x5 room (secondary diagonals)`, () => {
+        const board5x5 = makeBoard(makeFloorTiles(5, 5));
+        const unitCentered = unitInstance();
+        unitCentered.positionX = 2;
+        unitCentered.positionY = 2;
+        const expected = [
+            [true, true, true, true, true],
+            [true, true, true, true, true],
+            [true, true, true, true, true],
+            [true, true, true, true, true],
+            [true, true, true, true, true]
+        ];
+        //reminder that these raw result coordinates (e.g. [0][2]) are in [y][x] form (row,column)
+        const result = board5x5.lineOfSightFor(unitCentered);
+        expect(result, 'Can see All').to.deep.equal(expected);
+        expect(result[0][3], 'Can see NNE').to.equal(true);
+        expect(result[1][4], 'Can see ENE').to.equal(true);
+        expect(result[3][4], 'Can see ESE').to.equal(true);
+        expect(result[4][3], 'Can see SSE').to.equal(true);
+        expect(result[4][1], 'Can see SSW').to.equal(true);
+        expect(result[3][0], 'Can see WSW').to.equal(true);
+        expect(result[1][0], 'Can see WNW').to.equal(true);
+        expect(result[0][1], 'Can see NNW').to.equal(true);
+    });
 
     //take a list of directions to ignore
 

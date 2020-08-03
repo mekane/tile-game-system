@@ -32,6 +32,7 @@ function digit() {
 
 module.exports = {
     adjustCoordinatesForDirection,
+    directionAdjustmentsByDirection,
     DIRECTIONS: Object.keys(directionAdjustmentsByDirection),
     fileSafeString,
     generateId
