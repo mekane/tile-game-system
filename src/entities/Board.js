@@ -135,15 +135,19 @@ function Board(attributes) {
 
         function lineOfSightSearch({x, y}, direction) {
             let current = util.adjustCoordinatesForDirection(x, y, direction);
-            let currentTile = getTileAt(current);
-
-            while (currentTile !== null) {
+            //let currentTerrain = getTerrainAt(current);
+            //console.log(`Search ${direction} from (${x},${y}): ${blocked ? '[blocked]' : 'visible'}`)
+            while (!blocked(getTerrainAt(current))) {
                 result[current.y][current.x] = true;
                 current = util.adjustCoordinatesForDirection(current.x, current.y, direction);
-                currentTile = getTileAt(current);
-                //console.log(`search ${direction}: (${current.x}, ${current.y})`, currentTile);
+                //blocked = currentTerrain.empty || currentTerrain.blocksMovement;
+                //console.log(`Search ${direction} from (${current.x},${current.y}): ${blocked ? '[blocked]' : 'visible'}`)
             }
         }
+    }
+
+    function blocked(terrain) {
+        return terrain === null || terrain.empty || terrain.blocksMovement;
     }
 
     function toJson() {

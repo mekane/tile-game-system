@@ -4,7 +4,7 @@ function validBoard() {
         tiles: [
             ['A', 'A', 'C'],
             ['C', 'A', 'B'],
-            ['D', 'A', 'A']
+            ['W', 'A', 'A']
         ],
         terrain: {
             A: {
@@ -17,8 +17,8 @@ function validBoard() {
                 name: 'Hills',
                 movementRequired: 2
             },
-            D: {
-                name: 'Stones',
+            W: {
+                name: 'Wall',
                 blocksMovement: true
             }
         }

@@ -125,7 +125,7 @@ describe('The Board entity', () => {
             blocksMovement: false
         });
         expect(newBoard.getTerrainAt({x: 0, y: 2})).to.deep.equal({
-            name: 'Stones',
+            name: 'Wall',
             movementRequired: 1,
             blocksMovement: true
         });
@@ -146,7 +146,7 @@ describe('The Board entity', () => {
         expect(newBoard.getTileAt({x: 1, y: 0})).to.equal('A');
         expect(newBoard.getTileAt({x: 2, y: 1})).to.equal('B');
         expect(newBoard.getTileAt({x: 0, y: 1})).to.equal('C');
-        expect(newBoard.getTileAt({x: 0, y: 2})).to.equal('D');
+        expect(newBoard.getTileAt({x: 0, y: 2})).to.equal('W');
     });
 
     it(`returns null for invalid tile coordinates`, () => {
@@ -342,7 +342,39 @@ describe('Tracing line of sight for a unit', () => {
         expect(result, 'Can see All').to.deep.equal(expected);
     })
 
-    it(`can see all of an open 4x4 room`)
+    it(`is blocked by walls in direct path`, () => {
+        const tilesNorth = makeFloorTiles(1, 4);
+        tilesNorth[1][0] = 'W';
+        const boardNorth = makeBoard(tilesNorth);
+        const unitNorth = unitInstance();
+        unitNorth.positionY = 3;
+        const expectedNorth = [[false], [false], [true], [true]];
+        expect(boardNorth.lineOfSightFor(unitNorth), 'Wall North').to.deep.equal(expectedNorth);
+
+        const tilesEast = makeFloorTiles(4, 1);
+        tilesEast[0][2] = 'W';
+        const boardEast = makeBoard(tilesEast);
+        const expectedEast = [[true, true, false, false]];
+        expect(boardEast.lineOfSightFor(unitInstance()), 'Wall East').to.deep.equal(expectedEast);
+
+        const tilesSouth = makeFloorTiles(1, 4);
+        tilesSouth[2][0] = 'W';
+        const boardSouth = makeBoard(tilesSouth);
+        const expectedSouth = [[true], [true], [false], [false]];
+        expect(boardSouth.lineOfSightFor(unitInstance()), 'Wall South').to.deep.equal(expectedSouth);
+
+        const tilesWest = makeFloorTiles(4, 1);
+        tilesWest[0][1] = 'W';
+        const boardWest = makeBoard(tilesWest);
+        const unitWest = unitInstance();
+        unitWest.positionX = 3;
+        const expectedWest = [[false, false, true, true]];
+        expect(boardWest.lineOfSightFor(unitWest), 'Wall West').to.deep.equal(expectedWest);
+    })
+
+    it(`is not blocked by a single wall tangential to diagonal path`)
+
+    it(`is blocked by two walls in diagonal path`)
 
     it(`is blocked by walls in each direction`)
 
