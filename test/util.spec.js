@@ -74,3 +74,27 @@ describe('The directions constant', () => {
         expect(util.DIRECTIONS).to.deep.equal(['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']);
     });
 });
+
+describe('The NNE direction function', () => {
+    it('returns (0,0 for invalid steps and for step zero', () => {
+        expect(util.directionNNE()).to.deep.equal({x: 0, y: 0});
+        expect(util.directionNNE(-1)).to.deep.equal({x: 0, y: 0});
+        expect(util.directionNNE('A')).to.deep.equal({x: 0, y: 0});
+        expect(util.directionNNE(0)).to.deep.equal({x: 0, y: 0});
+    });
+
+    it('returns special case 0,Y for step 1', () => {
+        expect(util.directionNNE(1)).to.deep.equal({x: 0, y: 1});
+    });
+
+    it('returns coordinates in an X,Y,Y pattern', () => {
+        expect(util.directionNNE(2)).to.deep.equal({x: 1, y: 1});
+        expect(util.directionNNE(3)).to.deep.equal({x: 1, y: 2});
+        expect(util.directionNNE(4)).to.deep.equal({x: 1, y: 3});
+        expect(util.directionNNE(5)).to.deep.equal({x: 2, y: 3});
+        expect(util.directionNNE(6)).to.deep.equal({x: 2, y: 4});
+        expect(util.directionNNE(7)).to.deep.equal({x: 2, y: 5});
+        expect(util.directionNNE(8)).to.deep.equal({x: 3, y: 5});
+        expect(util.directionNNE(9)).to.deep.equal({x: 3, y: 6});
+    });
+});

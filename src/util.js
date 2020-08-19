@@ -30,10 +30,21 @@ function digit() {
     return (Math.random() * 9).toFixed();
 }
 
+function directionNNE(i) {
+    if (typeof i !== 'number' || i <= 0)
+        return {x: 0, y: 0};
+
+    const x = Math.floor((i + 1) / 3);
+    const y = Math.floor(2 * (i - 1) / 3) + 1;
+
+    return {x, y};
+}
+
 module.exports = {
     adjustCoordinatesForDirection,
     directionAdjustmentsByDirection,
     DIRECTIONS: Object.keys(directionAdjustmentsByDirection),
+    directionNNE,
     fileSafeString,
     generateId
 }
