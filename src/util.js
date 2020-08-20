@@ -30,12 +30,18 @@ function digit() {
     return (Math.random() * 9).toFixed();
 }
 
-function directionNNE(i) {
-    if (typeof i !== 'number' || i <= 0)
+function secondaryDirectionCoordinates(direction, i) {
+    if (typeof direction !== 'string' || typeof i !== 'number' || i <= 0)
         return {x: 0, y: 0};
 
-    const x = Math.floor((i + 1) / 3);
-    const y = Math.floor(2 * (i - 1) / 3) + 1;
+    const xDir = (direction.endsWith('w') ? -1 : 1);
+    const yDir = (direction[1] === 's' ? -1 : 1);
+
+    const xCoord = Math.floor((i + 1) / 3);
+    const yCoord = Math.floor(2 * (i - 1) / 3) + 1;
+
+    const x = (xCoord === 0 ? 0 : xCoord * xDir); //avoid silly -0
+    const y = (yCoord === 0 ? 0 : yCoord * yDir);
 
     return {x, y};
 }
@@ -44,7 +50,7 @@ module.exports = {
     adjustCoordinatesForDirection,
     directionAdjustmentsByDirection,
     DIRECTIONS: Object.keys(directionAdjustmentsByDirection),
-    directionNNE,
+    secondaryDirectionCoordinates,
     fileSafeString,
     generateId
 }

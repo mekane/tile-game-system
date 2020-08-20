@@ -75,26 +75,65 @@ describe('The directions constant', () => {
     });
 });
 
-describe('The NNE direction function', () => {
-    it('returns (0,0 for invalid steps and for step zero', () => {
-        expect(util.directionNNE()).to.deep.equal({x: 0, y: 0});
-        expect(util.directionNNE(-1)).to.deep.equal({x: 0, y: 0});
-        expect(util.directionNNE('A')).to.deep.equal({x: 0, y: 0});
-        expect(util.directionNNE(0)).to.deep.equal({x: 0, y: 0});
+describe('The secondary direction coordinates function', () => {
+    it('returns (0,0) for invalid directions', () => {
+        expect(util.secondaryDirectionCoordinates()).to.deep.equal({x: 0, y: 0});
+        expect(util.secondaryDirectionCoordinates(0)).to.deep.equal({x: 0, y: 0});
+        expect(util.secondaryDirectionCoordinates('bogus')).to.deep.equal({x: 0, y: 0});
     });
 
-    it('returns special case 0,Y for step 1', () => {
-        expect(util.directionNNE(1)).to.deep.equal({x: 0, y: 1});
+    it('returns (0,0) for invalid steps and for step zero', () => {
+        expect(util.secondaryDirectionCoordinates('nne')).to.deep.equal({x: 0, y: 0});
+        expect(util.secondaryDirectionCoordinates('nne', -1)).to.deep.equal({x: 0, y: 0});
+        expect(util.secondaryDirectionCoordinates('nne', 'A')).to.deep.equal({x: 0, y: 0});
+        expect(util.secondaryDirectionCoordinates('nne', 0)).to.deep.equal({x: 0, y: 0});
     });
 
-    it('returns coordinates in an X,Y,Y pattern', () => {
-        expect(util.directionNNE(2)).to.deep.equal({x: 1, y: 1});
-        expect(util.directionNNE(3)).to.deep.equal({x: 1, y: 2});
-        expect(util.directionNNE(4)).to.deep.equal({x: 1, y: 3});
-        expect(util.directionNNE(5)).to.deep.equal({x: 2, y: 3});
-        expect(util.directionNNE(6)).to.deep.equal({x: 2, y: 4});
-        expect(util.directionNNE(7)).to.deep.equal({x: 2, y: 5});
-        expect(util.directionNNE(8)).to.deep.equal({x: 3, y: 5});
-        expect(util.directionNNE(9)).to.deep.equal({x: 3, y: 6});
+    it('returns coordinates in an X,Y,Y pattern for North by NorthEast', () => {
+        expect(util.secondaryDirectionCoordinates('nne', 1)).to.deep.equal({x: 0, y: 1});
+        expect(util.secondaryDirectionCoordinates('nne', 2)).to.deep.equal({x: 1, y: 1});
+        expect(util.secondaryDirectionCoordinates('nne', 3)).to.deep.equal({x: 1, y: 2});
+        expect(util.secondaryDirectionCoordinates('nne', 4)).to.deep.equal({x: 1, y: 3});
+        expect(util.secondaryDirectionCoordinates('nne', 5)).to.deep.equal({x: 2, y: 3});
+        expect(util.secondaryDirectionCoordinates('nne', 6)).to.deep.equal({x: 2, y: 4});
+        expect(util.secondaryDirectionCoordinates('nne', 7)).to.deep.equal({x: 2, y: 5});
+        expect(util.secondaryDirectionCoordinates('nne', 8)).to.deep.equal({x: 3, y: 5});
+        expect(util.secondaryDirectionCoordinates('nne', 9)).to.deep.equal({x: 3, y: 6});
+    });
+
+    it('returns the same coordinates but negative Xs for North by NorthEast', () => {
+        expect(util.secondaryDirectionCoordinates('nnw', 1)).to.deep.equal({x: 0, y: 1});
+        expect(util.secondaryDirectionCoordinates('nnw', 2)).to.deep.equal({x: -1, y: 1});
+        expect(util.secondaryDirectionCoordinates('nnw', 3)).to.deep.equal({x: -1, y: 2});
+        expect(util.secondaryDirectionCoordinates('nnw', 4)).to.deep.equal({x: -1, y: 3});
+        expect(util.secondaryDirectionCoordinates('nnw', 5)).to.deep.equal({x: -2, y: 3});
+        expect(util.secondaryDirectionCoordinates('nnw', 6)).to.deep.equal({x: -2, y: 4});
+        expect(util.secondaryDirectionCoordinates('nnw', 7)).to.deep.equal({x: -2, y: 5});
+        expect(util.secondaryDirectionCoordinates('nnw', 8)).to.deep.equal({x: -3, y: 5});
+        expect(util.secondaryDirectionCoordinates('nnw', 9)).to.deep.equal({x: -3, y: 6});
+    });
+
+    it('returns the same coordinates but negative Ys for South by SouthEast', () => {
+        expect(util.secondaryDirectionCoordinates('sse', 1)).to.deep.equal({x: 0, y: -1});
+        expect(util.secondaryDirectionCoordinates('sse', 2)).to.deep.equal({x: 1, y: -1});
+        expect(util.secondaryDirectionCoordinates('sse', 3)).to.deep.equal({x: 1, y: -2});
+        expect(util.secondaryDirectionCoordinates('sse', 4)).to.deep.equal({x: 1, y: -3});
+        expect(util.secondaryDirectionCoordinates('sse', 5)).to.deep.equal({x: 2, y: -3});
+        expect(util.secondaryDirectionCoordinates('sse', 6)).to.deep.equal({x: 2, y: -4});
+        expect(util.secondaryDirectionCoordinates('sse', 7)).to.deep.equal({x: 2, y: -5});
+        expect(util.secondaryDirectionCoordinates('sse', 8)).to.deep.equal({x: 3, y: -5});
+        expect(util.secondaryDirectionCoordinates('sse', 9)).to.deep.equal({x: 3, y: -6});
+    });
+
+    it('returns the same coordinates but both negative for South by SouthWest', () => {
+        expect(util.secondaryDirectionCoordinates('ssw', 1)).to.deep.equal({x: 0, y: -1});
+        expect(util.secondaryDirectionCoordinates('ssw', 2)).to.deep.equal({x: -1, y: -1});
+        expect(util.secondaryDirectionCoordinates('ssw', 3)).to.deep.equal({x: -1, y: -2});
+        expect(util.secondaryDirectionCoordinates('ssw', 4)).to.deep.equal({x: -1, y: -3});
+        expect(util.secondaryDirectionCoordinates('ssw', 5)).to.deep.equal({x: -2, y: -3});
+        expect(util.secondaryDirectionCoordinates('ssw', 6)).to.deep.equal({x: -2, y: -4});
+        expect(util.secondaryDirectionCoordinates('ssw', 7)).to.deep.equal({x: -2, y: -5});
+        expect(util.secondaryDirectionCoordinates('ssw', 8)).to.deep.equal({x: -3, y: -5});
+        expect(util.secondaryDirectionCoordinates('ssw', 9)).to.deep.equal({x: -3, y: -6});
     });
 });
