@@ -131,6 +131,9 @@ function Board(attributes) {
 
         util.DIRECTIONS.forEach(dir => lineOfSightSearch(unitTile, dir));
 
+        //TODO: only do these if it makes sense (we know we can see something in that direction)
+        ['nne', 'ene', 'ese', 'sse', 'ssw', 'wsw', 'wnw', 'nnw'].forEach(dir => extendedLineOfSightSearch(unitTile, dir));
+
         return result;
 
         function lineOfSightSearch({x, y}, direction) {
@@ -150,6 +153,23 @@ function Board(attributes) {
                 current = util.adjustCoordinatesForDirection(current.x, current.y, direction);
                 //blocked = currentTerrain.empty || currentTerrain.blocksMovement;
                 //console.log(`Search ${direction} from (${current.x},${current.y}): ${blocked ? '[blocked]' : 'visible'}`)
+            }
+        }
+
+        function extendedLineOfSightSearch({x, y}, direction) {
+            let distance = 1;
+
+            let nextAdjust = util.secondaryDirectionCoordinates(direction, distance);
+            let current = {x: x + nextAdjust.x, y: y + nextAdjust.y};
+
+            console.log(`Search ${direction}[${distance}]: (${current.x},${current.y})`);
+            while (!blocked(getTerrainAt(current))) {
+                result[current.y][current.x] = true;
+
+                distance++;
+                nextAdjust = util.secondaryDirectionCoordinates(direction, distance);
+                current = {x: x + nextAdjust.x, y: y + nextAdjust.y};
+                console.log(`Search ${direction}[${distance}]: (${current.x},${current.y})`);
             }
         }
     }

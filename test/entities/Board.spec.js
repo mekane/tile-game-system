@@ -410,7 +410,7 @@ describe('Tracing line of sight for a unit', () => {
         expect(board.lineOfSightFor(unitCentered), 'Walls block diagonals').to.deep.equal(expected);
     })
 
-    it.skip(`can see all of an open 5x5 room (secondary diagonals)`, () => {
+    it(`can see all of an open 5x5 room (secondary diagonals)`, () => {
         const board5x5 = makeBoard(makeFloorTiles(5, 5));
         const unitCentered = unitInstance();
         unitCentered.positionX = 2;

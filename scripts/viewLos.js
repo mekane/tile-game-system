@@ -5,23 +5,25 @@
  *
  *
  */
-const {validBoard} = require('./test/_fixtures');
-const Board = require('./src/entities/Board');
+const {validBoard} = require('../test/_fixtures');
+const Board = require('../src/entities/Board');
 
 const boardData = validBoard();
 boardData.tiles = [
-['A','A','A','A','A','A','A'],
-['A','A','A','A','A','A','A'],
-['A','A','A','A','A','A','A'],
-['A','A','A','B','A','A','A'],
-['A','A','A','A','A','A','A'],
-['A','A','A','A','A','A','A'],
-['A','A','A','A','A','A','A'],
+['A','A','A','A','A','A','A','A','A'],
+['A','A','A','A','A','A','A','A','A'],
+['A','A','A','A','A','A','A','A','A'],
+['A','A','A','A','A','A','A','A','A'],
+['A','A','A','A','A','A','A','A','A'],
+['A','A','A','A','A','A','A','A','A'],
+['A','A','A','A','A','A','A','A','A'],
+['A','A','A','A','A','A','A','A','A'],
+['A','A','A','A','A','A','A','A','A'],
 ];
 const board = Board(boardData);
 
-const positionX = 3;
-const positionY = 3;
+const positionX = 4;
+const positionY = 4;
 const losData = board.lineOfSightFor({positionX, positionY});
 
 console.log('==== Terrain ====');
