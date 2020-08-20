@@ -136,4 +136,40 @@ describe('The secondary direction coordinates function', () => {
         expect(util.secondaryDirectionCoordinates('ssw', 8)).to.deep.equal({x: -3, y: -5});
         expect(util.secondaryDirectionCoordinates('ssw', 9)).to.deep.equal({x: -3, y: -6});
     });
+
+    it('returns coordinates flipped across x=y for East by NorthEast', () => {
+        expect(util.secondaryDirectionCoordinates('ene', 1)).to.deep.equal({x: 1, y: 0});
+        expect(util.secondaryDirectionCoordinates('ene', 2)).to.deep.equal({x: 1, y: 1});
+        expect(util.secondaryDirectionCoordinates('ene', 3)).to.deep.equal({x: 2, y: 1});
+        expect(util.secondaryDirectionCoordinates('ene', 4)).to.deep.equal({x: 3, y: 1});
+        expect(util.secondaryDirectionCoordinates('ene', 5)).to.deep.equal({x: 3, y: 2});
+        expect(util.secondaryDirectionCoordinates('ene', 6)).to.deep.equal({x: 4, y: 2});
+        expect(util.secondaryDirectionCoordinates('ene', 7)).to.deep.equal({x: 5, y: 2});
+        expect(util.secondaryDirectionCoordinates('ene', 8)).to.deep.equal({x: 5, y: 3});
+        expect(util.secondaryDirectionCoordinates('ene', 9)).to.deep.equal({x: 6, y: 3});
+    });
+
+    it('returns coordinates with negative Ys for East by SouthEast', () => {
+        expect(util.secondaryDirectionCoordinates('ese', 1)).to.deep.equal({x: 1, y: 0});
+        expect(util.secondaryDirectionCoordinates('ese', 2)).to.deep.equal({x: 1, y: -1});
+        expect(util.secondaryDirectionCoordinates('ese', 3)).to.deep.equal({x: 2, y: -1});
+        expect(util.secondaryDirectionCoordinates('ese', 4)).to.deep.equal({x: 3, y: -1});
+        expect(util.secondaryDirectionCoordinates('ese', 5)).to.deep.equal({x: 3, y: -2});
+        expect(util.secondaryDirectionCoordinates('ese', 6)).to.deep.equal({x: 4, y: -2});
+        expect(util.secondaryDirectionCoordinates('ese', 7)).to.deep.equal({x: 5, y: -2});
+        expect(util.secondaryDirectionCoordinates('ese', 8)).to.deep.equal({x: 5, y: -3});
+        expect(util.secondaryDirectionCoordinates('ese', 9)).to.deep.equal({x: 6, y: -3});
+    });
+
+    it('returns coordinates with negative Xs and Ys for West by SouthWest', () => {
+        expect(util.secondaryDirectionCoordinates('wsw', 1)).to.deep.equal({x: -1, y: 0});
+        expect(util.secondaryDirectionCoordinates('wsw', 2)).to.deep.equal({x: -1, y: -1});
+        expect(util.secondaryDirectionCoordinates('wsw', 3)).to.deep.equal({x: -2, y: -1});
+        expect(util.secondaryDirectionCoordinates('wsw', 4)).to.deep.equal({x: -3, y: -1});
+        expect(util.secondaryDirectionCoordinates('wsw', 5)).to.deep.equal({x: -3, y: -2});
+        expect(util.secondaryDirectionCoordinates('wsw', 6)).to.deep.equal({x: -4, y: -2});
+        expect(util.secondaryDirectionCoordinates('wsw', 7)).to.deep.equal({x: -5, y: -2});
+        expect(util.secondaryDirectionCoordinates('wsw', 8)).to.deep.equal({x: -5, y: -3});
+        expect(util.secondaryDirectionCoordinates('wsw', 9)).to.deep.equal({x: -6, y: -3});
+    });
 });

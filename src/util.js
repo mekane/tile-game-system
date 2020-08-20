@@ -34,14 +34,23 @@ function secondaryDirectionCoordinates(direction, i) {
     if (typeof direction !== 'string' || typeof i !== 'number' || i <= 0)
         return {x: 0, y: 0};
 
-    const xDir = (direction.endsWith('w') ? -1 : 1);
-    const yDir = (direction[1] === 's' ? -1 : 1);
+    const d0 = direction[0];
+    const d1 = direction[1];
+    const d2 = direction[2];
 
-    const xCoord = Math.floor((i + 1) / 3);
-    const yCoord = Math.floor(2 * (i - 1) / 3) + 1;
+    const xDir = (d2 === 'w' ? -1 : 1);
+    const yDir = (d1 === 's' ? -1 : 1);
 
-    const x = (xCoord === 0 ? 0 : xCoord * xDir); //avoid silly -0
-    const y = (yCoord === 0 ? 0 : yCoord * yDir);
+    const isNS = (d0 === 'n' && d1 === 'n') || (d0 === 's' && d1 === 's');
+
+    const shortPart = Math.floor((i + 1) / 3);
+    const longPart = Math.floor(2 * (i - 1) / 3) + 1;
+
+    const xPart = isNS ? shortPart : longPart;
+    const yPart = isNS ? longPart : shortPart;
+
+    const x = (xPart === 0 ? 0 : xPart * xDir); //avoid silly -0
+    const y = (yPart === 0 ? 0 : yPart * yDir);
 
     return {x, y};
 }
