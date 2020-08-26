@@ -2,7 +2,7 @@ const h = require('snabbdom/h').default;
 const {TileView, TILE_SIZE} = require('./TileView');
 const {UnitView} = require('./UnitView');
 
-function BoardView({tiles, state, lastUnitMove = {}}) {
+function BoardView({activeLineOfSight, tiles, state, lastUnitMove = {}}) {
     /*PROFILE*/
     window.profileGameView['BoardView']++;
     const units = state.units;
@@ -34,11 +34,12 @@ function BoardView({tiles, state, lastUnitMove = {}}) {
         const unitView = UnitView(unitData, unitNumber, isActive, TILE_SIZE, lastMove);
         tileViews[tileNumber].children.push(unitView);
     }
+
+    function makeTileViews(row, rowNumber) {
+        return row.map((tile, tileNumber) => TileView(tile, tileNumber, rowNumber, activeLineOfSight));
+    }
 }
 
-function makeTileViews(row, rowNumber) {
-    return row.map((tile, tileNumber) => TileView(tile, tileNumber, rowNumber));
-}
 
 module.exports = {
     BoardView

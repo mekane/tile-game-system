@@ -41,6 +41,9 @@ html {
     align-items: center;
 }
 
+.tile:not(.visible) {
+    opacity: .5;
+}
 
 /* Unit List */
 .unit-list {

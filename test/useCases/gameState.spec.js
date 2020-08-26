@@ -45,6 +45,7 @@ describe('The GameState Use Case Function', () => {
         const gameState = GameState({gameRepository});
         const actualState = await gameState(testId);
         expect(actualState).to.deep.equal({
+            activeLineOfSight: [],
             success: true,
             state: {
                 activeGroup: null,
@@ -54,5 +55,9 @@ describe('The GameState Use Case Function', () => {
             },
             tiles: Board(validBoard()).getViewData()
         });
+    });
+
+    it(`computes the line of sight for the currently active unit and includes the results`, () => {
+        //TODO: this will require a more complete integration test
     });
 });

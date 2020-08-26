@@ -11,11 +11,13 @@ function GameState({gameRepository}) {
             }
 
         const game = Game(gameData);
+        const board = game.getCurrentBoard();
 
         return {
+            activeLineOfSight: board.lineOfSightFor(game.getActiveUnit()),
             success: true,
             state: game.getState(),
-            tiles: game.getCurrentBoard().getViewData()
+            tiles: board.getViewData()
         };
     }
 }

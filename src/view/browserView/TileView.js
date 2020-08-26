@@ -3,13 +3,16 @@ const {cssSafeString} = require('../browserView/htmlHelpers');
 
 const selector = 'div.tile';
 
-function TileView(tileData, tileX, tileY) {
+function TileView(tileData, tileX, tileY, lineOfSightData) {
     /*PROFILE*/
     window.profileGameView['TileView']++;
 
+    const visible = lineOfSightData[tileY][tileX];
+
     const elData = {
         class: {
-            empty: tileData.empty
+            empty: tileData.empty,
+            visible
         },
         on: {
             click: e => console.log(`tile click (${tileX},${tileY})`)
