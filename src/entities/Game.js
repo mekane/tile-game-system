@@ -18,6 +18,11 @@ function Game(attributes) {
 
     let state = attributes.currentState || initializeStateForEncounter(scenario.getEncounter(currentEncounterIndex));
 
+    function getActiveUnit() {
+        const activeUnit = state.units[state.activeUnit];
+        return Object.assign({}, activeUnit);
+    }
+
     function getCurrentEncounter() {
         return scenario.getEncounter(currentEncounterIndex);
     }
@@ -280,6 +285,7 @@ function Game(attributes) {
 
     return Object.freeze({
         getId: _ => id,
+        getActiveUnit,
         getCurrentBoard: () => getCurrentEncounter().getBoard(),
         getScenario: () => scenario,
         getState,

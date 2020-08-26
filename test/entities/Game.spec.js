@@ -70,6 +70,25 @@ describe('Game Entity Properties and Methods', () => {
         expect(actualBoard1).to.deep.equal(expectedBoard1);
     });
 
+    it(`has a getActiveUnit method that returns a copy of the properties for the current unit`, () => {
+        const gameData = validGameWithVarietyOfUnits();
+        gameData.scenario.encounters[1].init = [
+            {action: 'addUnit', unitName: 'Marine', boardX: 1, boardY: 1},
+            {action: 'addUnit', unitName: 'Alien', boardX: 1, boardY: 2}
+        ];
+        const game = Game(gameData);
+        game.startEncounter(1);
+        const state = game.getState();
+
+        expect(game.getActiveUnit()).to.not.equal(state.units[state.activeUnit]);
+        expect(game.getActiveUnit()).to.deep.equal(state.units[state.activeUnit]);
+
+        game.sendAction({action: 'doneActivating', unitIndex: 0});
+
+        expect(game.getActiveUnit()).to.not.equal(state.units[state.activeUnit]);
+        expect(game.getActiveUnit()).to.deep.equal(state.units[state.activeUnit]);
+    });
+
     it(`has a getType function that returns the name of the entity type`, () => {
         const newGame = Game(validGame());
         expect(newGame.getType()).to.equal('Game');

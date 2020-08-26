@@ -162,14 +162,12 @@ function Board(attributes) {
             let nextAdjust = util.secondaryDirectionCoordinates(direction, distance);
             let current = {x: x + nextAdjust.x, y: y + nextAdjust.y};
 
-            console.log(`Search ${direction}[${distance}]: (${current.x},${current.y})`);
             while (!blocked(getTerrainAt(current))) {
                 result[current.y][current.x] = true;
 
                 distance++;
                 nextAdjust = util.secondaryDirectionCoordinates(direction, distance);
                 current = {x: x + nextAdjust.x, y: y + nextAdjust.y};
-                console.log(`Search ${direction}[${distance}]: (${current.x},${current.y})`);
             }
         }
     }
