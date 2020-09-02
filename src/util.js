@@ -39,7 +39,7 @@ function secondaryDirectionCoordinates(direction, i) {
     const d2 = direction[2];
 
     const xDir = (d2 === 'w' ? -1 : 1);
-    const yDir = (d1 === 's' ? -1 : 1);
+    const yDir = (d1 === 'n' ? -1 : 1);
 
     const isNS = (d0 === 'n' && d1 === 'n') || (d0 === 's' && d1 === 's');
 
