@@ -1,9 +1,13 @@
 .tile.grass {
-    background: #cfc;
+    background: #394;
+}
+
+.tile.road {
+    background: #733;
 }
 
 .tile.trees {
-    background: #393;
+    background: #262;
 }
 
 .tile.hills {

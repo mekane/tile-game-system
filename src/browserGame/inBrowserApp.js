@@ -1,3 +1,4 @@
+const woodlandTiles = require('./woodlandMap');
 const spaceshipTiles = require('./spaceshipMap');
 const {BrowserView} = require('../view/browserView');
 const LocalGameAdapter = require('../adapters/LocalGame');
@@ -17,25 +18,20 @@ async function initGame() {
             "board": {
                 "id": "board_test_06356206",
                 "name": "Test",
-                "tiles": [
-                    ["A", "A", "B"],
-                    ["C", "A", "B", "B"],
-                    ["D", "A", "A"],
-                ],
+                "tiles": woodlandTiles,
                 "terrain": {
-                    "A": {"name": "Grass"},
-                    "B": {"name": "Trees"},
-                    "C": {"name": "Hills", "movementRequired": 2},
-                    "D": {"name": "Stones", "blocksMovement": true}
+                    "G": {"name": "Grass"},
+                    "R": {"name": "Road"},
+                    "T": {"name": "Trees", "movementRequired": 2},
+                    "H": {"name": "Hills", "movementRequired": 2},
+                    "S": {"name": "Stones", "blocksMovement": true}
                 }
             },
-            "units": [{"id": "unit_goblin_06067272", "name": "Goblin", "movement": 6}, {
-                "id": "unit_goblin_55818862",
-                "name": "Goblin",
-                "movement": 6
-            }],
+            "units": [
+                {"id": "unit_goblin_06067272", "name": "Goblin", "movement": 60},
+            ],
             "init": [
-                {"action": "addUnit", "unitName": "Goblin", "boardX": 1, "boardY": 1}
+                {"action": "addUnit", "unitName": "Goblin", "boardX": 1, "boardY": 8}
             ]
         }, {
             "id": "encounter_test_84134828",
@@ -76,7 +72,7 @@ async function initGame() {
 
     // set to 0 for the woods encounter
     // set to 1 for the space ship encounter
-    const startResult = await gameAdapter.startEncounter(gameId, 1);
+    const startResult = await gameAdapter.startEncounter(gameId, 0);
     reportError(startResult);
 
     return gameId;
