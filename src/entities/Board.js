@@ -26,6 +26,8 @@ const typeName = 'Board';
  * | A | A | A |
  * +---+---+---+
  *
+ * Would be defined like this:
+ *
  * const tiles = [
  *   ['A', 'A', 'B'],
  *   ['A', 'A', 'A']
@@ -34,7 +36,7 @@ const typeName = 'Board';
  * So that the visual appearance of the data matches the layout of the board. But note that
  * accessing tiles[0][2] would return the third tile in the first row (the 'B'), not the tile
  * at x=0, y=2 (which is invalid). So accesses to the underlying data structure are done as
- * row, column (which is basically (y,x).
+ * row, column (which is basically (y,x)).
  *
  * Methods that take an x and a y will put these in the right order so you can think of the
  * x,y origin as the top-left corner (the @ symbol above)
@@ -46,6 +48,8 @@ const terrainDefaults = Object.freeze({
     blocksMovement: false
 });
 const empty = {empty: true};
+
+const secondaryDiagonals = ['nne', 'ene', 'ese', 'sse', 'ssw', 'wsw', 'wnw', 'nnw'];
 
 function Board(attributes) {
 
@@ -132,7 +136,7 @@ function Board(attributes) {
         util.DIRECTIONS.forEach(dir => lineOfSightSearch(unitTile, dir));
 
         //TODO: only do these if it makes sense (we know we can see something in that direction)
-        ['nne', 'ene', 'ese', 'sse', 'ssw', 'wsw', 'wnw', 'nnw'].forEach(dir => extendedLineOfSightSearch(unitTile, dir));
+        secondaryDiagonals.forEach(dir => extendedLineOfSightSearch(unitTile, dir));
 
         return result;
 
