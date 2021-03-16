@@ -8,8 +8,20 @@ const Unit = require('./Unit');
 const typeName = 'Encounter';
 
 /**
+ * @typedef {object} EncounterAttributes
+ * @property {string} [id]
+ * @property {string} name
+ * @property {string} description
+ * @property {object} board
+ * @property {array} units
+ * @property {array} init
+ */
+
+/**
  * An Encounter is a single level or map or battle.
- * It is initialized with
+ * It is initialized with attributes that must conform to
+ * the EncounterAttributes JSON schema
+ * @type {EncounterAttributes}
  */
 function Encounter(attributes) {
 
