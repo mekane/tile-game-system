@@ -14,6 +14,10 @@ function adjustCoordinatesForDirection(x, y, direction) {
     return {x: x + adj.x, y: y + adj.y}
 }
 
+function digit() {
+    return (Math.random() * 9).toFixed();
+}
+
 function fileSafeString(string) {
     const noSpaces = string.replace(/\s|-/g, '_');
     const noSpecialChars = noSpaces.replace(/[\W]/g, '');
@@ -26,8 +30,18 @@ function generateId(type, name) {
     return `${prefix}_${number}`;
 }
 
-function digit() {
-    return (Math.random() * 9).toFixed();
+function groupUnitsByTurnOrder(originalUnits) {
+    const units = originalUnits.slice();
+    const turnOrderMap = {};
+
+    units.forEach((unit, index) => {
+        if (typeof turnOrderMap[unit.turnOrder] === 'undefined') {
+            turnOrderMap[unit.turnOrder] = [];
+        }
+        turnOrderMap[unit.turnOrder].push(index);
+    });
+    const keys = Object.keys(turnOrderMap);
+    return keys.map(key => turnOrderMap[key]);
 }
 
 function secondaryDirectionCoordinates(direction, i) {
@@ -59,7 +73,8 @@ module.exports = {
     adjustCoordinatesForDirection,
     directionAdjustmentsByDirection,
     DIRECTIONS: Object.keys(directionAdjustmentsByDirection),
-    secondaryDirectionCoordinates,
     fileSafeString,
-    generateId
+    generateId,
+    groupUnitsByTurnOrder,
+    secondaryDirectionCoordinates
 }

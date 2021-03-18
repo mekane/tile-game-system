@@ -173,3 +173,36 @@ describe('The secondary direction coordinates function', () => {
         expect(util.secondaryDirectionCoordinates('wsw', 9)).to.deep.equal({x: -6, y: 3});
     });
 });
+
+describe('Grouping units by turn order', () => {
+    it('returns a new empty list if an empty list is given', () => {
+        const emptyList = [];
+        expect(util.groupUnitsByTurnOrder(emptyList)).to.deep.equal([])
+        expect(util.groupUnitsByTurnOrder(emptyList)).to.not.equal(emptyList)
+    })
+
+    it('puts units into sub-array groups', () => {
+        const testData = [
+            {turnOrder: 1},
+            {turnOrder: 2},
+            {turnOrder: 3}
+        ]
+        const actual = util.groupUnitsByTurnOrder(testData);
+        expect(actual).to.be.an('array').with.length(3)
+    })
+
+    it('returns an array of indexes of the units in the original list', () => {
+        const originalList = [
+            {turnOrder: 1},
+            {turnOrder: 6},
+            {turnOrder: 9},
+            {turnOrder: 1},
+            {turnOrder: 6},
+            {turnOrder: 9}
+        ]
+        const expected = [
+            [0, 3], [1, 4], [2, 5]
+        ]
+        expect(util.groupUnitsByTurnOrder(originalList)).to.deep.equal(expected)
+    })
+})

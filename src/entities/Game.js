@@ -4,6 +4,8 @@ const validator = require('../validator');
 
 const Scenario = require('./Scenario');
 
+const addUnit = require('./gameActions/addUnit.js');
+
 const typeName = 'Game';
 
 function Game(attributes) {
@@ -52,7 +54,7 @@ function Game(attributes) {
                 activateUnit(message);
                 break;
             case 'addunit':
-                addUnit(message);
+                addUnit(state, message, getCurrentEncounter());
                 break;
             case 'doneactivating':
                 doneActivating(message);
@@ -85,86 +87,6 @@ function Game(attributes) {
         state.activeUnit = unitIndex;
     }
 
-    function addUnit({unitId, unitName, boardX, boardY}) {
-        if (!unitId && !unitName)
-            throw new Error('Add Unit failed: missing unit id or name');
-
-        const encounter = getCurrentEncounter();
-        const unitDefs = encounter.getUnitsById();
-
-        let unitDefinition = false;
-
-        if (unitId)
-            unitDefinition = unitDefs[unitId];
-        else {
-            const keys = Object.keys(unitDefs);
-            for (let i = 0; i < keys.length; i++) {
-                const unitDef = unitDefs[keys[i]];
-                if (unitDef.getName() === unitName) {
-                    unitDefinition = unitDef;
-                    break;
-                }
-            }
-        }
-
-        if (typeof unitDefinition !== 'object') {
-            if (unitId)
-                throw new Error(`Add Unit failed: could not find unit with id ${unitId}`);
-            else
-                throw new Error(`Add Unit failed: could not find unit with name ${unitName}`);
-        }
-
-        if (typeof boardX === 'undefined' || typeof boardY === 'undefined')
-            throw new Error('Add Unit failed: missing board coordinates');
-
-        const {width, height} = encounter.getBoard().getDimensions();
-
-        if (boardX < 0 || boardX > width || boardY < 0 || boardY > height)
-            throw new Error('Add Unit failed: board coordinates out of bounds');
-
-        const terrainDef = encounter.getBoard().getTerrainAt({x: boardX, y: boardY});
-        if (terrainDef.blocksMovement)
-            throw new Error('Add Unit failed: cannot add unit at specified coordinates');
-
-        state.units.forEach(u => {
-            if (u.positionX === boardX && u.positionY === boardY)
-                throw new Error('Add Unit failed: cannot add unit at specified coordinates');
-        });
-
-        const unitTurnOrder = unitDefinition.getTurnOrder();
-
-        const newUnit = {
-            definitionId: unitDefinition.getId(),
-            movementMax: unitDefinition.getMovement(),
-            movementRemaining: unitDefinition.getMovement(),
-            name: unitDefinition.getName(),
-            positionX: boardX,
-            positionY: boardY,
-            turnOrder: typeof unitTurnOrder === 'number' ? unitTurnOrder : 99
-        };
-        state.units.push(newUnit);
-        state.unitsGroupedByTurnOrder = groupUnitsByTurnOrder(state.units);
-
-        if (state.activeGroup === null) {
-            state.activeGroup = 0;
-            state.activeUnit = 0;
-        }
-    }
-
-    function groupUnitsByTurnOrder(originalUnits) {
-        const units = originalUnits.slice();
-        const turnOrderMap = {};
-
-        units.forEach((unit, index) => {
-            if (typeof turnOrderMap[unit.turnOrder] === 'undefined') {
-                turnOrderMap[unit.turnOrder] = [];
-            }
-            turnOrderMap[unit.turnOrder].push(index);
-        });
-        const keys = Object.keys(turnOrderMap);
-        return keys.map(key => turnOrderMap[key]);
-    }
-
     function doneActivating({unitIndex}) {
         if (typeof unitIndex !== 'number')
             throw new Error('missing unit index');
@@ -189,7 +111,7 @@ function Game(attributes) {
             if (nextGroup)
                 state.activeUnit = nextGroup[0];
             else {
-                state.unitsGroupedByTurnOrder = groupUnitsByTurnOrder(state.units);
+                state.unitsGroupedByTurnOrder = util.groupUnitsByTurnOrder(state.units);
                 state.activeGroup = 0;
                 state.activeUnit = state.unitsGroupedByTurnOrder[0][0];
                 state.units.forEach(u => {

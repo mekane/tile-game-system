@@ -72,7 +72,7 @@ async function initGame() {
 
     // set to 0 for the woods encounter
     // set to 1 for the space ship encounter
-    const startResult = await gameAdapter.startEncounter(gameId, 0);
+    const startResult = await gameAdapter.startEncounter(gameId, 1);
     reportError(startResult);
 
     return gameId;
