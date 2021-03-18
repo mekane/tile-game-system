@@ -1,7 +1,5 @@
 const util = require('../../util.js')
 
-// TODO: separate out unit test for just this
-// TODO: pass in encounter and game state information to act on
 function addUnit(state, {unitId, unitName, boardX, boardY}, encounter) {
     if (!unitId && !unitName)
         throw new Error('Add Unit failed: missing unit id or name');
