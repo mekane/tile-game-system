@@ -4,11 +4,7 @@ const validator = require('../validator');
 
 const Scenario = require('./Scenario');
 
-const activateUnit = require('./gameActions/activateUnit.js');
-const addUnit = require('./gameActions/addUnit.js');
-
-const doneActivating = require('./currentUnitActions/doneActivating.js');
-const moveUnit = require('./currentUnitActions/moveUnit.js');
+const currentUnitActionFactory = require('./currentUnitActions');
 
 const typeName = 'Game';
 
@@ -53,20 +49,10 @@ function Game(attributes) {
         if (!validator.validateAs(message, 'GameAction'))
             throw new Error('Invalid action');
 
-        switch (message.action.toLowerCase()) {
-            case 'activateunit':
-                activateUnit(state, message);
-                break;
-            case 'addunit':
-                addUnit(state, message, getCurrentEncounter());
-                break;
-            case 'doneactivating':
-                doneActivating(state, message);
-                break;
-            case 'moveunit':
-                moveUnit(state, message, getCurrentEncounter());
-                break;
-        }
+        const nameName = message.action.toLowerCase();
+        const action = currentUnitActionFactory(nameName);
+
+        return action(state, message, getCurrentEncounter());
     }
 
     function startEncounter(encounterIndex) {
