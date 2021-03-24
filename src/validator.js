@@ -1,5 +1,4 @@
 const BoardSchema = require('./schema/BoardAttributes.schema.json');
-const CharacterSchema = require('./schema/CharacterAttributes.schema.json');
 const EncounterSchema = require('./schema/EncounterAttributes.schema.json');
 const GameSchema = require('./schema/GameAttributes.schema.json');
 const GameActionSchema = require('./schema/GameAction.schema.json');
