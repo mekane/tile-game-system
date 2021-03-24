@@ -2,7 +2,7 @@
 const util = require('../util');
 const validator = require('../validator');
 
-const Encounter = require('./Encounter');
+const Encounter = _ => _;
 
 const typeName = 'Scenario';
 
@@ -34,7 +34,7 @@ function Scenario(attributes) {
         return {
             id,
             name,
-            encounters: encounters.map(e => e.toJson())
+            encounters
         }
     }
 

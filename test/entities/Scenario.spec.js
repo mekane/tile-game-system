@@ -63,12 +63,6 @@ describe('The Scenario entity', () => {
         expect(newScenario.getId()).to.equal(idString);
     });
 
-    it(`has a getBoard method that returns the Board entity`, () => {
-        const newScenario = Scenario(validScenario());
-        const encounter = newScenario.getEncounter(0);
-
-        expect(encounter.getType()).to.equal('Encounter');
-    });
 
     it(`has a getNumberOfEncounters method that returns the number of encounters in the scenario`, () => {
         const newScenario = Scenario(validScenario());
@@ -83,15 +77,5 @@ describe('The Scenario entity', () => {
     it(`has a toJson method that returns the raw data for the Scenario`, () => {
         const newScenario = Scenario(validScenario());
         expect(validator.validateAs(newScenario.toJson(), newScenario.getType())).to.equal(true);
-    });
-
-    it(`returns copies from toJson, not original objects`, () => {
-        const originalScenarioData = validScenario();
-        originalScenarioData.id = 'scenario_test_1234';
-
-        const newScenario = Scenario(originalScenarioData);
-        const json = newScenario.toJson();
-        expect(json).to.not.equal(originalScenarioData);
-        expect(json.encounters[0]).to.not.equal(originalScenarioData.encounters[0]);
     });
 });

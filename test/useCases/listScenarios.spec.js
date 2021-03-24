@@ -22,12 +22,9 @@ describe('The ListScenarios Use Case function', () => {
         const listOfScenarios = await listScenarioUseCase();
 
         expect(listOfScenarios).to.be.an('array').with.length(3);
-        expect(listOfScenarios[0].getId()).to.equal('test_scenario_id0');
-        expect(listOfScenarios[0].getType()).to.equal('Scenario');
-        expect(listOfScenarios[1].getId()).to.equal('test_scenario_id1');
-        expect(listOfScenarios[1].getType()).to.equal('Scenario');
-        expect(listOfScenarios[2].getId()).to.equal('test_scenario_id2');
-        expect(listOfScenarios[2].getType()).to.equal('Scenario');
+        expect(listOfScenarios[0].id).to.equal('test_scenario_id0');
+        expect(listOfScenarios[1].id).to.equal('test_scenario_id1');
+        expect(listOfScenarios[2].id).to.equal('test_scenario_id2');
     });
 });
 

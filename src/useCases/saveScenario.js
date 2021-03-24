@@ -1,11 +1,10 @@
-const Scenario = require('../entities/Scenario');
+const util = require('../util.js');
 
 function SaveScenario({scenarioRepository}) {
     return async function SaveScenario(scenarioData) {
 
         if (typeof scenarioData.id !== 'string') {
-            const tempScenario = Scenario(scenarioData);
-            scenarioData.id = tempScenario.getId();
+            scenarioData.id = util.generateId('Scenario', scenarioData.name);
         }
 
         await scenarioRepository.save(scenarioData);

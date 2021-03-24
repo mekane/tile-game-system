@@ -1,4 +1,5 @@
 const util = require('../../util.js');
+const Board = require('../Board.js');
 
 function moveUnit(state, {unitIndex, direction}, encounter) {
     if (typeof unitIndex !== 'number')
@@ -17,7 +18,8 @@ function moveUnit(state, {unitIndex, direction}, encounter) {
     const unitX = unitToMove.positionX;
     const unitY = unitToMove.positionY;
     const {x, y} = util.adjustCoordinatesForDirection(unitX, unitY, direction);
-    const tile = encounter.getBoard().getTileAt({x, y});
+    const board = Board(encounter.board);
+    const tile = board.getTileAt({x, y});
 
     if (tile === null)
         throw new Error('Move Unit failed: destination is out of bounds');
@@ -27,7 +29,7 @@ function moveUnit(state, {unitIndex, direction}, encounter) {
             throw new Error('Move Unit failed: destination is occupied');
     });
 
-    const terrainDef = encounter.getBoard().getTerrainAt({x, y});
+    const terrainDef = board.getTerrainAt({x, y});
 
     if (terrainDef.blocksMovement)
         throw new Error('Move Unit failed: destination is blocked');

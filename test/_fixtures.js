@@ -1,3 +1,5 @@
+let unitId = 0;
+
 function validBoard() {
     return {
         name: 'Test',
@@ -88,6 +90,7 @@ function validScenario(overrides) {
 
 function validUnit() {
     return {
+        id: 'Unit_' + unitId++,
         name: 'Goblin',
         movement: 6,
         turnOrder: 1

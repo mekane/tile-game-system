@@ -1,23 +1,20 @@
 const util = require('../../util.js')
+const Board = require('../Board.js')
 
 function addUnit(state, {unitId, unitName, boardX, boardY}, encounter) {
     if (!unitId && !unitName)
         throw new Error('Add Unit failed: missing unit id or name');
 
-    const unitDefs = encounter.getUnitsById();
+    const unitDefs = encounter.units;
 
     let unitDefinition = false;
 
-    if (unitId)
-        unitDefinition = unitDefs[unitId];
-    else {
-        const keys = Object.keys(unitDefs);
-        for (let i = 0; i < keys.length; i++) {
-            const unitDef = unitDefs[keys[i]];
-            if (unitDef.getName() === unitName) {
-                unitDefinition = unitDef;
-                break;
-            }
+    const keys = Object.keys(unitDefs);
+    for (let i = 0; i < keys.length; i++) {
+        const unitDef = unitDefs[keys[i]];
+        if (unitId === unitDef.id || unitDef.name === unitName) {
+            unitDefinition = unitDef;
+            break;
         }
     }
 
@@ -31,12 +28,13 @@ function addUnit(state, {unitId, unitName, boardX, boardY}, encounter) {
     if (typeof boardX === 'undefined' || typeof boardY === 'undefined')
         throw new Error('Add Unit failed: missing board coordinates');
 
-    const {width, height} = encounter.getBoard().getDimensions();
+    const board = Board(encounter.board)
+    const {width, height} = board.getDimensions();
 
     if (boardX < 0 || boardX > width || boardY < 0 || boardY > height)
         throw new Error('Add Unit failed: board coordinates out of bounds');
 
-    const terrainDef = encounter.getBoard().getTerrainAt({x: boardX, y: boardY});
+    const terrainDef = board.getTerrainAt({x: boardX, y: boardY});
     if (terrainDef.blocksMovement)
         throw new Error('Add Unit failed: cannot add unit at specified coordinates');
 
@@ -45,13 +43,13 @@ function addUnit(state, {unitId, unitName, boardX, boardY}, encounter) {
             throw new Error('Add Unit failed: cannot add unit at specified coordinates');
     });
 
-    const unitTurnOrder = unitDefinition.getTurnOrder();
+    const unitTurnOrder = unitDefinition.turnOrder;
 
     const newUnit = {
-        definitionId: unitDefinition.getId(),
-        movementMax: unitDefinition.getMovement(),
-        movementRemaining: unitDefinition.getMovement(),
-        name: unitDefinition.getName(),
+        definitionId: unitDefinition.id,
+        movementMax: unitDefinition.movement,
+        movementRemaining: unitDefinition.movement,
+        name: unitDefinition.name,
         positionX: boardX,
         positionY: boardY,
         turnOrder: typeof unitTurnOrder === 'number' ? unitTurnOrder : 99

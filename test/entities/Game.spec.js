@@ -94,13 +94,6 @@ describe('Game Entity Properties and Methods', () => {
         expect(newGame.getType()).to.equal('Game');
     });
 
-    it(`has a getScenario function that returns the Scenario entity`, () => {
-        const newGame = Game(validGame());
-
-        const scenario = newGame.getScenario();
-        expect(scenario.getType()).to.equal('Scenario');
-    });
-
     it(`has a getState method that returns the current game state`, () => {
         const newGame = Game(validGame());
         expect(newGame.getState()).to.deep.equal(expectedGameState());
@@ -109,17 +102,6 @@ describe('Game Entity Properties and Methods', () => {
     it(`has a toJson method that returns the raw data for the Game`, () => {
         const newGame = Game(validGame());
         expect(validator.validateAs(newGame.toJson(), newGame.getType())).to.equal(true);
-    });
-
-    it(`returns copies from toJson, not original objects`, () => {
-        const originalGameData = validGame();
-        originalGameData.id = 'game_test_1234';
-
-        const newGame = Game(originalGameData);
-        const json = newGame.toJson();
-        expect(json, 'Overall JSON').to.not.equal(originalGameData);
-        expect(json.scenario, 'Scenario JSON').to.not.equal(originalGameData.scenario);
-        expect(json.scenario.encounters[0], 'Encounter JSON').to.not.equal(originalGameData.scenario.encounters[0]);
     });
 });
 
@@ -261,7 +243,7 @@ describe('Game Action - Add Unit', () => {
         const game = Game(validGame());
 
         const action = 'addUnit';
-        const unitId = game.getScenario().getEncounter(0).getUnits()[0].getId();
+        const unitId = game.getScenario().encounters[0].units[0].id;
 
         const messageMissingBoard = () => game.sendAction({action: "addUnit", unitId});
         const badBoardXmin = () => game.sendAction({action, unitId, boardX: -1, boardY: 0});
@@ -278,14 +260,14 @@ describe('Game Action - Add Unit', () => {
 
     it(`adds a unit to the specified tile`, () => {
         const game = Game(validGame());
-        const unitToAdd = game.getScenario().getEncounter(0).getUnits()[0];
-        const unitId = unitToAdd.getId();
+        const unitToAdd = game.getScenario().encounters[0].units[0];
+        const unitId = unitToAdd.id;
         game.sendAction({action: 'addUnit', unitId, boardX: 0, boardY: 0});
 
         const newState = game.getState();
         expect(newState.units.length).to.equal(1);
         const unit = newState.units[0];
-        expect(unit.name).to.equal(unitToAdd.getName());
+        expect(unit.name).to.equal(unitToAdd.name);
     });
 
     it(`sets initial properties on the unit based on unit definition`, () => {
@@ -316,16 +298,16 @@ describe('Game Action - Add Unit', () => {
         const game = Game(gameDataWithMoreEncounterDetail());
         game.startEncounter(1);
 
-        const unitToAdd = game.getScenario().getEncounter(1).getUnits()[0];
-        const addUnitToBlockedSpaceAction = {action: 'addUnit', unitId: unitToAdd.getId(), boardX: 0, boardY: 0};
+        const unitToAdd = game.getScenario().encounters[1].units[0];
+        const addUnitToBlockedSpaceAction = {action: 'addUnit', unitId: unitToAdd.id, boardX: 0, boardY: 0};
         const messageUnitConflict = () => game.sendAction(addUnitToBlockedSpaceAction);
         expect(messageUnitConflict).to.throw(/Add Unit failed: cannot add unit at specified coordinates/);
     });
 
     it(`throws an error if the specified board location already contains a unit`, () => {
         const game = Game(validGame());
-        const unitToAdd = game.getScenario().getEncounter(0).getUnits()[0];
-        const unitId = unitToAdd.getId();
+        const unitToAdd = game.getScenario().encounters[0].units[0];
+        const unitId = unitToAdd.id;
         const addUnitAction = {action: 'addUnit', unitId, boardX: 0, boardY: 0};
         game.sendAction(addUnitAction)
 
@@ -446,8 +428,8 @@ describe('Game Action - Move Unit', () => {
 
     it(`throws an error if the specified board location already contains a unit`, () => {
         const game = constructGameWithOneUnit();
-        const unitToAdd = game.getScenario().getEncounter(0).getUnits()[0];
-        const unitId = unitToAdd.getId();
+        const unitToAdd = game.getScenario().encounters[0].units[0];
+        const unitId = unitToAdd.id;
         const addUnitAction = {action: 'addUnit', unitId, boardX: 1, boardY: 0};
         game.sendAction(addUnitAction)
 
@@ -479,8 +461,8 @@ describe('Game Action - Move Unit', () => {
         const game = Game(gameDataWithMoreEncounterDetail());
         game.startEncounter(1);
 
-        const unitToAdd = game.getScenario().getEncounter(1).getUnits()[0];
-        game.sendAction({action: 'addUnit', unitId: unitToAdd.getId(), boardX: 1, boardY: 1});
+        const unitToAdd = game.getScenario().encounters[1].units[0];
+        game.sendAction({action: 'addUnit', unitId: unitToAdd.id, boardX: 1, boardY: 1});
 
         game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 's'});
         const unit = game.getState().units[0];
@@ -812,9 +794,9 @@ function validGameWithVarietyOfUnits() {
     const gameData = gameDataWithMoreEncounterDetail();
     const enc = gameData.scenario.encounters[1];
     enc.units = [
-        {name: 'Marine', movement: 4, turnOrder: 1},
-        {name: 'Alien', movement: 6, turnOrder: 3},
-        {name: 'Blob', movement: 6, turnOrder: 5},
+        {id: 'm1', name: 'Marine', movement: 4, turnOrder: 1},
+        {id: 'a1', name: 'Alien', movement: 6, turnOrder: 3},
+        {id: 'b1', name: 'Blob', movement: 6, turnOrder: 5},
     ];
     return gameData;
 }
@@ -823,12 +805,12 @@ function validGameWithUnitsForOrderTest() {
     const gameData = gameDataWithMoreEncounterDetail();
     const enc = gameData.scenario.encounters[1];
     enc.units = [
-        {name: 'U01', movement: 4, turnOrder: 1},  //5
-        {name: 'U09', movement: 6, turnOrder: 9},  //4
-        {name: 'U10', movement: 6, turnOrder: 10}, //3
-        {name: 'U11', movement: 6, turnOrder: 11}, //2
-        {name: 'U20', movement: 6, turnOrder: 20}, //1
-        {name: 'U29', movement: 6, turnOrder: 29}, //0
+        {id: 'u01', name: 'U01', movement: 4, turnOrder: 1},  //5
+        {id: 'u09', name: 'U09', movement: 6, turnOrder: 9},  //4
+        {id: 'u10', name: 'U10', movement: 6, turnOrder: 10}, //3
+        {id: 'u11', name: 'U11', movement: 6, turnOrder: 11}, //2
+        {id: 'u20', name: 'U20', movement: 6, turnOrder: 20}, //1
+        {id: 'u29', name: 'U29', movement: 6, turnOrder: 29}, //0
     ];
     return gameData;
 }

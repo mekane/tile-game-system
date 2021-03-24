@@ -2,23 +2,23 @@
 const util = require('../util');
 const validator = require('../validator');
 
-const Scenario = require('./Scenario');
+const Board = require('./Board.js');
 
 const currentUnitActionFactory = require('./currentUnitActions');
 
 const typeName = 'Game';
 
 function Game(attributes) {
-    if (!validator.validateAs(attributes, typeName))
+    if (!validator.validateAs(attributes, typeName, true))
         return null;
 
     const id = attributes.id || util.generateId('game', attributes.name);
     const name = attributes.name;
-    const scenario = Scenario(attributes.scenario);
+    const scenario = attributes.scenario;
 
     let currentEncounterIndex = attributes.currentEncounterIndex || 0;
 
-    let state = attributes.currentState || initializeStateForEncounter(scenario.getEncounter(currentEncounterIndex));
+    let state = attributes.currentState || initializeStateForEncounter(scenario.encounters[currentEncounterIndex]);
 
     function getActiveUnit() {
         const activeUnit = state.units[state.activeUnit];
@@ -26,7 +26,7 @@ function Game(attributes) {
     }
 
     function getCurrentEncounter() {
-        return scenario.getEncounter(currentEncounterIndex);
+        return scenario.encounters[currentEncounterIndex];
     }
 
     function getState() {
@@ -59,7 +59,7 @@ function Game(attributes) {
         if (typeof encounterIndex !== 'number')
             throw new Error('missing encounter number');
 
-        const maxEncounterIndex = scenario.getNumberOfEncounters();
+        const maxEncounterIndex = scenario.encounters.length;
         if (encounterIndex < 0 || encounterIndex > maxEncounterIndex)
             throw new Error('invalid encounter number');
 
@@ -67,7 +67,8 @@ function Game(attributes) {
         const encounter = getCurrentEncounter();
         state = initializeStateForEncounter(encounter);
 
-        encounter.getInit().forEach(sendAction);
+        const initialActions = encounter.init || [];
+        initialActions.forEach(sendAction);
 
         if (state.units.length) {
             state.activeGroup = 0;
@@ -79,7 +80,7 @@ function Game(attributes) {
         return {
             id,
             name,
-            scenario: scenario.toJson(),
+            scenario: scenario,
             currentEncounterIndex,
             currentState: state
         }
@@ -88,7 +89,7 @@ function Game(attributes) {
     return Object.freeze({
         getId: _ => id,
         getActiveUnit,
-        getCurrentBoard: () => getCurrentEncounter().getBoard(),
+        getCurrentBoard: () => Board(getCurrentEncounter().board),
         getScenario: () => scenario,
         getState,
         getType: () => typeName,

@@ -21,7 +21,8 @@ describe('A realistic test using the Local Game Adapter to make a new game', () 
         await populateSomeScenarios(localGameAdapter);
         const list = await localGameAdapter.listScenarios();
 
-        let result = await localGameAdapter.newGame('Test New Game', list[0].getId());
+        let result = await localGameAdapter.newGame('Test New Game', list[0].id);
+
         expect(result.success).to.equal(true);
         const gameId = result.created;
 
