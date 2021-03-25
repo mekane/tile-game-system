@@ -7,7 +7,6 @@ const UnitSchema = require('./schema/UnitAttributes.schema.json');
 
 const schemaForType = {
     Board: BoardSchema,
-    Character: CharacterSchema,
     Encounter: EncounterSchema,
     Game: GameSchema,
     GameAction: GameActionSchema,

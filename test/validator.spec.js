@@ -5,7 +5,6 @@ const validator = require('../src/validator');
 
 const types = [
     'Board',
-    'Character',
     'Encounter',
     'Game',
     'GameAction',
