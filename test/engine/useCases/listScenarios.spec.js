@@ -1,8 +1,8 @@
 const expect = require('chai').expect;
-const {mockRepository, inMemoryRepository} = require('../_mocks');
-const {validScenario} = require('../_fixtures');
+const {mockRepository, inMemoryRepository} = require('../../_mocks.js');
+const {validScenario} = require('../../_fixtures.js');
 
-const {ListScenarios} = require('../../engine/useCases/listScenarios');
+const {ListScenarios} = require('../../../engine/useCases/listScenarios.js');
 
 describe('The ListScenarios Use Case Initializer', () => {
     it(`exports an init function to inject the module with dependencies`, () => {

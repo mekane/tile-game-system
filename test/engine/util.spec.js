@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 
-const util = require('../engine/util.js');
+const util = require('../../engine/util.js');
 
 describe('The filesafe function', () => {
     it(`lowercases the characters in the string`, () => {

@@ -1,8 +1,8 @@
 const expect = require('chai').expect;
-const {mockRepository, spyRepository, inMemoryRepository, stubRepository} = require('../_mocks');
-const {validGame, validGameAction} = require('../_fixtures');
+const {mockRepository, spyRepository, inMemoryRepository, stubRepository} = require('../../_mocks.js');
+const {validGame, validGameAction} = require('../../_fixtures.js');
 
-const {GameAction} = require('../../engine/useCases/gameAction');
+const {GameAction} = require('../../../engine/useCases/gameAction.js');
 
 const testId = 'test_id';
 
