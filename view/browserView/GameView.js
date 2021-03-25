@@ -1,6 +1,6 @@
 const h = require('snabbdom/h').default;
-const {BoardView} = require('./BoardView');
-const {UnitListView} = require('./UnitListView');
+const {BoardView} = require('./BoardView.js');
+const {UnitListView} = require('./UnitListView.js');
 
 function GameView(viewData) {
     /*PROFILE*/window.profileGameView['GameView']++;

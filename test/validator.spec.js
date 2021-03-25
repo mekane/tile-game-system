@@ -1,7 +1,7 @@
 const expect = require('chai').expect;
 const fixtures = require('./_fixtures');
 
-const validator = require('../src/validator');
+const validator = require('../engine/validator.js');
 
 const types = [
     'Board',

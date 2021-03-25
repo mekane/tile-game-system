@@ -1,4 +1,4 @@
-const UseCasesInit = require('../../useCases/index');
+const UseCasesInit = require('../../useCases');
 const {Repository} = require('../../repository');
 
 function inMemoryDataStore(initialData) {

@@ -1,9 +1,9 @@
-const {GameAction} = require('./gameAction');
-const {GameState} = require('./gameState');
-const {ListScenarios} = require('./listScenarios');
-const {NewGame} = require('./newGame');
-const {SaveScenario} = require('./saveScenario');
-const {StartEncounter} = require('./startEncounter');
+const {GameAction} = require('./gameAction.js');
+const {GameState} = require('./gameState.js');
+const {ListScenarios} = require('./listScenarios.js');
+const {NewGame} = require('./newGame.js');
+const {SaveScenario} = require('./saveScenario.js');
+const {StartEncounter} = require('./startEncounter.js');
 
 function init({gameRepository, scenarioRepository}) {
     if (isInvalid(gameRepository))

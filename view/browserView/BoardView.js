@@ -1,6 +1,6 @@
 const h = require('snabbdom/h').default;
-const {TileView, TILE_SIZE} = require('./TileView');
-const {UnitView} = require('./UnitView');
+const {TileView, TILE_SIZE} = require('./TileView.js');
+const {UnitView} = require('./UnitView.js');
 
 function BoardView({activeLineOfSight, tiles, state, lastUnitMove = {}}) {
     /*PROFILE*/

@@ -1,4 +1,4 @@
-const Scenario = require('../entities/Scenario');
+const Scenario = require('../entities/Scenario.js');
 
 function ListScenarios({scenarioRepository}) {
     return async function ListScenarios() {

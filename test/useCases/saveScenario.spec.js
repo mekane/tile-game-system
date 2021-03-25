@@ -2,7 +2,7 @@ const expect = require('chai').expect;
 const {mockRepository, inMemoryRepository} = require('../_mocks');
 const {validScenario} = require('../_fixtures');
 
-const {SaveScenario} = require('../../src/useCases/saveScenario');
+const {SaveScenario} = require('../../engine/useCases/saveScenario');
 
 describe('The SaveScenario Use Case Initializer', () => {
     it(`exports an init function to inject the module with dependencies`, () => {

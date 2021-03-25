@@ -1,9 +1,9 @@
 'use strict'
 const expect = require('chai').expect;
 const {validBoard} = require('../_fixtures');
-const validator = require('../../src/validator');
+const validator = require('../../engine/validator.js');
 
-const Board = require('../../src/entities/Board');
+const Board = require('../../engine/entities/Board');
 
 describe('The Board entity', () => {
     it(`exports a constructor function`, () => {

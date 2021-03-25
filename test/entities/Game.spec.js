@@ -1,9 +1,9 @@
 'use strict'
 const expect = require('chai').expect;
 const {validEncounterWithInitialUnit, validGame} = require('../_fixtures');
-const validator = require('../../src/validator');
+const validator = require('../../engine/validator.js');
 
-const Game = require('../../src/entities/Game');
+const Game = require('../../engine/entities/Game');
 const validGameId = /^game_test_\d{6,8}/;
 
 describe('Game Entity Construction', () => {

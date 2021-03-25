@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 
-const helpers = require('../../../src/view/browserView/htmlHelpers');
+const helpers = require('../../../view/browserView/htmlHelpers');
 
 describe('Converting arbitrary strings to valid css class names', () => {
     it('does nothing for empty strings', () => {

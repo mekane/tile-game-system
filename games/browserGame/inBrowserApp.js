@@ -1,7 +1,7 @@
-const woodlandTiles = require('./woodlandMap');
-const spaceshipTiles = require('./spaceshipMap');
-const {BrowserView} = require('../view/browserView');
-const LocalGameAdapter = require('../adapters/LocalGame');
+const woodlandTiles = require('./woodlandMap.js');
+const spaceshipTiles = require('./spaceshipMap.js');
+const {BrowserView} = require('../../view/browserView');
+const LocalGameAdapter = require('../../engine/adapters/LocalGame');
 
 const main = document.querySelector('#main');
 

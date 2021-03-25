@@ -1,4 +1,4 @@
-const Game = require('../entities/Game');
+const Game = require('../entities/Game.js');
 
 function NewGame({gameRepository, scenarioRepository}) {
     return async function NewGame(name = 'New Game', scenarioId) {

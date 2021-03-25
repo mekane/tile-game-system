@@ -1,5 +1,5 @@
 const h = require('snabbdom/h').default;
-const {cssSafeString} = require('../browserView/htmlHelpers');
+const {cssSafeString} = require('./htmlHelpers.js');
 
 function UnitView(unitData, unitNumber, isActive, TILE_SIZE, lastMoveDirection) {
     /*PROFILE*/

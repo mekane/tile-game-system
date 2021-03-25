@@ -8,7 +8,7 @@ const patch = snabbdom.init([ // Init patch function with chosen modules
     require('snabbdom/modules/eventlisteners').default
 ]);
 
-const {GameView} = require('./GameView');
+const {GameView} = require('./GameView.js');
 
 async function BrowserView(domElement, gameId, gameAdapter) {
     let vnode = toVNode(domElement);

@@ -1,7 +1,7 @@
 const expect = require('chai').expect;
 const {mockRepository} = require('../_mocks');
 
-const UseCasesInit = require('../../src/useCases/index');
+const UseCasesInit = require('../../engine/useCases/index');
 
 describe('The Use Case Module Index', () => {
     it(`exports a single init method that takes the repositories to inject`, () => {

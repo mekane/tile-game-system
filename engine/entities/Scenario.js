@@ -1,6 +1,6 @@
 'use strict'
-const util = require('../util');
-const validator = require('../validator');
+const util = require('../util.js');
+const validator = require('../validator.js');
 
 const Encounter = _ => _;
 

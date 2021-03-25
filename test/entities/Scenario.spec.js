@@ -1,9 +1,9 @@
 'use strict'
 const expect = require('chai').expect;
 const validScenario = require('../_fixtures').validScenario;
-const validator = require('../../src/validator');
+const validator = require('../../engine/validator.js');
 
-const Scenario = require('../../src/entities/Scenario');
+const Scenario = require('../../engine/entities/Scenario');
 
 describe('The Scenario entity', () => {
     it(`exports a constructor function`, () => {
