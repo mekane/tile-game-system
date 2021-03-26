@@ -1,9 +1,9 @@
-const h = require('snabbdom/h').default;
-const {cssSafeString} = require('./htmlHelpers.js');
+import {h} from 'snabbdom/h.js';
+import {cssSafeString} from './htmlHelpers.js';
 
 const selector = 'div.tile';
 
-function TileView(tileData, tileX, tileY, lineOfSightData) {
+export function TileView(tileData, tileX, tileY, lineOfSightData) {
     /*PROFILE*/
     window.profileGameView['TileView']++;
 
@@ -28,7 +28,4 @@ function TileView(tileData, tileX, tileY, lineOfSightData) {
     return h(selector, elData, []);
 }
 
-module.exports = {
-    TileView,
-    TILE_SIZE: 48
-}
+export const TILE_SIZE = 48;

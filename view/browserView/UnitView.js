@@ -1,7 +1,7 @@
-const h = require('snabbdom/h').default;
-const {cssSafeString} = require('./htmlHelpers.js');
+import {h} from 'snabbdom/h.js';
+import {cssSafeString} from './htmlHelpers.js';
 
-function UnitView(unitData, unitNumber, isActive, TILE_SIZE, lastMoveDirection) {
+export function UnitView(unitData, unitNumber, isActive, TILE_SIZE, lastMoveDirection) {
     /*PROFILE*/
     window.profileGameView['UnitView']++;
 
@@ -44,8 +44,4 @@ function UnitView(unitData, unitNumber, isActive, TILE_SIZE, lastMoveDirection) 
     function getTransitionSpeed(moveRate) {
         return moveRate < 5 ? '1s' : '.3s';
     }
-}
-
-module.exports = {
-    UnitView
 }

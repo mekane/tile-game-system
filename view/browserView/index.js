@@ -1,22 +1,27 @@
-const snabbdom = require('snabbdom');
-const toVNode = require('snabbdom/tovnode').default;
-const patch = snabbdom.init([ // Init patch function with chosen modules
-    require('snabbdom/modules/attributes').default,
-    require('snabbdom/modules/class').default,
-    require('snabbdom/modules/props').default,
-    require('snabbdom/modules/style').default,
-    require('snabbdom/modules/eventlisteners').default
+import {init} from 'snabbdom/snabbdom.js'
+import {attributesModule} from 'snabbdom/modules/attributes.js'
+import {classModule} from 'snabbdom/modules/class.js'
+import {eventListenersModule} from 'snabbdom/modules/eventlisteners.js'
+import {propsModule} from 'snabbdom/modules/props.js'
+import {styleModule} from 'snabbdom/modules/style.js'
+
+import {toVNode} from 'snabbdom/tovnode.js';
+
+const patch = init([ // Init patch function with chosen modules
+    attributesModule,
+    classModule,
+    eventListenersModule,
+    propsModule,
+    styleModule
 ]);
 
-const {GameView} = require('./GameView.js');
+import {GameView} from './GameView.js'
 
 /**
- *
- * @constructor
  * @param {Node} domElement
  * @param {Function} actionHandler
  */
-function BrowserView(domElement, actionHandler) {
+export function BrowserView(domElement, actionHandler) {
     let vNode = toVNode(domElement);
 
     initGlobalControls();
@@ -85,8 +90,4 @@ function BrowserView(domElement, actionHandler) {
 
         //console.log('Game View Profile:', window.profileGameView);
     }
-}
-
-module.exports = {
-    BrowserView
 }

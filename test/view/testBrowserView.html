@@ -1,12 +1,48 @@
 <html>
 <head>
     <title>Browser View Test</title>
+    <style>
+        .board {
+            border: 2px solid black;
+            display: inline-grid;
+            grid-gap: 0;
+        }
+
+        .tile {
+            background: #ccc;
+            border: 1px solid #393939;
+            font-size: 70%;
+        }
+
+        .tile.empty {
+            background: #252525;
+            border: 1px solid #292929;
+        }
+
+        .unit {
+            background: #999;
+            border: 1px solid #222;
+            border-radius: 50%;
+            height: 80%;
+            width: 80%;
+            text-align: center;
+        }
+
+        .tile,
+        .unit {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
 <h1>Browser View Test</h1>
 <p>The purpose of this html page is to do a simple test of whether the browser view is properly loading and rendering
     on the page and reporting browser events. Its responsibility is to turn a game state into html elements and to send
-    browser events back to the handler.</p>
+    browser events back to the handler. This ensures that the view is correctly bundled as a stand-alone module
+    that can be imported and used.
+</p>
 
 <h2>Verify Rendering</h2>
 <p>
@@ -22,7 +58,112 @@
     keys to verify that messages show up for each keypress.
 </p>
 <script type="module">
-    const
+    import {BrowserView} from '../../build/view.bundle.js';
+
+    const el = document.querySelector('#browserViewHere');
+    const view = BrowserView(el, console.log);
+
+    const testState = {
+        "lastUnitMove": {
+            "action": "moveUnit",
+            "unitIndex": 0,
+            "direction": "e"
+        },
+        "activeLineOfSight": [
+            [
+                false,
+                false,
+                false
+            ],
+            [
+                false,
+                false,
+                false
+            ],
+            [
+                false,
+                false,
+                false
+            ]
+        ],
+        "success": true,
+        "state": {
+            "units": [
+                {
+                    "definitionId": "unit_marine_17516600",
+                    "movementMax": 40,
+                    "movementRemaining": 37,
+                    "name": "Space Marine",
+                    "positionX": 1,
+                    "positionY": 1,
+                    "turnOrder": 99,
+                    "hasActivated": true
+                },
+            ],
+            "unitsGroupedByTurnOrder": [
+                [
+                    0
+                ]
+            ],
+            "activeGroup": 0,
+            "activeUnit": 0
+        },
+        "tiles": [
+            [
+                {
+                    "name": "Wall",
+                    "movementRequired": 1,
+                    "blocksMovement": true
+                },
+                {
+                    "name": "Wall",
+                    "movementRequired": 1,
+                    "blocksMovement": true
+                },
+                {
+                    "name": "Wall",
+                    "movementRequired": 1,
+                    "blocksMovement": true
+                }
+            ],
+            [
+                {
+                    "name": "Wall",
+                    "movementRequired": 1,
+                    "blocksMovement": true
+                },
+                {
+                    "name": "Room",
+                    "movementRequired": 1,
+                    "blocksMovement": false
+                },
+                {
+                    "name": "Room",
+                    "movementRequired": 1,
+                    "blocksMovement": false
+                },
+            ],
+            [
+                {
+                    "name": "Wall",
+                    "movementRequired": 1,
+                    "blocksMovement": true
+                },
+                {
+                    "name": "Room",
+                    "movementRequired": 1,
+                    "blocksMovement": false
+                },
+                {
+                    "name": "Room",
+                    "movementRequired": 1,
+                    "blocksMovement": false
+                }
+            ]
+        ]
+    }
+
+    view.render(testState)
 </script>
 </body>
 </html>

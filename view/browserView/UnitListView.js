@@ -1,8 +1,8 @@
-const h = require('snabbdom/h').default;
+import {h} from 'snabbdom/h.js';
 
 const block = 'unit-list'
 
-function UnitListView(state) {
+export function UnitListView(state) {
     /*PROFILE*/
     window.profileGameView['UnitListView']++;
 
@@ -54,8 +54,4 @@ function UnitListView(state) {
 
         return h(classes.join('.'), {}, content);
     }
-}
-
-module.exports = {
-    UnitListView
 }

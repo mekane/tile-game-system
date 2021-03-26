@@ -1,8 +1,8 @@
-const h = require('snabbdom/h').default;
-const {TileView, TILE_SIZE} = require('./TileView.js');
-const {UnitView} = require('./UnitView.js');
+import {h} from 'snabbdom/h.js';
+import {TileView, TILE_SIZE} from './TileView.js';
+import {UnitView} from './UnitView.js';
 
-function BoardView({activeLineOfSight, tiles, state, lastUnitMove = {}}) {
+export function BoardView({activeLineOfSight, tiles, state, lastUnitMove = {}}) {
     /*PROFILE*/
     window.profileGameView['BoardView']++;
     const units = state.units;
@@ -38,9 +38,4 @@ function BoardView({activeLineOfSight, tiles, state, lastUnitMove = {}}) {
     function makeTileViews(row, rowNumber) {
         return row.map((tile, tileNumber) => TileView(tile, tileNumber, rowNumber, activeLineOfSight));
     }
-}
-
-
-module.exports = {
-    BoardView
 }
