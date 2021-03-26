@@ -1,7 +1,7 @@
-const util = require('../../util.js')
-const Board = require('../Board.js')
+import {Board} from '../Board.js';
+import {groupUnitsByTurnOrder} from '../../util.js';
 
-function addUnit(state, {unitId, unitName, boardX, boardY}, encounter) {
+export function addUnit(state, {unitId, unitName, boardX, boardY}, encounter) {
     if (!unitId && !unitName)
         throw new Error('Add Unit failed: missing unit id or name');
 
@@ -55,12 +55,10 @@ function addUnit(state, {unitId, unitName, boardX, boardY}, encounter) {
         turnOrder: typeof unitTurnOrder === 'number' ? unitTurnOrder : 99
     };
     state.units.push(newUnit);
-    state.unitsGroupedByTurnOrder = util.groupUnitsByTurnOrder(state.units);
+    state.unitsGroupedByTurnOrder = groupUnitsByTurnOrder(state.units);
 
     if (state.activeGroup === null) {
         state.activeGroup = 0;
         state.activeUnit = 0;
     }
 }
-
-module.exports = addUnit;

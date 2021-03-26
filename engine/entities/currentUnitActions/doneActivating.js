@@ -1,6 +1,6 @@
-const util = require('../../util.js');
+import {groupUnitsByTurnOrder} from '../../util.js';
 
-function doneActivating(state, {unitIndex}) {
+export function doneActivating(state, {unitIndex}) {
     if (typeof unitIndex !== 'number')
         throw new Error('missing unit index');
 
@@ -24,7 +24,7 @@ function doneActivating(state, {unitIndex}) {
         if (nextGroup)
             state.activeUnit = nextGroup[0];
         else {
-            state.unitsGroupedByTurnOrder = util.groupUnitsByTurnOrder(state.units);
+            state.unitsGroupedByTurnOrder = groupUnitsByTurnOrder(state.units);
             state.activeGroup = 0;
             state.activeUnit = state.unitsGroupedByTurnOrder[0][0];
             state.units.forEach(u => {
@@ -45,5 +45,3 @@ function doneActivating(state, {unitIndex}) {
         }
     }
 }
-
-module.exports = doneActivating;

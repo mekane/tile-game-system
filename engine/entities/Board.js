@@ -1,6 +1,11 @@
-'use strict'
-const util = require('../util.js');
-const validator = require('../validator.js');
+import {
+    adjustCoordinatesForDirection,
+    directionAdjustmentsByDirection,
+    DIRECTIONS,
+    generateId,
+    secondaryDirectionCoordinates
+} from '../util.js';
+import {validateAs} from '../validator.js';
 
 const typeName = 'Board';
 
@@ -51,12 +56,12 @@ const empty = {empty: true};
 
 const secondaryDiagonals = ['nne', 'ene', 'ese', 'sse', 'ssw', 'wsw', 'wnw', 'nnw'];
 
-function Board(attributes) {
+export function Board(attributes) {
 
-    if (!validator.validateAs(attributes, typeName))
+    if (!validateAs(attributes, typeName))
         return null;
 
-    const id = attributes.id || util.generateId('board', attributes.name);
+    const id = attributes.id || generateId('board', attributes.name);
     const name = attributes.name;
     const tiles = attributes.tiles.slice();
     const terrain = JSON.parse(JSON.stringify(attributes.terrain));
@@ -133,7 +138,7 @@ function Board(attributes) {
         const unitTile = {x: unit.positionX, y: unit.positionY};
         result[unitTile.y][unitTile.x] = true;
 
-        util.DIRECTIONS.forEach(dir => lineOfSightSearch(unitTile, dir));
+        DIRECTIONS.forEach(dir => lineOfSightSearch(unitTile, dir));
 
         //TODO: only do these if it makes sense (we know we can see something in that direction)
         secondaryDiagonals.forEach(dir => extendedLineOfSightSearch(unitTile, dir));
@@ -141,7 +146,7 @@ function Board(attributes) {
         return result;
 
         function lineOfSightSearch({x, y}, direction) {
-            let current = util.adjustCoordinatesForDirection(x, y, direction);
+            let current = adjustCoordinatesForDirection(x, y, direction);
             //let currentTerrain = getTerrainAt(current);
             //console.log(`Search ${direction} from (${x},${y}): ${blocked ? '[blocked]' : 'visible'}`)
             while (!blocked(getTerrainAt(current))) {
@@ -154,7 +159,7 @@ function Board(attributes) {
                         result[current.y][current.x] = false;
                 }
 
-                current = util.adjustCoordinatesForDirection(current.x, current.y, direction);
+                current = adjustCoordinatesForDirection(current.x, current.y, direction);
                 //blocked = currentTerrain.empty || currentTerrain.blocksMovement;
                 //console.log(`Search ${direction} from (${current.x},${current.y}): ${blocked ? '[blocked]' : 'visible'}`)
             }
@@ -163,14 +168,14 @@ function Board(attributes) {
         function extendedLineOfSightSearch({x, y}, direction) {
             let distance = 1;
 
-            let nextAdjust = util.secondaryDirectionCoordinates(direction, distance);
+            let nextAdjust = secondaryDirectionCoordinates(direction, distance);
             let current = {x: x + nextAdjust.x, y: y + nextAdjust.y};
 
             while (!blocked(getTerrainAt(current))) {
                 result[current.y][current.x] = true;
 
                 distance++;
-                nextAdjust = util.secondaryDirectionCoordinates(direction, distance);
+                nextAdjust = secondaryDirectionCoordinates(direction, distance);
                 current = {x: x + nextAdjust.x, y: y + nextAdjust.y};
             }
         }
@@ -185,7 +190,7 @@ function Board(attributes) {
     }
 
     function getCoordinatesForDiagonal(x, y, direction) {
-        const adjustForDir = util.directionAdjustmentsByDirection[direction];
+        const adjustForDir = directionAdjustmentsByDirection[direction];
         const xRev = adjustForDir.x * -1;
         const yRev = adjustForDir.y * -1;
 
@@ -213,4 +218,3 @@ function Board(attributes) {
     });
 }
 
-module.exports = Board;

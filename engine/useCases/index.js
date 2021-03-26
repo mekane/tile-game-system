@@ -1,11 +1,11 @@
-const {GameAction} = require('./gameAction.js');
-const {GameState} = require('./gameState.js');
-const {ListScenarios} = require('./listScenarios.js');
-const {NewGame} = require('./newGame.js');
-const {SaveScenario} = require('./saveScenario.js');
-const {StartEncounter} = require('./startEncounter.js');
+import {GameAction} from './gameAction.js';
+import {GameState} from './gameState.js';
+import {ListScenarios} from './listScenarios.js';
+import {NewGame} from './newGame.js';
+import {SaveScenario} from './saveScenario.js';
+import {StartEncounter} from './startEncounter.js';
 
-function init({gameRepository, scenarioRepository}) {
+export function init({gameRepository, scenarioRepository}) {
     if (isInvalid(gameRepository))
         throw new Error('Error initializing Controller: missing repository gameRepository');
 
@@ -33,4 +33,3 @@ function isInvalid(obj) {
     return typeof obj !== 'object';
 }
 
-module.exports = init;

@@ -1,4 +1,6 @@
-const expect = require('chai').expect;
+import chai from 'chai';
+
+const expect = chai.expect;
 
 import {cssSafeString} from "../../../view/browserView/htmlHelpers.js";
 

@@ -1,38 +1,30 @@
-const expect = require('chai').expect;
-const fixtures = require('../_fixtures.js');
+import chai from 'chai';
 
-const validator = require('../../engine/validator.js');
+const expect = chai.expect;
 
-const types = [
-    'Board',
-    'Encounter',
-    'Game',
-    'GameAction',
-    'Scenario',
-    'Unit'
-];
+import {validBoard, validEncounter, validGame, validGameAction, validScenario, validUnit} from '../_fixtures.js';
+import {validateAs} from '../../engine/validator.js';
 
 describe('The validator module', () => {
     it(`exports a validateAs method that takes an object and a type`, () => {
-        expect(validator.validateAs).to.be.a('function');
+        expect(validateAs).to.be.a('function');
     });
 
     it(`always returns false for undefined`, () => {
         let foo;
-        expect(validator.validateAs(foo, 'Board')).to.equal(false);
+        expect(validateAs(foo, 'Board')).to.equal(false);
     });
 
     it(`returns false for unknown types`, () => {
-        expect(validator.validateAs({}, 'NeverHeardOfItNoWay')).to.equal(false);
+        expect(validateAs({}, 'NeverHeardOfItNoWay')).to.equal(false);
     });
 
-    types.forEach(Type => {
-        const validType = `valid${Type}`;
-        const validTypeFn = fixtures[validType];
-        const instance = validTypeFn();
-
-        it(`returns true for valid ${Type} values`, () => {
-            expect(validator.validateAs(instance, Type)).to.equal(true);
-        });
+    it(`returns true for valid values`, () => {
+        expect(validateAs(validBoard(), 'Board')).to.equal(true);
+        expect(validateAs(validEncounter(), 'Encounter')).to.equal(true);
+        expect(validateAs(validGame(), 'Game')).to.equal(true);
+        expect(validateAs(validGameAction(), 'GameAction')).to.equal(true);
+        expect(validateAs(validScenario(), 'Scenario')).to.equal(true);
+        expect(validateAs(validUnit(), 'Unit')).to.equal(true);
     });
 });

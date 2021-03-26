@@ -1,15 +1,15 @@
-const doneActivating = require('./doneActivating.js');
-const moveUnit = require('./moveUnit.js');
+import {doneActivating} from './doneActivating.js';
+import {moveUnit} from './moveUnit.js';
 
-const activateUnit = require('../gameActions/activateUnit.js');
-const addUnit = require('../gameActions/addUnit.js');
+import {activateUnit} from '../gameActions/activateUnit.js';
+import {addUnit} from '../gameActions/addUnit.js';
 
 
 /**
  * @param actionName string
  * @return Function
  */
-function currentUnitActionFactory(actionName) {
+export function currentUnitActionFactory(actionName) {
     let actionFunction = (state, options, encounter) => state;
     const name = actionName.toLowerCase();
 
@@ -35,5 +35,3 @@ function currentUnitActionFactory(actionName) {
 
     return actionResult;
 }
-
-module.exports = currentUnitActionFactory;

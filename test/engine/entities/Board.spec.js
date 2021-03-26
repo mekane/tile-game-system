@@ -1,9 +1,9 @@
-'use strict'
-const expect = require('chai').expect;
-const {validBoard} = require('../../_fixtures.js');
-const validator = require('../../../engine/validator.js');
+import chai from 'chai';
 
-const Board = require('../../../engine/entities/Board.js');
+const expect = chai.expect;
+import {validBoard} from '../../_fixtures.js';
+import {validateAs} from '../../../engine/validator.js';
+import {Board} from '../../../engine/entities/Board.js';
 
 describe('The Board entity', () => {
     it(`exports a constructor function`, () => {
@@ -231,7 +231,7 @@ describe('The Board entity', () => {
 
     it(`has a toJson method that returns the raw data for the Board`, () => {
         const newBoard = Board(validBoard());
-        expect(validator.validateAs(newBoard.toJson(), newBoard.getType())).to.equal(true);
+        expect(validateAs(newBoard.toJson(), newBoard.getType())).to.equal(true);
     });
 
     it(`returns copies from toJson, not original objects`, () => {

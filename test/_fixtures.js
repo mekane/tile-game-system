@@ -1,6 +1,6 @@
 let unitId = 0;
 
-function validBoard() {
+export function validBoard() {
     return {
         name: 'Test',
         tiles: [
@@ -27,19 +27,7 @@ function validBoard() {
     }
 }
 
-function validCharacter() {
-    return {
-        name: 'Test Character',
-        strength: 12,
-        dexterity: 9,
-        constitution: 3,
-        wisdom: 1,
-        intelligence: 19,
-        charisma: 16
-    }
-}
-
-function validEncounter(overrides) {
+export function validEncounter(overrides) {
     return Object.assign({
         name: 'Test',
         description: 'A cool encounter',
@@ -51,7 +39,7 @@ function validEncounter(overrides) {
     }, overrides);
 }
 
-function validEncounterWithInitialUnit(overrides) {
+export function validEncounterWithInitialUnit(overrides) {
     const encounterWithInit = validEncounter({
         name: 'Test Encounter With Initial Unit',
         init: [
@@ -61,7 +49,7 @@ function validEncounterWithInitialUnit(overrides) {
     return Object.assign(encounterWithInit, overrides);
 }
 
-function validGame(overrides) {
+export function validGame(overrides) {
     return Object.assign({
         name: 'Test',
         scenario: validScenario(),
@@ -69,7 +57,7 @@ function validGame(overrides) {
     }, overrides);
 }
 
-function validGameAction() {
+export function validGameAction() {
     return {
         action: 'addUnit',
         unitName: 'Goblin',
@@ -78,7 +66,7 @@ function validGameAction() {
     }
 }
 
-function validScenario(overrides) {
+export function validScenario(overrides) {
     return Object.assign({
         name: 'Test',
         encounters: [
@@ -88,7 +76,7 @@ function validScenario(overrides) {
     }, overrides);
 }
 
-function validUnit() {
+export function validUnit() {
     return {
         id: 'Unit_' + unitId++,
         name: 'Goblin',
@@ -96,14 +84,3 @@ function validUnit() {
         turnOrder: 1
     }
 }
-
-module.exports = {
-    validBoard,
-    validCharacter,
-    validEncounter,
-    validEncounterWithInitialUnit,
-    validGame,
-    validGameAction,
-    validScenario,
-    validUnit
-};

@@ -1,9 +1,10 @@
-'use strict'
-const expect = require('chai').expect;
-const validScenario = require('../../_fixtures.js').validScenario;
-const validator = require('../../../engine/validator.js');
+import chai from 'chai';
 
-const Scenario = require('../../../engine/entities/Scenario.js');
+const expect = chai.expect;
+import {validScenario} from '../../_fixtures.js';
+import {validateAs} from '../../../engine/validator.js';
+
+import {Scenario} from '../../../engine/entities/Scenario.js';
 
 describe('The Scenario entity', () => {
     it(`exports a constructor function`, () => {
@@ -76,6 +77,6 @@ describe('The Scenario entity', () => {
 
     it(`has a toJson method that returns the raw data for the Scenario`, () => {
         const newScenario = Scenario(validScenario());
-        expect(validator.validateAs(newScenario.toJson(), newScenario.getType())).to.equal(true);
+        expect(validateAs(newScenario.toJson(), newScenario.getType())).to.equal(true);
     });
 });

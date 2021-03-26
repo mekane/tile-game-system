@@ -1,7 +1,7 @@
 const woodlandTiles = require('./woodlandMap.js');
 const spaceshipTiles = require('./spaceshipMap.js');
-const {BrowserView} = require('../../view/browserView');
-const LocalGameAdapter = require('../../engine/adapters/LocalGame');
+import {BrowserView} from '../../view/browserView';
+import {LocalGameAdapter} from '../../engine/adapters/LocalGame';
 
 const gameAdapter = LocalGameAdapter();
 const main = document.querySelector('#main');
@@ -116,7 +116,7 @@ async function handleAction(properties) {
     if (result.success) {
         const nextState = await gameAdapter.gameState(gameId);
         activeUnitIndex = nextState.state.activeUnit;
-        
+
         const stateToRender = Object.assign({lastUnitMove}, nextState);
         view.render(stateToRender);
     } else {

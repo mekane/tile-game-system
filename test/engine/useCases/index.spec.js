@@ -1,18 +1,21 @@
-const expect = require('chai').expect;
-const {mockRepository} = require('../../_mocks.js');
+import chai from 'chai';
 
-const UseCasesInit = require('../../../engine/useCases');
+const expect = chai.expect;
+
+import {mockRepository} from '../../_mocks.js';
+
+import {init} from '../../../engine/useCases/index.js';
 
 describe('The Use Case Module Index', () => {
     it(`exports a single init method that takes the repositories to inject`, () => {
-        expect(UseCasesInit).to.be.a('function');
+        expect(init).to.be.a('function');
     });
 
     it(`throws an error if any of the repositories are missing`, () => {
         const gameRepository = mockRepository();
         const scenarioRepository = mockRepository();
-        const missingGameRepo = _ => UseCasesInit({scenarioRepository});
-        const missingScenarioRepo = _ => UseCasesInit({gameRepository});
+        const missingGameRepo = _ => init({scenarioRepository});
+        const missingScenarioRepo = _ => init({gameRepository});
 
         expect(missingGameRepo).to.throw(/Error initializing Controller: missing repository/);
         expect(missingScenarioRepo).to.throw(/Error initializing Controller: missing repository/);
@@ -22,7 +25,7 @@ describe('The Use Case Module Index', () => {
         const gameRepository = mockRepository();
         const scenarioRepository = mockRepository();
 
-        const useCases = UseCasesInit({gameRepository, scenarioRepository});
+        const useCases = init({gameRepository, scenarioRepository});
         expect(useCases).to.be.an('object');
         expect(useCases.gameAction).to.be.a('function');
         expect(useCases.gameState).to.be.a('function');

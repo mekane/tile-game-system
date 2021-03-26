@@ -1,8 +1,10 @@
-const expect = require('chai').expect;
-const {mockRepository, spyRepository, inMemoryRepository} = require('../../_mocks.js');
-const {validScenario} = require('../../_fixtures.js');
+import chai from 'chai';
 
-const {NewGame} = require('../../../engine/useCases/newGame.js');
+const expect = chai.expect;
+
+import {mockRepository, spyRepository, inMemoryRepository} from '../../_mocks.js';
+import {NewGame} from '../../../engine/useCases/newGame.js';
+import {validScenario} from '../../_fixtures.js';
 
 const testScenario = validScenario();
 const testScenarioID = 'Test_Scenario_ID';

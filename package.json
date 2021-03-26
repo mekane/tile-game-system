@@ -1,5 +1,6 @@
 {
   "name": "tile-game-system",
+  "type": "module",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,7 +9,7 @@
   },
   "scripts": {
     "build": "./node_modules/.bin/webpack",
-    "test": "mocha -b --experimental-modules --recursive",
+    "test": "mocha -b --experimental-modules --experimental-json-modules --recursive",
     "watch": "./node_modules/.bin/webpack --watch"
   },
   "author": "",

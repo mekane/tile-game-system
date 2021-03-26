@@ -1,6 +1,6 @@
 const requiredDataStoreMethods = ['get', 'list', 'put'];
 
-function Repository(dataStore) {
+export function Repository(dataStore) {
 
     requiredDataStoreMethods.forEach(method => {
         if (typeof dataStore[method] !== 'function')
@@ -21,6 +21,3 @@ function Repository(dataStore) {
     }
 }
 
-module.exports = {
-    Repository
-}

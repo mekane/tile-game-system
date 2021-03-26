@@ -1,7 +1,9 @@
-const expect = require('chai').expect;
-const {inMemoryDataStore} = require('../../_mocks.js');
+import chai from 'chai';
 
-const {Repository} = require('../../../engine/repository');
+const expect = chai.expect;
+
+import {inMemoryDataStore} from '../../_mocks.js';
+import {Repository} from '../../../engine/repository/index.js';
 
 const noop = _ => _;
 const mockDataStore = {
@@ -57,7 +59,7 @@ describe('Repository Save', () => {
             putCalled: 0,
             get: noop,
             list: noop,
-            put: function() {
+            put: function () {
                 this.putCalled++
             }
         }
@@ -73,7 +75,7 @@ describe('Repository Get', () => {
     it(`is an async function that calls the get method on the data store`, async () => {
         const getSpy = {
             getCalled: 0,
-            get: function() {
+            get: function () {
                 this.getCalled++
             },
             list: noop,

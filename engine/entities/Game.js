@@ -1,18 +1,15 @@
-'use strict'
-const util = require('../util.js');
-const validator = require('../validator.js');
-
-const Board = require('./Board.js');
-
-const currentUnitActionFactory = require('./currentUnitActions');
+import {Board} from './Board.js';
+import {currentUnitActionFactory} from './currentUnitActions/index.js';
+import {generateId} from '../util.js';
+import {validateAs} from '../validator.js';
 
 const typeName = 'Game';
 
-function Game(attributes) {
-    if (!validator.validateAs(attributes, typeName, true))
+export function Game(attributes) {
+    if (!validateAs(attributes, typeName, true))
         return null;
 
-    const id = attributes.id || util.generateId('game', attributes.name);
+    const id = attributes.id || generateId('game', attributes.name);
     const name = attributes.name;
     const scenario = attributes.scenario;
 
@@ -46,7 +43,7 @@ function Game(attributes) {
     }
 
     function sendAction(message) {
-        if (!validator.validateAs(message, 'GameAction'))
+        if (!validateAs(message, 'GameAction'))
             throw new Error('Invalid action');
 
         const nameName = message.action.toLowerCase();
@@ -98,5 +95,3 @@ function Game(attributes) {
         toJson
     });
 }
-
-module.exports = Game;

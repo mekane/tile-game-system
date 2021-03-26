@@ -1,6 +1,6 @@
-const Game = require('../entities/Game.js');
+import {Game} from '../entities/Game.js';
 
-function NewGame({gameRepository, scenarioRepository}) {
+export function NewGame({gameRepository, scenarioRepository}) {
     return async function NewGame(name = 'New Game', scenarioId) {
         const scenarioData = await scenarioRepository.getById(scenarioId);
 
@@ -23,6 +23,3 @@ function NewGame({gameRepository, scenarioRepository}) {
     }
 }
 
-module.exports = {
-    NewGame
-};

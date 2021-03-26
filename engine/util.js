@@ -1,4 +1,4 @@
-const directionAdjustmentsByDirection = {
+export const directionAdjustmentsByDirection = {
     'n': {x: 0, y: -1},
     'ne': {x: 1, y: -1},
     'e': {x: 1, y: 0},
@@ -9,7 +9,7 @@ const directionAdjustmentsByDirection = {
     'nw': {x: -1, y: -1},
 }
 
-function adjustCoordinatesForDirection(x, y, direction) {
+export function adjustCoordinatesForDirection(x, y, direction) {
     const adj = directionAdjustmentsByDirection[direction] || {x: 0, y: 0};
     return {x: x + adj.x, y: y + adj.y}
 }
@@ -18,19 +18,19 @@ function digit() {
     return (Math.random() * 9).toFixed();
 }
 
-function fileSafeString(string) {
+export function fileSafeString(string) {
     const noSpaces = string.replace(/\s|-/g, '_');
     const noSpecialChars = noSpaces.replace(/[\W]/g, '');
     return noSpecialChars.toLowerCase();
 }
 
-function generateId(type, name) {
+export function generateId(type, name) {
     const prefix = fileSafeString(`${type}_${name}`);
     const number = [digit(), digit(), digit(), digit(), digit(), digit(), digit(), digit()].join('');
     return `${prefix}_${number}`;
 }
 
-function groupUnitsByTurnOrder(originalUnits) {
+export function groupUnitsByTurnOrder(originalUnits) {
     const units = originalUnits.slice();
     const turnOrderMap = {};
 
@@ -44,7 +44,7 @@ function groupUnitsByTurnOrder(originalUnits) {
     return keys.map(key => turnOrderMap[key]);
 }
 
-function secondaryDirectionCoordinates(direction, i) {
+export function secondaryDirectionCoordinates(direction, i) {
     if (typeof direction !== 'string' || typeof i !== 'number' || i <= 0)
         return {x: 0, y: 0};
 
@@ -69,12 +69,4 @@ function secondaryDirectionCoordinates(direction, i) {
     return {x, y};
 }
 
-module.exports = {
-    adjustCoordinatesForDirection,
-    directionAdjustmentsByDirection,
-    DIRECTIONS: Object.keys(directionAdjustmentsByDirection),
-    fileSafeString,
-    generateId,
-    groupUnitsByTurnOrder,
-    secondaryDirectionCoordinates
-}
+export const DIRECTIONS = Object.keys(directionAdjustmentsByDirection);
