@@ -1,4 +1,4 @@
-const {Repository} = require('../engine/repository/index.js');
+const {Repository} = require('../engine/repository/Repository.js');
 
 const noop = () => null;
 

@@ -1,7 +1,7 @@
 const expect = require('chai').expect;
 const {inMemoryDataStore} = require('../../_mocks.js');
 
-const {Repository} = require('../../../engine/repository');
+const {Repository} = require('../../../engine/repository/Repository.js');
 
 const noop = _ => _;
 const mockDataStore = {

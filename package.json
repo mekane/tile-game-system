@@ -9,7 +9,7 @@
   "scripts": {
     "build": "./node_modules/.bin/webpack",
     "clean": "rm build/*",
-    "test": "mocha -b --experimental-modules --experimental-json-modules --recursive",
+    "test": "mocha -b test/**/*.spec.js",
     "watch": "./node_modules/.bin/webpack --watch"
   },
   "author": "",
