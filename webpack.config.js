@@ -13,7 +13,7 @@ const viewBundle = {
             type: 'module',
         },
         filename: 'view.bundle.js',
-        path: path.resolve(__dirname, 'build')
+        path: path.resolve(__dirname, 'test', 'view')
     }
 }
 

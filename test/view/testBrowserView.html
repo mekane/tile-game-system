@@ -14,9 +14,8 @@
             font-size: 70%;
         }
 
-        .tile.empty {
-            background: #252525;
-            border: 1px solid #292929;
+        .tile.wall {
+            background: #aaa;
         }
 
         .unit {
@@ -58,7 +57,7 @@
     keys to verify that messages show up for each keypress.
 </p>
 <script type="module">
-    import {BrowserView} from '../../view/browserView/index.js';
+    import {BrowserView} from './view.bundle.js';
 
     const el = document.querySelector('#browserViewHere');
     const view = BrowserView(el, console.log);
@@ -90,14 +89,13 @@
         "state": {
             "units": [
                 {
-                    "definitionId": "unit_marine_17516600",
-                    "movementMax": 40,
-                    "movementRemaining": 37,
-                    "name": "Space Marine",
+                    "definitionId": "unit_test_17516600",
+                    "movementMax": 4,
+                    "movementRemaining": 4,
+                    "name": "Unit Name",
                     "positionX": 1,
                     "positionY": 1,
-                    "turnOrder": 99,
-                    "hasActivated": true
+                    "turnOrder": 99
                 },
             ],
             "unitsGroupedByTurnOrder": [
