@@ -1,6 +1,6 @@
 let unitId = 0;
 
-export function validBoard() {
+function validBoard() {
     return {
         name: 'Test',
         tiles: [
@@ -27,7 +27,19 @@ export function validBoard() {
     }
 }
 
-export function validEncounter(overrides) {
+function validCharacter() {
+    return {
+        name: 'Test Character',
+        strength: 12,
+        dexterity: 9,
+        constitution: 3,
+        wisdom: 1,
+        intelligence: 19,
+        charisma: 16
+    }
+}
+
+function validEncounter(overrides) {
     return Object.assign({
         name: 'Test',
         description: 'A cool encounter',
@@ -39,7 +51,7 @@ export function validEncounter(overrides) {
     }, overrides);
 }
 
-export function validEncounterWithInitialUnit(overrides) {
+function validEncounterWithInitialUnit(overrides) {
     const encounterWithInit = validEncounter({
         name: 'Test Encounter With Initial Unit',
         init: [
@@ -49,7 +61,7 @@ export function validEncounterWithInitialUnit(overrides) {
     return Object.assign(encounterWithInit, overrides);
 }
 
-export function validGame(overrides) {
+function validGame(overrides) {
     return Object.assign({
         name: 'Test',
         scenario: validScenario(),
@@ -57,7 +69,7 @@ export function validGame(overrides) {
     }, overrides);
 }
 
-export function validGameAction() {
+function validGameAction() {
     return {
         action: 'addUnit',
         unitName: 'Goblin',
@@ -66,7 +78,7 @@ export function validGameAction() {
     }
 }
 
-export function validScenario(overrides) {
+function validScenario(overrides) {
     return Object.assign({
         name: 'Test',
         encounters: [
@@ -76,7 +88,7 @@ export function validScenario(overrides) {
     }, overrides);
 }
 
-export function validUnit() {
+function validUnit() {
     return {
         id: 'Unit_' + unitId++,
         name: 'Goblin',
@@ -84,3 +96,14 @@ export function validUnit() {
         turnOrder: 1
     }
 }
+
+module.exports = {
+    validBoard,
+    validCharacter,
+    validEncounter,
+    validEncounterWithInitialUnit,
+    validGame,
+    validGameAction,
+    validScenario,
+    validUnit
+};

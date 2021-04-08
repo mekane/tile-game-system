@@ -1,5 +1,5 @@
-import {init} from '../../useCases/index.js';
-import {Repository} from '../../repository/index.js';
+const UseCasesInit = require('../../useCases');
+const {Repository} = require('../../repository');
 
 function inMemoryDataStore(initialData) {
     let repo = initialData || {};
@@ -16,10 +16,12 @@ function inMemoryDataStore(initialData) {
  * This wraps the use cases, injects in-memory repositories, and exports an
  * interface of JS functions (as a library) to control a tile game.
  */
-export function LocalGameAdapter() {
+function init() {
     const gameRepository = Repository(inMemoryDataStore());
     const scenarioRepository = Repository(inMemoryDataStore());
-    const useCases = init({gameRepository, scenarioRepository});
+    const useCases = UseCasesInit({gameRepository, scenarioRepository});
 
     return useCases;
 }
+
+module.exports = init;

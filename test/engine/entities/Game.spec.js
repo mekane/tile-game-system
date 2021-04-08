@@ -1,11 +1,9 @@
-import chai from 'chai';
+'use strict'
+const expect = require('chai').expect;
+const {validEncounterWithInitialUnit, validGame} = require('../../_fixtures.js');
+const validator = require('../../../engine/validator.js');
 
-const expect = chai.expect;
-import {validEncounterWithInitialUnit, validGame} from '../../_fixtures.js';
-import {validateAs} from '../../../engine/validator.js';
-
-import {Game} from '../../../engine/entities/Game.js';
-
+const Game = require('../../../engine/entities/Game.js');
 const validGameId = /^game_test_\d{6,8}/;
 
 describe('Game Entity Construction', () => {
@@ -103,7 +101,7 @@ describe('Game Entity Properties and Methods', () => {
 
     it(`has a toJson method that returns the raw data for the Game`, () => {
         const newGame = Game(validGame());
-        expect(validateAs(newGame.toJson(), newGame.getType())).to.equal(true);
+        expect(validator.validateAs(newGame.toJson(), newGame.getType())).to.equal(true);
     });
 });
 

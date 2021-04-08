@@ -1,9 +1,9 @@
-import BoardSchema from './schema/BoardAttributes.schema.json';
-import EncounterSchema from './schema/EncounterAttributes.schema.json';
-import GameSchema from './schema/GameAttributes.schema.json';
-import GameActionSchema from './schema/GameAction.schema.json';
-import ScenarioSchema from './schema/ScenarioAttributes.schema.json';
-import UnitSchema from './schema/UnitAttributes.schema.json';
+const BoardSchema = require('./schema/BoardAttributes.schema.json');
+const EncounterSchema = require('./schema/EncounterAttributes.schema.json');
+const GameSchema = require('./schema/GameAttributes.schema.json');
+const GameActionSchema = require('./schema/GameAction.schema.json');
+const ScenarioSchema = require('./schema/ScenarioAttributes.schema.json');
+const UnitSchema = require('./schema/UnitAttributes.schema.json');
 
 const schemaForType = {
     Board: BoardSchema,
@@ -15,9 +15,8 @@ const schemaForType = {
 }
 const types = Object.keys(schemaForType);
 
-import jsonschema from 'jsonschema';
-
-const schemaValidator = new jsonschema.Validator();
+const Validator = require('jsonschema').Validator;
+const schemaValidator = new Validator();
 
 types.forEach(type => {
     const schema = schemaForType[type];
@@ -25,7 +24,7 @@ types.forEach(type => {
     schemaValidator.addSchema(schema, id);
 });
 
-export function validateAs(data, type, showMessages = false) {
+function validateAs(data, type, showMessages = false) {
     if (typeof data === 'undefined')
         return false;
 
@@ -47,3 +46,6 @@ export function validateAs(data, type, showMessages = false) {
     return true;
 }
 
+module.exports = {
+    validateAs
+}

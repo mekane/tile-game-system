@@ -1,12 +1,12 @@
-import {Repository} from '../engine/repository/index.js';
+const {Repository} = require('../engine/repository/index.js');
 
 const noop = () => null;
 
-export function mockRepository() {
+function mockRepository() {
     return Repository({get: noop, list: noop, put: noop});
 }
 
-export function spyRepository() {
+function spyRepository() {
     return {
         getCalled: 0,
         listCalled: 0,
@@ -23,11 +23,11 @@ export function spyRepository() {
     }
 }
 
-export function inMemoryRepository(initialData) {
+function inMemoryRepository(initialData) {
     return Repository(inMemoryDataStore(initialData));
 }
 
-export function inMemoryDataStore(initialData) {
+function inMemoryDataStore(initialData) {
     let repo = initialData || {};
 
     return {
@@ -36,4 +36,11 @@ export function inMemoryDataStore(initialData) {
         put: obj => repo[obj.id] = obj,
         debug: () => console.dir(repo)
     }
+}
+
+module.exports = {
+    inMemoryDataStore,
+    inMemoryRepository,
+    mockRepository,
+    spyRepository
 }

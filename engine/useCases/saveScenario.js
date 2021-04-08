@@ -1,10 +1,10 @@
-import {generateId} from "../util.js";
+const util = require('../util.js');
 
-export function SaveScenario({scenarioRepository}) {
+function SaveScenario({scenarioRepository}) {
     return async function SaveScenario(scenarioData) {
 
         if (typeof scenarioData.id !== 'string') {
-            scenarioData.id = generateId('Scenario', scenarioData.name);
+            scenarioData.id = util.generateId('Scenario', scenarioData.name);
         }
 
         await scenarioRepository.save(scenarioData);
@@ -15,3 +15,7 @@ export function SaveScenario({scenarioRepository}) {
         };
     }
 }
+
+module.exports = {
+    SaveScenario
+};

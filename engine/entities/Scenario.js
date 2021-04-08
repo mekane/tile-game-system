@@ -1,5 +1,6 @@
-import {generateId} from '../util.js';
-import {validateAs} from '../validator.js';
+'use strict'
+const util = require('../util.js');
+const validator = require('../validator.js');
 
 const Encounter = _ => _;
 
@@ -17,12 +18,12 @@ const typeName = 'Scenario';
  * Methods on this entity are convenience methods for retrieving information about
  * the terrain and tile layout.
  */
-export function Scenario(attributes) {
+function Scenario(attributes) {
 
-    if (!validateAs(attributes, typeName))
+    if (!validator.validateAs(attributes, typeName))
         return null;
 
-    const id = attributes.id || generateId('scenario', attributes.name);
+    const id = attributes.id || util.generateId('scenario', attributes.name);
     const name = attributes.name;
     const encounters = attributes.encounters.map(Encounter);
 
@@ -45,3 +46,5 @@ export function Scenario(attributes) {
         toJson
     });
 }
+
+module.exports = Scenario;

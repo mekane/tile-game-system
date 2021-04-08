@@ -1,9 +1,7 @@
-import chai from 'chai';
+const expect = require('chai').expect;
+const {validScenario} = require('../../../_fixtures.js');
 
-const expect = chai.expect;
-import {validScenario} from '../../../_fixtures.js';
-
-import {LocalGameAdapter} from '../../../../engine/adapters/LocalGame/index.js';
+const LocalGameAdapter = require('../../../../engine/adapters/LocalGame');
 
 describe('The LocalGameAdapter', () => {
     it(`exports an object with use case functions`, () => {

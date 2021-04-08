@@ -1,7 +1,7 @@
-import {adjustCoordinatesForDirection} from '../../util.js';
-import {Board} from '../Board.js';
+const util = require('../../util.js');
+const Board = require('../Board.js');
 
-export function moveUnit(state, {unitIndex, direction}, encounter) {
+function moveUnit(state, {unitIndex, direction}, encounter) {
     if (typeof unitIndex !== 'number')
         throw new Error('Move Unit failed: missing unit index');
 
@@ -17,7 +17,7 @@ export function moveUnit(state, {unitIndex, direction}, encounter) {
 
     const unitX = unitToMove.positionX;
     const unitY = unitToMove.positionY;
-    const {x, y} = adjustCoordinatesForDirection(unitX, unitY, direction);
+    const {x, y} = util.adjustCoordinatesForDirection(unitX, unitY, direction);
     const board = Board(encounter.board);
     const tile = board.getTileAt({x, y});
 
@@ -42,3 +42,5 @@ export function moveUnit(state, {unitIndex, direction}, encounter) {
     unitToMove.positionX = x;
     unitToMove.positionY = y;
 }
+
+module.exports = moveUnit;

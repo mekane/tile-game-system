@@ -1,6 +1,5 @@
 {
   "name": "tile-game-system",
-  "type": "module",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

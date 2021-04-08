@@ -1,4 +1,4 @@
-export function activateUnit(state, {unitIndex}) {
+function activateUnit(state, {unitIndex}) {
     if (typeof unitIndex !== 'number')
         throw new Error('missing unit index');
 
@@ -19,3 +19,5 @@ export function activateUnit(state, {unitIndex}) {
 
     state.activeUnit = unitIndex;
 }
+
+module.exports = activateUnit;
