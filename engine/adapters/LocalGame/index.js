@@ -16,7 +16,7 @@ function inMemoryDataStore(initialData) {
  * This wraps the use cases, injects in-memory repositories, and exports an
  * interface of JS functions (as a library) to control a tile game.
  */
-function init() {
+function LocalGameAdapter() {
     const gameRepository = Repository(inMemoryDataStore());
     const scenarioRepository = Repository(inMemoryDataStore());
     const useCases = UseCasesInit({gameRepository, scenarioRepository});
@@ -24,4 +24,6 @@ function init() {
     return useCases;
 }
 
-module.exports = init;
+module.exports = {
+    LocalGameAdapter
+};

@@ -1,7 +1,7 @@
 const expect = require('chai').expect;
 const {validScenario} = require('../../../_fixtures.js');
 
-const LocalGameAdapter = require('../../../../engine/adapters/LocalGame');
+const {LocalGameAdapter} = require('../../../../engine/adapters/LocalGame');
 
 describe('The LocalGameAdapter', () => {
     it(`exports an object with use case functions`, () => {

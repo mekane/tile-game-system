@@ -1,6 +1,7 @@
-import spaceshipTiles from './spaceshipMap.js';
-import {BrowserView} from '../../build/view.bundle.js';
-import {LocalGameAdapter} from '../../engine/adapters/LocalGame/index.js';
+const spaceshipTiles = require('./spaceshipMap.js');
+import {BrowserView} from '../../view/browserView';
+
+const {LocalGameAdapter} = require('../../engine/adapters/LocalGame');
 
 const gameAdapter = LocalGameAdapter();
 const main = document.querySelector('#main');

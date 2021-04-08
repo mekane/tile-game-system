@@ -1,6 +1,7 @@
-import woodlandTiles from './woodlandMap.js';
-import {BrowserView} from '../../build/view.bundle.js';
-import {LocalGameAdapter} from '../../engine/adapters/LocalGame/index.js';
+const woodlandTiles = require('./woodlandsMap.js');
+import {BrowserView} from '../../view/browserView';
+
+const {LocalGameAdapter} = require('../../engine/adapters/LocalGame');
 
 const gameAdapter = LocalGameAdapter();
 const main = document.querySelector('#main');

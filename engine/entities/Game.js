@@ -87,7 +87,7 @@ function Game(attributes) {
     }
 
     return Object.freeze({
-        getId: _ => id,
+        getId: () => id,
         getActiveUnit,
         getCurrentBoard: () => Board(getCurrentEncounter().board),
         getScenario: () => scenario,
