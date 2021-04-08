@@ -1,7 +1,7 @@
-import {BrowserView} from '../../view/browserView';
+import {BrowserView} from '../view/browserView';
 
 //This LocalGameAdapter runs everything in-browser, in memory and starts empty
-const {LocalGameAdapter} = require('../../engine/adapters/LocalGame');
+const {LocalGameAdapter} = require('../engine/adapters/LocalGame');
 
 /**
  * Used to start up a Local Game that run in the browser totally in memory.

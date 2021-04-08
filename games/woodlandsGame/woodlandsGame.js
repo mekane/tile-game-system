@@ -28,6 +28,6 @@ const scenarioData = {
     }]
 };
 
-import {GameContainer} from "./GameContainer.js";
+import {GameContainer} from "../GameContainer.js";
 
 GameContainer(scenarioData)

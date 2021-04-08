@@ -33,6 +33,6 @@ const scenarioData = {
     }]
 };
 
-import {GameContainer} from '../woodlandsGame/GameContainer.js';
+import {GameContainer} from '../GameContainer.js';
 
 GameContainer(scenarioData)
