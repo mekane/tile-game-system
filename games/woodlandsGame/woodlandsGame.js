@@ -1,7 +1,6 @@
-const woodlandTiles = require('./woodlandMap.js');
-const spaceshipTiles = require('./spaceshipMap.js');
-import {BrowserView} from '../../view/browserView';
-import {LocalGameAdapter} from '../../engine/adapters/LocalGame';
+import woodlandTiles from './woodlandMap.js';
+import {BrowserView} from '../../build/view.bundle.js';
+import {LocalGameAdapter} from '../../engine/adapters/LocalGame/index.js';
 
 const gameAdapter = LocalGameAdapter();
 const main = document.querySelector('#main');
@@ -13,6 +12,7 @@ let lastUnitMove = {}; // slight hack for CSS transition animation to work in br
 
 initGame()
     .then(async function (gId) {
+        console.log('Starting Woodlands Game');
         gameId = gId;
         const nextState = await gameAdapter.gameState(gameId);
         activeUnitIndex = nextState.state.activeUnit;
@@ -45,33 +45,6 @@ async function initGame() {
             "init": [
                 {"action": "addUnit", "unitName": "Goblin", "boardX": 1, "boardY": 8}
             ]
-        }, {
-            "id": "encounter_test_84134828",
-            "name": "Hulking Space Ship",
-            "description": "A grim dark encounter on an alien space ship",
-            "board": {
-                "id": "board_test_92882731",
-                "name": "Test",
-                tiles: spaceshipTiles,
-                "terrain": {
-                    H: {name: 'Hallway'},
-                    J: {name: 'Hallway2'},
-                    D: {name: 'Door'},
-                    R: {name: 'Room'},
-                    W: {name: 'Wall', blocksMovement: true}
-                }
-            },
-            "units": [
-                {"id": "unit_marine_17516600", "name": "Space Marine", "movement": 40},
-                {"id": "unit_genestealer_17516600", "name": "Genestealer", "movement": 6}
-            ],
-            "init": [
-                {"action": "addUnit", "unitName": "Space Marine", "boardX": 4, "boardY": 12},
-                {"action": "addUnit", "unitName": "Space Marine", "boardX": 3, "boardY": 12},
-                {"action": "addUnit", "unitName": "Space Marine", "boardX": 2, "boardY": 12},
-                {"action": "addUnit", "unitName": "Space Marine", "boardX": 1, "boardY": 12},
-                {"action": "addUnit", "unitName": "Space Marine", "boardX": 0, "boardY": 12}
-            ]
         }]
     };
     //console.log(scenarioData);
@@ -82,9 +55,7 @@ async function initGame() {
     reportError(newGameResult);
     const gameId = newGameResult.created;
 
-    // set to 0 for the woods encounter
-    // set to 1 for the space ship encounter
-    const startResult = await gameAdapter.startEncounter(gameId, 1);
+    const startResult = await gameAdapter.startEncounter(gameId, 0);
     reportError(startResult);
 
     return gameId;
