@@ -1,7 +1,6 @@
 const {DataStore} = require("./DataStore.js");
 
 class InMemoryDataStore extends DataStore {
-    _dataStore = {};
 
     constructor(initialData) {
         super();
