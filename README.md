@@ -41,6 +41,11 @@ While not actually using the JavaScript `class` convention, the exported functio
 as a constructor and when called returns an instance object just like a constructor. The
 initializer is used to inject dependencies, such as repositories and configuration.
 
+Convention is for the file to be named the same as the export, including capitalization.
+Any other exports should be constants for enum-style comparison or trivial bits of data.
+The _modulename/index.js_ pattern is avoided, mainly because it doesn't work with Node's
+experimental ES2015 module support.
+
 Examples of this are `Repository` and entities such as `Game`.
 
 

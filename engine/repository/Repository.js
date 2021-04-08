@@ -7,6 +7,14 @@ function Repository(dataStore) {
             throw new Error(`Invalid DataStore: missing required method ${method}`);
     });
 
+    function getById(id) {
+        return dataStore.get(id)
+    }
+
+    function list() {
+        return dataStore.list()
+    }
+
     function save(item) {
         if (!item || typeof item.id === 'undefined') {
             throw new Error('Error saving to repository: no id property on ' + item);
@@ -15,9 +23,9 @@ function Repository(dataStore) {
     }
 
     return {
-        getById: id => dataStore.get(id),
-        list: dataStore.list,
-        save,
+        getById,
+        list,
+        save
     }
 }
 
