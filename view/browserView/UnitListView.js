@@ -26,13 +26,13 @@ export function UnitListView(state) {
         if (isActive)
             classes.push('active');
 
-        const unitMovement = h('div.unit-list__unit-move',`Move: ${unit.movementRemaining} / ${unit.movementMax}`);
+        const unitMovement = h('div.unit-list__unit-move', `Move: ${unit.movementRemaining} / ${unit.movementMax}`);
         const unitDetails = [unitMovement]
 
         if (isActive) {
             const data = {
                 on: {
-                    'click': e => viewAction('unitDone', unitIndex)
+                    'click': e => viewAction({action: 'unitDone', unitIndex})
                 }
             }
             unitDetails.push(h('button.done', data, 'Done'));
@@ -41,7 +41,7 @@ export function UnitListView(state) {
         if (!isActive && !unit.doneActivating) { //TODO: && "couldActivate" (is in activeGroup)
             const data = {
                 on: {
-                    'click': e => viewAction('activateUnit', unitIndex)
+                    'click': e => viewAction({action: 'activateUnit', unitIndex})
                 }
             }
             unitDetails.push(h('button.activate', data, 'Activate'));

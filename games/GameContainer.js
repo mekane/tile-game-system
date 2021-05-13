@@ -43,7 +43,7 @@ export async function GameContainer(scenarioDefinitions) {
     }
 
     async function handleAction(properties) {
-        console.log('game action', properties);
+        //console.log('handle action', properties);
 
         let result = false;
         lastUnitMove = {};
@@ -55,9 +55,11 @@ export async function GameContainer(scenarioDefinitions) {
             if (result.success)
                 lastUnitMove = moveAction;
         } else if (actionType === 'unitDone') {
-            result = await gameAdapter.gameAction(gameId, {action: 'doneActivating', unitIndex: properties});
+            result = await gameAdapter.gameAction(gameId, {action: 'doneActivating', unitIndex: properties.unitIndex});
         } else if (actionType === 'activateUnit') {
-            result = await gameAdapter.gameAction(gameId, {action: 'activateUnit', unitIndex: properties})
+            result = await gameAdapter.gameAction(gameId, {action: 'activateUnit', unitIndex: properties.unitIndex})
+        } else {
+            console.log('Unknown action ' + actionType)
         }
 
         if (result.success) {
@@ -67,7 +69,7 @@ export async function GameContainer(scenarioDefinitions) {
             const stateToRender = Object.assign({lastUnitMove}, nextState);
             view.render(stateToRender);
         } else {
-            console.log(result.error);
+            console.log(result);
         }
     }
 }
