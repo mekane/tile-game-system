@@ -18,7 +18,7 @@ function Game(attributes) {
 
     let currentEncounterIndex = attributes.currentEncounterIndex || 0;
 
-    let state = attributes.currentState || initializeStateForEncounter(scenario.encounters[currentEncounterIndex]);
+    let state = attributes.currentState || initialEncounterState(scenario.encounters[currentEncounterIndex]);
 
     function getActiveUnit() {
         const activeUnit = state.units[state.activeUnit];
@@ -33,8 +33,7 @@ function Game(attributes) {
         return state;
     }
 
-    function initializeStateForEncounter(currentEncounter) {
-
+    function initialEncounterState() {
         const newState = {
             units: [],
             unitsGroupedByTurnOrder: [],
@@ -65,7 +64,7 @@ function Game(attributes) {
 
         currentEncounterIndex = encounterIndex;
         const encounter = getCurrentEncounter();
-        state = initializeStateForEncounter(encounter);
+        state = initialEncounterState();
 
         const initialActions = encounter.init || [];
         initialActions.forEach(sendAction);
