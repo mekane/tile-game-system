@@ -1,6 +1,6 @@
 'use strict'
 const expect = require('chai').expect;
-const {validEncounterWithInitialUnit, validGame} = require('../../_fixtures.js');
+const {gameDataWithMoreEncounterDetail, validEncounterWithInitialUnit, validGame} = require('../../_fixtures.js');
 const validator = require('../../../engine/validator.js');
 
 const Game = require('../../../engine/entities/Game.js');
@@ -269,49 +269,6 @@ describe('Game Action - Add Unit', () => {
 
         const unit = game.getState().units[0];
         expect(unit.turnOrder).to.equal(99);
-    });
-
-    //ACTION
-    it(`throws an error if the terrain at the specified location blocks movement`, () => {
-        const game = Game(gameDataWithMoreEncounterDetail());
-        game.startEncounter(1);
-
-        const unitToAdd = game.getScenario().encounters[1].units[0];
-        const addUnitToBlockedSpaceAction = {action: 'addUnit', unitId: unitToAdd.id, boardX: 0, boardY: 0};
-        const messageUnitConflict = () => game.sendAction(addUnitToBlockedSpaceAction);
-        expect(messageUnitConflict).to.throw(/Add Unit failed: cannot add unit at specified coordinates/);
-    });
-
-    //ACTION
-    it(`throws an error if the specified board location already contains a unit`, () => {
-        const game = Game(validGame());
-        const unitToAdd = game.getScenario().encounters[0].units[0];
-        const unitId = unitToAdd.id;
-        const addUnitAction = {action: 'addUnit', unitId, boardX: 0, boardY: 0};
-        game.sendAction(addUnitAction)
-
-        const messageUnitConflict = () => game.sendAction(addUnitAction);
-        expect(messageUnitConflict).to.throw(/Add Unit failed: cannot add unit at specified coordinates/);
-    });
-
-    //ACTION
-    it(`can add a unit by name`, () => {
-        const game = Game(validGame());
-        const addUnitAction = {action: 'addUnit', unitName: 'Goblin', boardX: 0, boardY: 0};
-        game.sendAction(addUnitAction);
-
-        const unit = game.getState().units[0];
-        expect(unit.definitionId).to.be.a('string');
-        expect(unit.name).to.equal('Goblin');
-        expect(unit.positionX).to.equal(0);
-        expect(unit.positionY).to.equal(0);
-    });
-
-    //ACTION
-    it(`throws an error if there is no unit with the given name`, () => {
-        const game = Game(validGame());
-        const unitNotFound = () => game.sendAction({action: "addUnit", unitName: "bogus", boardX: 0, boardY: 0});
-        expect(unitNotFound).to.throw(/Add Unit failed: could not find unit with name/);
     });
 
     //EVENT
@@ -798,73 +755,6 @@ function validGameWithUnitsForOrderTest() {
         {id: 'u29', name: 'U29', movement: 6, turnOrder: 29}, //0
     ];
     return gameData;
-}
-
-function gameDataWithMoreEncounterDetail() {
-    const simpleBoard = {
-        id: 'board_simple_1234',
-        name: 'Simple Board',
-        tiles: [['A']],
-        terrain: {A: {name: 'A'}}
-    }
-
-    const complexBoard = {
-        id: 'board_complex_1235',
-        name: 'Complex Board',
-        tiles: [
-            ['W', 'W', 'W', 'W', 'W'],
-            ['W', 'A', 'A', 'A', 'W'],
-            ['W', 'B', 'A', 'A', 'A'],
-            ['W', 'A', 'A', 'A', 'W'],
-            ['W', 'W', 'W', 'W', 'W']
-        ],
-        terrain: {
-            A: {
-                name: 'Floor'
-            },
-            B: {
-                name: 'Sticky Floor',
-                movementRequired: 2
-            },
-            W: {
-                name: 'Wall',
-                blocksMovement: true
-            }
-        }
-    }
-    return {
-        id: 'game_simple_1234',
-        name: 'Test Game',
-        scenario: {
-            id: 'scenario_simple_1234',
-            name: 'Test Scenario',
-            encounters: [{
-                id: 'encounter_simple_1234',
-                name: 'Test Encounter',
-                description: 'A simple encounter',
-                board: simpleBoard,
-                units: [
-                    {
-                        id: 'unit_simple_1234',
-                        name: 'Test Unit',
-                        movement: 5
-                    }
-                ]
-            }, {
-                id: 'encounter_simple_1235',
-                name: 'Test Encounter 2',
-                description: 'A complex encounter',
-                board: complexBoard,
-                units: [
-                    {
-                        id: 'unit_simple_1235',
-                        name: 'Test Unit 2',
-                        movement: 6
-                    }
-                ]
-            }]
-        }
-    }
 }
 
 function expectedGameState() {

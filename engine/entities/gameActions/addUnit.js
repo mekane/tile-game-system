@@ -61,6 +61,8 @@ function addUnit(state, {unitId, unitName, boardX, boardY}, encounter) {
         state.activeGroup = 0;
         state.activeUnit = 0;
     }
+
+    //TODO: convert these to return a new state, not mutate the one passed in
 }
 
 module.exports = addUnit;

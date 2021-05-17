@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-const {validEncounterWithInitialUnit, validGame} = require('../../../_fixtures.js');
+const {gameDataWithMoreEncounterDetail, validGame} = require('../../../_fixtures.js');
 
 const addUnit = require('../../../../engine/entities/gameActions/addUnit.js');
 
@@ -33,4 +33,51 @@ describe('Encounter Action - AddUnit', () => {
         expect(badBoardYmax).to.throw(/Add Unit failed: board coordinates out of bounds/);
     });
 
+    it(`throws an error if the terrain at the specified location blocks movement`, () => {
+        const encounter = gameDataWithMoreEncounterDetail().scenario.encounters[1];
+        const unitToAdd = encounter.units[0];
+
+        const addUnitToBlockedSpaceAction = {action: 'addUnit', unitId: unitToAdd.id, boardX: 0, boardY: 0};
+        const messageUnitConflict = () => addUnit({}, addUnitToBlockedSpaceAction, encounter);
+        expect(messageUnitConflict).to.throw(/Add Unit failed: cannot add unit at specified coordinates/);
+    });
+
+    it(`throws an error if the specified board location already contains a unit`, () => {
+        const state = blankEncounterState();
+        const addUnitAction = {unitId: encounter.units[0].id, boardX: 0, boardY: 0};
+        addUnit(state, addUnitAction, encounter);
+
+        const messageUnitConflict = () => addUnit(state, addUnitAction, encounter);
+        expect(messageUnitConflict).to.throw(/Add Unit failed: cannot add unit at specified coordinates/);
+    });
+
+    //TODO: make this assert the correct event returned
+    //NOTE: this decouples the specifier (id vs. name) from the result of what actually happened.
+    // So we still need two unit tests for id and for name, but only one for the AddUnit event because
+    // it will have all the detail it needs
+    it.skip(`can add a unit by name`, () => {
+        //TODO: make this as specific as possible
+        const expectedEvent = {
+            eventType: 'AddUnit', boardX: 0, boardY: 0, unit: {
+                name: 'Goblin'
+            }
+        };
+
+        const actualEvent = addUnit(blankEncounterState(), {unitName: 'Goblin', boardX: 0, boardY: 0}, encounter);
+
+        expect(actualEvent).to.deep.equal(expectedEvent);
+    });
+
+    it(`throws an error if there is no unit with the given name`, () => {
+        const unitNotFound = () => addUnit(blankEncounterState(), {unitName: "bogus"}, encounter);
+        expect(unitNotFound).to.throw(/Add Unit failed: could not find unit with name/);
+    });
+
 })
+
+//TODO: this probably knows too much about the internal Game state - can we fix this?
+function blankEncounterState() {
+    return {
+        units: []
+    }
+}

@@ -97,7 +97,76 @@ function validUnit() {
     }
 }
 
+
+function gameDataWithMoreEncounterDetail() {
+    const simpleBoard = {
+        id: 'board_simple_1234',
+        name: 'Simple Board',
+        tiles: [['A']],
+        terrain: {A: {name: 'A'}}
+    }
+
+    const complexBoard = {
+        id: 'board_complex_1235',
+        name: 'Complex Board',
+        tiles: [
+            ['W', 'W', 'W', 'W', 'W'],
+            ['W', 'A', 'A', 'A', 'W'],
+            ['W', 'B', 'A', 'A', 'A'],
+            ['W', 'A', 'A', 'A', 'W'],
+            ['W', 'W', 'W', 'W', 'W']
+        ],
+        terrain: {
+            A: {
+                name: 'Floor'
+            },
+            B: {
+                name: 'Sticky Floor',
+                movementRequired: 2
+            },
+            W: {
+                name: 'Wall',
+                blocksMovement: true
+            }
+        }
+    }
+    return {
+        id: 'game_simple_1234',
+        name: 'Test Game',
+        scenario: {
+            id: 'scenario_simple_1234',
+            name: 'Test Scenario',
+            encounters: [{
+                id: 'encounter_simple_1234',
+                name: 'Test Encounter',
+                description: 'A simple encounter',
+                board: simpleBoard,
+                units: [
+                    {
+                        id: 'unit_simple_1234',
+                        name: 'Test Unit',
+                        movement: 5
+                    }
+                ]
+            }, {
+                id: 'encounter_simple_1235',
+                name: 'Test Encounter 2',
+                description: 'A complex encounter',
+                board: complexBoard,
+                units: [
+                    {
+                        id: 'unit_simple_1235',
+                        name: 'Test Unit 2',
+                        movement: 6
+                    }
+                ]
+            }]
+        }
+    }
+}
+
 module.exports = {
+    gameDataWithMoreEncounterDetail,
     validBoard,
     validCharacter,
     validEncounter,
