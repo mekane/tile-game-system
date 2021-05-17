@@ -206,6 +206,7 @@ describe('Starting a new encounter', () => {
     });
 });
 
+//This will go away and be replaced by Event tests
 describe('Sending actions to the Game', () => {
     it(`has a sendAction method that takes a valid action message`, () => {
         const game = Game(validGame());
@@ -227,49 +228,24 @@ describe('Sending actions to the Game', () => {
 });
 
 describe('Game Action - Add Unit', () => {
-    it(`throws an error if no unit is specified`, () => {
-        const game = Game(validGame());
-        const messageMissingUnit = () => game.sendAction({action: "addUnit"});
-        expect(messageMissingUnit).to.throw(/Add Unit failed: missing unit id/);
-    });
 
-    it(`throws an error if the specified unit does not exist in the list of units`, () => {
-        const game = Game(validGame());
-        const unitNotFound = () => game.sendAction({action: "addUnit", unitId: "bogus", boardX: 0, boardY: 0});
-        expect(unitNotFound).to.throw(/Add Unit failed: could not find unit with id/);
-    });
+    //TODO: add test that asserts it returns an 'ADD UNIT' Event
 
-    it(`throws an error if the specified board location is invalid`, () => {
-        const game = Game(validGame());
-
-        const action = 'addUnit';
-        const unitId = game.getScenario().encounters[0].units[0].id;
-
-        const messageMissingBoard = () => game.sendAction({action: "addUnit", unitId});
-        const badBoardXmin = () => game.sendAction({action, unitId, boardX: -1, boardY: 0});
-        const badBoardXmax = () => game.sendAction({action, unitId, boardX: 999, boardY: 0});
-        const badBoardYmin = () => game.sendAction({action, unitId, boardX: 0, boardY: -1});
-        const badBoardYmax = () => game.sendAction({action, unitId, boardX: 0, boardY: 999});
-
-        expect(messageMissingBoard).to.throw(/Add Unit failed: missing board coordinates/);
-        expect(badBoardXmin).to.throw(/Add Unit failed: board coordinates out of bounds/);
-        expect(badBoardXmax).to.throw(/Add Unit failed: board coordinates out of bounds/);
-        expect(badBoardYmin).to.throw(/Add Unit failed: board coordinates out of bounds/);
-        expect(badBoardYmax).to.throw(/Add Unit failed: board coordinates out of bounds/);
-    });
-
+// EVENT
     it(`adds a unit to the specified tile`, () => {
         const game = Game(validGame());
         const unitToAdd = game.getScenario().encounters[0].units[0];
         const unitId = unitToAdd.id;
         game.sendAction({action: 'addUnit', unitId, boardX: 0, boardY: 0});
 
+        //convert to Event
         const newState = game.getState();
         expect(newState.units.length).to.equal(1);
         const unit = newState.units[0];
         expect(unit.name).to.equal(unitToAdd.name);
     });
 
+    //EVENT test
     it(`sets initial properties on the unit based on unit definition`, () => {
         const game = constructGameWithOneUnit();
         const unit = game.getState().units[0];
@@ -284,6 +260,7 @@ describe('Game Action - Add Unit', () => {
         expect(unit.turnOrder).to.equal(1);
     });
 
+    //Event test
     it(`sets default values for optional properties not set on the unit definition`, () => {
         const gameData = validGame();
         delete gameData.scenario.encounters[0].units[0].turnOrder;
@@ -294,6 +271,7 @@ describe('Game Action - Add Unit', () => {
         expect(unit.turnOrder).to.equal(99);
     });
 
+    //ACTION
     it(`throws an error if the terrain at the specified location blocks movement`, () => {
         const game = Game(gameDataWithMoreEncounterDetail());
         game.startEncounter(1);
@@ -304,6 +282,7 @@ describe('Game Action - Add Unit', () => {
         expect(messageUnitConflict).to.throw(/Add Unit failed: cannot add unit at specified coordinates/);
     });
 
+    //ACTION
     it(`throws an error if the specified board location already contains a unit`, () => {
         const game = Game(validGame());
         const unitToAdd = game.getScenario().encounters[0].units[0];
@@ -315,6 +294,7 @@ describe('Game Action - Add Unit', () => {
         expect(messageUnitConflict).to.throw(/Add Unit failed: cannot add unit at specified coordinates/);
     });
 
+    //ACTION
     it(`can add a unit by name`, () => {
         const game = Game(validGame());
         const addUnitAction = {action: 'addUnit', unitName: 'Goblin', boardX: 0, boardY: 0};
@@ -327,12 +307,14 @@ describe('Game Action - Add Unit', () => {
         expect(unit.positionY).to.equal(0);
     });
 
+    //ACTION
     it(`throws an error if there is no unit with the given name`, () => {
         const game = Game(validGame());
         const unitNotFound = () => game.sendAction({action: "addUnit", unitName: "bogus", boardX: 0, boardY: 0});
         expect(unitNotFound).to.throw(/Add Unit failed: could not find unit with name/);
     });
 
+    //EVENT
     it(`adds the unit to its turn order group`, () => {
         const game = Game(validGame());
         game.sendAction({action: 'addUnit', unitName: 'Goblin', boardX: 0, boardY: 0});
@@ -343,6 +325,7 @@ describe('Game Action - Add Unit', () => {
         expect(state.activeUnit).to.equal(0);
     });
 
+    //EVENT
     it(`adds additional units to the active unit group for the same initiative order`, () => {
         const game = Game(validGame());
         game.sendAction({action: 'addUnit', unitName: 'Goblin', boardX: 0, boardY: 0});
@@ -354,6 +337,7 @@ describe('Game Action - Add Unit', () => {
         expect(state.activeUnit).to.equal(0);
     });
 
+    //EVENT
     it(`adds additional unit groups for different turn orders`, () => {
         const game = Game(validGameWithVarietyOfUnits());
         game.startEncounter(1);
@@ -365,6 +349,7 @@ describe('Game Action - Add Unit', () => {
         expect(state.unitsGroupedByTurnOrder).to.deep.equal([[0, 1], [2]]);
     });
 
+    //EVENT
     it(`doesn't mess up the turn order state if adding in an in-progress encounter`, () => {
         const game = Game(validGameWithVarietyOfUnits());
         game.startEncounter(1);
