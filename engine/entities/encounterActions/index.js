@@ -1,4 +1,4 @@
-const doneActivating = require('./doneActivating.js');
+const doneActivating = require('./markUnitDone.js');
 const moveUnit = require('./moveUnit.js');
 
 const activateUnit = require('./activateUnit.js');

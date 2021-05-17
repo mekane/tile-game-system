@@ -1,6 +1,6 @@
 const util = require('../../util.js');
 
-function doneActivating(state, {unitIndex}) {
+function markUnitDone(state, {unitIndex}) {
     if (typeof unitIndex !== 'number')
         throw new Error('Mark Unit Done Failed: missing unit index');
 
@@ -46,4 +46,4 @@ function doneActivating(state, {unitIndex}) {
     }
 }
 
-module.exports = doneActivating;
+module.exports = markUnitDone;

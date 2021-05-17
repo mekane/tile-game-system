@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 
-const markUnitDone = require('../../../../engine/entities/encounterActions/doneActivating.js');
+const markUnitDone = require('../../../../engine/entities/encounterActions/markUnitDone.js');
 
 describe('Encounter Action - MarkUnitDone', () => {
     //ACTION
