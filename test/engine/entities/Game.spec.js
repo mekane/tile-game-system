@@ -329,7 +329,6 @@ describe('Game Event - AddUnit', () => {
 });
 
 describe('Game Action - Move Unit', () => {
-
     //TODO: convert to EVENT
     it(`reduces the unit's movement remaining by one (by default)`, () => {
         const game = constructGameWithOneUnit();
@@ -378,45 +377,6 @@ describe('Game Action - Move Unit', () => {
 });
 
 describe('Game Action - Activate Unit', () => {
-    //ACTION
-    it(`throws an error if no unit is specified`, () => {
-        const game = constructGameWithOneUnit();
-        const messageMissingUnit = () => game.sendAction({action: 'activateUnit'});
-        expect(messageMissingUnit).to.throw(/missing unit index/);
-    });
-
-    //ACTION
-    it(`throws an error if the specified unit does not exist in the list of units`, () => {
-        const game = constructGameWithOneUnit();
-        const unitNotFound = () => game.sendAction({action: 'activateUnit', unitIndex: 1});
-        expect(unitNotFound).to.throw(/could not find unit with index/);
-    });
-
-    //ACTION
-    it(`throws an error if the unit is not in the current activation group`, () => {
-        const gameData = validGameWithVarietyOfUnits();
-        gameData.scenario.encounters[1].init = [
-            {action: 'addUnit', unitName: 'Marine', boardX: 1, boardY: 1}, // group 0
-            {action: 'addUnit', unitName: 'Alien', boardX: 2, boardY: 2} // group 1
-        ];
-        const game = Game(gameData);
-        game.startEncounter(1);
-
-        const unitNotEligible = () => game.sendAction({action: 'activateUnit', unitIndex: 1});
-        expect(unitNotEligible).to.throw(/unit at index 1 cannot activate now/);
-    });
-
-    //ACTION
-    it(`throws an error if the unit is done`, () => {
-        const game = constructGameWithTwoUnits();
-        game.sendAction({action: 'doneActivating', unitIndex: 0});
-        const unitIsDone = () => game.sendAction({action: "activateUnit", unitIndex: 0});
-        expect(unitIsDone).to.throw(/unit at index 0 is already done/);
-    });
-
-    //ACTION
-    //TODO: "success" test that returns an ActivateUnit Event
-
     //EVENT
     it(`sets the activeUnitIndex value`, () => {
         const gameData = validGameWithVarietyOfUnits();

@@ -1,17 +1,17 @@
 function activateUnit(state, {unitIndex}) {
     if (typeof unitIndex !== 'number')
-        throw new Error('missing unit index');
+        throw new Error('Activate Unit failed: missing unit index');
 
     const unitToActivate = state.units[unitIndex];
     if (typeof unitToActivate !== 'object')
-        throw new Error(`could not find unit with index ${unitIndex}`);
+        throw new Error(`Activate Unit failed: could not find unit with index ${unitIndex}`);
 
     const currentActivationGroup = state.unitsGroupedByTurnOrder[state.activeGroup];
     if (currentActivationGroup.indexOf(unitIndex) < 0)
-        throw new Error(`unit at index ${unitIndex} cannot activate now`);
+        throw new Error(`Activate Unit failed: unit cannot activate now`);
 
     if (unitToActivate.doneActivating)
-        throw new Error(`unit at index ${unitIndex} is already done`);
+        throw new Error(`Activate Unit failed: unit is already done activating`);
 
     const currentActiveUnit = state.units[state.activeUnit];
     if (currentActiveUnit && currentActiveUnit.hasActivated)
