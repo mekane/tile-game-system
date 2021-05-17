@@ -15,8 +15,6 @@ function NewGame({gameRepository, scenarioRepository}) {
             scenario: scenarioData
         });
 
-        console.log('New Game', newGame);
-
         await gameRepository.save(newGame.toJson()); //TODO: standardize repository behavior
         return {
             success: true,

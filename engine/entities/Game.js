@@ -92,7 +92,7 @@ function Game(attributes) {
         getScenario: () => scenario,
         getState,
         getType: () => typeName,
-        sendAction,
+        sendEvent: sendAction,
         startEncounter,
         toJson
     });
