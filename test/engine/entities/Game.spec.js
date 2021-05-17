@@ -329,80 +329,8 @@ describe('Game Event - AddUnit', () => {
 });
 
 describe('Game Action - Move Unit', () => {
-    // ACTION
-    it(`throws an error if no unit or direction is specified`, () => {
-        const game = constructGameWithOneUnit();
-        const messageMissingUnit = () => game.sendAction({action: "moveUnit"});
-        expect(messageMissingUnit).to.throw(/Move Unit failed: missing unit index/);
 
-        const messageMissingDirection = () => game.sendAction({action: "moveUnit", unitIndex: 0});
-        expect(messageMissingDirection).to.throw(/Move Unit failed: missing direction/);
-    });
-
-    // ACTION
-    it(`throws an error if the specified unit does not exist in the list of units`, () => {
-        const game = constructGameWithOneUnit();
-        const unitNotFound = () => game.sendAction({action: "moveUnit", unitIndex: 1, direction: 'n'});
-        expect(unitNotFound).to.throw(/Move Unit failed: could not find unit with index/);
-    });
-
-    // ACTION
-    it(`throws an error if the unit is done`, () => {
-        const game = constructGameWithTwoUnits();
-        game.sendAction({action: 'doneActivating', unitIndex: 0});
-        const unitIsDone = () => game.sendAction({action: "moveUnit", unitIndex: 0, direction: 'e'});
-        expect(unitIsDone).to.throw(/unit is already done activating/);
-    });
-
-    // ACTION
-    it(`throws an error if the specified direction is invalid`, () => {
-        const game = constructGameWithOneUnit();
-        const unitNotFound = () => game.sendAction({action: "moveUnit", unitIndex: 0, direction: 'Foo'});
-        expect(unitNotFound).to.throw(/Invalid action/);
-    });
-
-    // ACTION
-    it(`throws an error if the board location in the specified direction is invalid`, () => {
-        const game = constructGameWithOneUnit();
-        const action = 'moveUnit';
-        const unitIndex = 0;
-
-        const moveOffBoardY = () => game.sendAction({action, unitIndex, direction: 'n'});
-        const moveOffBoardX = () => game.sendAction({action, unitIndex, direction: 'w'});
-        const moveOffBoardD = () => game.sendAction({action, unitIndex, direction: 'nw'});
-
-        expect(moveOffBoardY).to.throw(/Move Unit failed: destination is out of bounds/);
-        expect(moveOffBoardX).to.throw(/Move Unit failed: destination is out of bounds/);
-        expect(moveOffBoardD).to.throw(/Move Unit failed: destination is out of bounds/);
-    });
-
-    // ACTION
-    it(`throws an error if the specified board location already contains a unit`, () => {
-        const game = constructGameWithOneUnit();
-        const unitToAdd = game.getScenario().encounters[0].units[0];
-        const unitId = unitToAdd.id;
-        const addUnitAction = {action: 'addUnit', unitId, boardX: 1, boardY: 0};
-        game.sendAction(addUnitAction)
-
-        const moveUnitAction = {action: 'moveUnit', unitIndex: 0, direction: 'e'};
-        const messageUnitConflict = () => game.sendAction(moveUnitAction);
-        expect(messageUnitConflict).to.throw(/Move Unit failed: destination is occupied/);
-    });
-
-    // ACTION
-    it(`throws an error if the terrain of the destination tile blocks movement`, () => {
-        const moveSouth = {action: 'moveUnit', unitIndex: 0, direction: 's'};
-        const game = constructGameWithOneUnit();
-        game.sendAction(moveSouth);
-
-        const movementBlocked = () => game.sendAction(moveSouth);
-        expect(movementBlocked).to.throw(/Move Unit failed: destination is blocked/);
-    });
-
-    // ACTION
-    //TODO: "success" test that returns a MoveUnit event
-
-    // EVENT
+    //TODO: convert to EVENT
     it(`reduces the unit's movement remaining by one (by default)`, () => {
         const game = constructGameWithOneUnit();
 
@@ -413,7 +341,7 @@ describe('Game Action - Move Unit', () => {
         expect(unit.movementRemaining).to.equal(5);
     });
 
-    // EVENT
+    //TODO: convert to EVENT
     it(`reduces the unit's movement remaining by the defined amount on the tile`, () => {
         const game = Game(gameDataWithMoreEncounterDetail());
         game.startEncounter(1);
@@ -427,44 +355,7 @@ describe('Game Action - Move Unit', () => {
         expect(unit.movementRemaining).to.equal(4);
     });
 
-    // ACTION
-    it(`throws an error if the unit is out of movement`, () => {
-        const game = constructGameWithOneUnit();
-
-        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'}); //5 remaining
-        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'w'}); //4
-        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'}); //3
-        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'w'}); //2
-        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'}); //1
-        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'w'}); //0 remaining
-
-        const unit = game.getState().units[0];
-        expect(unit.movementMax).to.equal(6);
-        expect(unit.movementRemaining).to.equal(0);
-
-        const messageNoMove = () => game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'});
-        expect(messageNoMove).to.throw(/Move Unit failed: unit lacks sufficient movement points/);
-    });
-
-    // ACTION
-    it(`throws an error if the unit doesn't have enough movement`, () => {
-        const game = constructGameWithOneUnit();
-
-        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'}); //5 remaining
-        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'w'}); //4
-        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'}); //3
-        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'w'}); //2
-        game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'}); //1 remaining
-
-        const unit = game.getState().units[0];
-        expect(unit.movementMax).to.equal(6);
-        expect(unit.movementRemaining).to.equal(1);
-
-        const messageNoMove = () => game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'});
-        expect(messageNoMove).to.throw(/Move Unit failed: unit lacks sufficient movement points/);
-    });
-
-    // EVENT
+    //TODO: convert to EVENT
     it(`moves the unit to the specified tile`, () => {
         const game = constructGameWithOneUnit();
         const moveUnitAction = {action: 'moveUnit', unitIndex: 0, direction: 'e'};
@@ -475,7 +366,8 @@ describe('Game Action - Move Unit', () => {
         expect(unit.positionY).to.equal(0);
     });
 
-    // EVENT (with options), and TODO: add more options
+    //TODO: convert to EVENT (with options),
+    // and TODO: add more options
     it(`marks the unit as having acted (but not done)`, () => {
         const game = constructGameWithOneUnit();
         game.sendAction({action: 'moveUnit', unitIndex: 0, direction: 'e'});

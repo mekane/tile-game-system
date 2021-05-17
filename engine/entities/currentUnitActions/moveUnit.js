@@ -18,6 +18,10 @@ function moveUnit(state, {unitIndex, direction}, encounter) {
     const unitX = unitToMove.positionX;
     const unitY = unitToMove.positionY;
     const {x, y} = util.adjustCoordinatesForDirection(unitX, unitY, direction);
+
+    if (unitX === x && unitY === y)
+        throw new Error('Move Unit failed: invalid move direction');
+
     const board = Board(encounter.board);
     const tile = board.getTileAt({x, y});
 
