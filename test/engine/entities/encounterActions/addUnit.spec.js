@@ -51,6 +51,8 @@ describe('Encounter Action - AddUnit', () => {
         expect(messageUnitConflict).to.throw(/Add Unit failed: cannot add unit at specified coordinates/);
     });
 
+    //TODO: add basic "success" test that asserts it returns an 'ADD UNIT' Event for a valid unit Id
+
     //TODO: make this assert the correct event returned
     //NOTE: this decouples the specifier (id vs. name) from the result of what actually happened.
     // So we still need two unit tests for id and for name, but only one for the AddUnit event because
