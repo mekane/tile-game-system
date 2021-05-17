@@ -12,7 +12,7 @@ function GameAction({gameRepository}) {
 
         try {
             const game = Game(gameData);
-            game.sendEvent(gameAction);
+            game.sendAction(gameAction);
             await gameRepository.save(game.toJson()); /* TODO: sort this out! */
         } catch (err) {
             return {

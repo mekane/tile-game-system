@@ -4,7 +4,7 @@ const validator = require('../validator.js');
 
 const Board = require('./Board.js');
 
-const currentUnitActionFactory = require('./currentUnitActions');
+const currentUnitActionFactory = require('./encounterActions');
 
 const typeName = 'Game';
 
@@ -54,6 +54,10 @@ function Game(attributes) {
         return action(state, message, getCurrentEncounter());
     }
 
+    function sendEvent(message) {
+        return sendAction(message)
+    }
+
     function startEncounter(encounterIndex) {
         if (typeof encounterIndex !== 'number')
             throw new Error('missing encounter number');
@@ -92,7 +96,8 @@ function Game(attributes) {
         getScenario: () => scenario,
         getState,
         getType: () => typeName,
-        sendEvent: sendAction,
+        sendEvent,
+        sendAction,
         startEncounter,
         toJson
     });

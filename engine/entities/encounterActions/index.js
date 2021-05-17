@@ -1,8 +1,8 @@
 const doneActivating = require('./doneActivating.js');
 const moveUnit = require('./moveUnit.js');
 
-const activateUnit = require('../gameActions/activateUnit.js');
-const addUnit = require('../gameActions/addUnit.js');
+const activateUnit = require('./activateUnit.js');
+const addUnit = require('./addUnit.js');
 
 
 /**

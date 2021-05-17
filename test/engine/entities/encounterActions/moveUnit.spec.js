@@ -1,7 +1,7 @@
 const expect = require('chai').expect;
 const {gameDataWithMoreEncounterDetail, validGame} = require('../../../_fixtures.js');
 
-const moveUnit = require('../../../../engine/entities/currentUnitActions/moveUnit.js');
+const moveUnit = require('../../../../engine/entities/encounterActions/moveUnit.js');
 
 const encounter = validGame().scenario.encounters[0];
 
