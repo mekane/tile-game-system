@@ -2,14 +2,14 @@ const util = require('../../util.js');
 
 function doneActivating(state, {unitIndex}) {
     if (typeof unitIndex !== 'number')
-        throw new Error('missing unit index');
+        throw new Error('Mark Unit Done Failed: missing unit index');
 
     const unitToMark = state.units[unitIndex];
     if (typeof unitToMark !== 'object')
-        throw new Error(`could not find unit with index ${unitIndex}`);
+        throw new Error(`Mark Unit Done Failed: invalid unit`);
 
     if (unitToMark.doneActivating)
-        throw new Error(`unit at index ${unitIndex} is already done`);
+        throw new Error(`Mark Unit Done Failed: unit is already done`);
 
     unitToMark.hasActivated = true;
     unitToMark.doneActivating = true;

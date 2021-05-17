@@ -2,7 +2,7 @@ const expect = require('chai').expect;
 
 const activateUnit = require('../../../../engine/entities/gameActions/activateUnit.js');
 
-describe('Encounter Action - MoveUnit', () => {
+describe('Encounter Action - ActivateUnit', () => {
     //ACTION
     it(`throws an error if no unit is specified`, () => {
         const messageMissingUnit = () => activateUnit({}, {});

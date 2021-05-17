@@ -417,29 +417,6 @@ describe('Game Action - Activate Unit', () => {
 });
 
 describe('Game Action - Unit Done Activating', () => {
-    //ACTION
-    it(`throws an error if no unit is specified`, () => {
-        const game = constructGameWithOneUnit();
-        const messageMissingUnit = () => game.sendAction({action: "doneActivating"});
-        expect(messageMissingUnit).to.throw(/missing unit index/);
-    });
-
-    //ACTION
-    it(`throws an error if the specified unit does not exist in the list of units`, () => {
-        const game = constructGameWithOneUnit();
-        const unitNotFound = () => game.sendAction({action: "doneActivating", unitIndex: 1});
-        expect(unitNotFound).to.throw(/could not find unit with index/);
-    });
-
-    //ACTION
-    it(`throws an error if the unit was already done activating`, () => {
-        const game = constructGameWithTwoUnits();
-        game.sendAction({action: "doneActivating", unitIndex: 0});
-
-        const unitAlreadyDone = () => game.sendAction({action: "doneActivating", unitIndex: 0});
-        expect(unitAlreadyDone).to.throw(/unit at index 0 is already done/);
-    });
-
     //EVENT - TODO: options
     it(`marks the unit as done activating (and has acted)`, () => {
         const game = constructGameWithTwoUnits();
