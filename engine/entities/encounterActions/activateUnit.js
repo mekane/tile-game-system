@@ -13,11 +13,7 @@ function activateUnit(state, {unitIndex}) {
     if (unitToActivate.doneActivating)
         throw new Error(`Activate Unit failed: unit is already done activating`);
 
-    const currentActiveUnit = state.units[state.activeUnit];
-    if (currentActiveUnit && currentActiveUnit.hasActivated)
-        currentActiveUnit.doneActivating = true;
-
-    state.activeUnit = unitIndex;
+    return {type: 'ActivateUnit', unitIndex};
 }
 
 module.exports = activateUnit;

@@ -41,10 +41,7 @@ function moveUnit(state, {unitIndex, direction}, encounter) {
     if (unitToMove.movementRemaining < terrainDef.movementRequired)
         throw new Error('Move Unit failed: unit lacks sufficient movement points');
 
-    unitToMove.hasActivated = true;
-    unitToMove.movementRemaining -= terrainDef.movementRequired;
-    unitToMove.positionX = x;
-    unitToMove.positionY = y;
+    return {type: 'MoveUnit', unitIndex, x, y, movementToSubtract: terrainDef.movementRequired}
 }
 
 module.exports = moveUnit;

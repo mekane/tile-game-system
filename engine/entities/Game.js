@@ -45,17 +45,21 @@ function Game(attributes) {
     }
 
     function sendAction(message) {
-        if (!validator.validateAs(message, 'GameAction'))
-            throw new Error('Invalid action');
-
         const nameName = message.action.toLowerCase();
         const action = currentUnitActionFactory(nameName);
 
-        return action(state, message, getCurrentEncounter());
+        //TODO: in the final code for this, account for possible []
+        const event = action(state, message, getCurrentEncounter());
+        sendEvent(event);
     }
 
     function sendEvent(message) {
-        return sendAction(message)
+        //TODO: validate events somehow
+        //if (!validator.validateAs(message, 'GameAction'))
+        //console.log('WARNING: invalid game event', message)
+        //return false;
+
+        return processEvent(message)
     }
 
     function startEncounter(encounterIndex) {
@@ -101,6 +105,34 @@ function Game(attributes) {
         startEncounter,
         toJson
     });
+
+    function processEvent(event = {}) {
+
+        if (event.type === 'ActivateUnit') {
+            const currentActiveUnit = state.units[state.activeUnit];
+            if (currentActiveUnit && currentActiveUnit.hasActivated)
+                currentActiveUnit.doneActivating = true; //TODO: add ability to disable this with an event option
+
+            state.activeUnit = event.unitIndex;
+        } else if (event.type === 'AddUnit') {
+            state.units.push(event.unit);
+            state.unitsGroupedByTurnOrder = util.groupUnitsByTurnOrder(state.units);
+
+            if (state.activeGroup === null) {
+                state.activeGroup = 0;
+                state.activeUnit = 0;
+            }
+        } else if (event.type === 'MoveUnit') {
+            const unitToMove = state.units[event.unitIndex];
+            unitToMove.hasActivated = true;
+            unitToMove.movementRemaining -= event.movementToSubtract;
+            unitToMove.positionX = event.x;
+            unitToMove.positionY = event.y;
+        } else {
+            console.log('WARNING: unknown game event type ' + event.type)
+            return false;
+        }
+    }
 }
 
 module.exports = Game;

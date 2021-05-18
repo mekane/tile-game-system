@@ -63,28 +63,43 @@ describe('Encounter Action - MoveUnit', () => {
     });
 
     it(`throws an error if the terrain of the destination tile blocks movement`, () => {
-        const moveSouth = {unitIndex: 0, direction: 's'};
         let state = initialEncounterState();
-        moveUnit(state, moveSouth, encounter)
+        state.units[0].positionY = 1;
 
-        const movementBlocked = () => moveUnit(state, moveSouth, encounter);
+        const movementBlocked = () => moveUnit(state, {unitIndex: 0, direction: 's'}, encounter);
         expect(movementBlocked).to.throw(/Move Unit failed: destination is blocked/);
     });
 
-    //TODO: "success" test that returns a MoveUnit event
+    it(`returns an event representing the unit's movement`, () => {
+        const state = initialEncounterState();
+        const expectedEvent = {
+            type: 'MoveUnit',
+            unitIndex: 0,
+            x: 1,
+            y: 0,
+            movementToSubtract: 1
+        }
 
+        const actualEvent = moveUnit(state, {unitIndex: 0, direction: 'e'}, encounter)
+        expect(actualEvent).to.deep.equal(expectedEvent);
+    });
+
+    it(`includes the destination coordinates in the event`, () => {
+        const state = initialEncounterState();
+        const event = moveUnit(state, {unitIndex: 0, direction: 's'}, encounter)
+        expect(event.x).to.equal(0);
+        expect(event.y).to.equal(1);
+    });
+
+    it(`returns an event with the appropriate amount of movement to subtract`, () => {
+        const state = initialEncounterState();
+        const event = moveUnit(state, {unitIndex: 0, direction: 's'}, encounter)
+        expect(event.movementToSubtract).to.equal(2);
+    })
 
     it(`throws an error if the unit is out of movement`, () => {
-        let state = initialEncounterState();
-        const unitIndex = 0;
-
-        //TODO: return new state instead of mutation
-        moveUnit(state, {unitIndex, direction: 'e'}, encounter); //5 remaining
-        moveUnit(state, {unitIndex, direction: 'w'}, encounter); //4
-        moveUnit(state, {unitIndex, direction: 'e'}, encounter); //3
-        moveUnit(state, {unitIndex, direction: 'w'}, encounter); //2
-        moveUnit(state, {unitIndex, direction: 'e'}, encounter); //1
-        moveUnit(state, {unitIndex, direction: 'w'}, encounter); //0 remaining
+        let state = initialEncounterState()
+        state.units[0].movementRemaining = 0;
 
         const messageNoMove = () => moveUnit(state, {unitIndex: 0, direction: 'e'}, encounter);
         expect(messageNoMove).to.throw(/Move Unit failed: unit lacks sufficient movement points/);
@@ -92,18 +107,11 @@ describe('Encounter Action - MoveUnit', () => {
 
     it(`throws an error if the unit doesn't have enough movement`, () => {
         let state = initialEncounterState();
-        const unitIndex = 0;
+        state.units[0].movementRemaining = 1;
 
-        moveUnit(state, {unitIndex, direction: 'e'}, encounter); //5 remaining
-        moveUnit(state, {unitIndex, direction: 'w'}, encounter); //4
-        moveUnit(state, {unitIndex, direction: 'e'}, encounter); //3
-        moveUnit(state, {unitIndex, direction: 'w'}, encounter); //2
-        moveUnit(state, {unitIndex, direction: 'e'}, encounter); //1 remaining
-
-        const messageNoMove = () => moveUnit(state, {unitIndex: 0, direction: 'e'}, encounter);
+        const messageNoMove = () => moveUnit(state, {unitIndex: 0, direction: 's'}, encounter);
         expect(messageNoMove).to.throw(/Move Unit failed: unit lacks sufficient movement points/);
     });
-
 });
 
 function initialEncounterState() {

@@ -3,19 +3,16 @@ const expect = require('chai').expect;
 const activateUnit = require('../../../../engine/entities/encounterActions/activateUnit.js');
 
 describe('Encounter Action - ActivateUnit', () => {
-    //ACTION
     it(`throws an error if no unit is specified`, () => {
         const messageMissingUnit = () => activateUnit({}, {});
         expect(messageMissingUnit).to.throw(/Activate Unit failed: missing unit index/);
     });
 
-    //ACTION
     it(`throws an error if the specified unit does not exist in the list of units`, () => {
         const unitNotFound = () => activateUnit(initialEncounterState(), {unitIndex: 1});
         expect(unitNotFound).to.throw(/Activate Unit failed: could not find unit with index/);
     });
 
-    //ACTION
     it(`throws an error if the unit is not in the current activation group`, () => {
         const multiUnitState = {
             units: [
@@ -47,7 +44,6 @@ describe('Encounter Action - ActivateUnit', () => {
         expect(unitNotEligible).to.throw(/Activate Unit failed: unit cannot activate now/);
     });
 
-    //ACTION
     it(`throws an error if the unit is done`, () => {
         const state = initialEncounterState();
         //TODO: this is inappropriate internal knowledge - find a better way to mark the unit done
@@ -58,9 +54,12 @@ describe('Encounter Action - ActivateUnit', () => {
         expect(unitIsDone).to.throw(/Activate Unit failed: unit is already done activating/);
     });
 
-    //ACTION
     //TODO: "success" test that returns an ActivateUnit Event
-
+    it('returns an event object', () => {
+        const expectedEvent = {type: 'ActivateUnit', unitIndex: 0};
+        const actualEvent = activateUnit(initialEncounterState(), {unitIndex: 0});
+        expect(actualEvent).to.deep.equal(expectedEvent);
+    })
 });
 
 //TODO: remove duplication

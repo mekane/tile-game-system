@@ -45,7 +45,7 @@ function addUnit(state, {unitId, unitName, boardX, boardY}, encounter) {
 
     const unitTurnOrder = unitDefinition.turnOrder;
 
-    const newUnit = {
+    const unit = {
         definitionId: unitDefinition.id,
         movementMax: unitDefinition.movement,
         movementRemaining: unitDefinition.movement,
@@ -54,15 +54,9 @@ function addUnit(state, {unitId, unitName, boardX, boardY}, encounter) {
         positionY: boardY,
         turnOrder: typeof unitTurnOrder === 'number' ? unitTurnOrder : 99
     };
-    state.units.push(newUnit);
-    state.unitsGroupedByTurnOrder = util.groupUnitsByTurnOrder(state.units);
 
-    if (state.activeGroup === null) {
-        state.activeGroup = 0;
-        state.activeUnit = 0;
-    }
-
-    //TODO: convert these to return a new state, not mutate the one passed in
+    //TODO: use a const enum for the types
+    return {type: 'AddUnit', unit};
 }
 
 module.exports = addUnit;

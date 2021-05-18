@@ -37,36 +37,67 @@ describe('Encounter Action - AddUnit', () => {
         const encounter = gameDataWithMoreEncounterDetail().scenario.encounters[1];
         const unitToAdd = encounter.units[0];
 
-        const addUnitToBlockedSpaceAction = {action: 'addUnit', unitId: unitToAdd.id, boardX: 0, boardY: 0};
+        const addUnitToBlockedSpaceAction = {unitId: unitToAdd.id, boardX: 0, boardY: 0};
         const messageUnitConflict = () => addUnit({}, addUnitToBlockedSpaceAction, encounter);
         expect(messageUnitConflict).to.throw(/Add Unit failed: cannot add unit at specified coordinates/);
     });
 
     it(`throws an error if the specified board location already contains a unit`, () => {
         const state = blankEncounterState();
-        const addUnitAction = {unitId: encounter.units[0].id, boardX: 0, boardY: 0};
-        addUnit(state, addUnitAction, encounter);
+        //TODO: use events to add a unit
+        state.units = [
+            {name: 'block test', positionX: 0, positionY: 0}
+        ];
 
-        const messageUnitConflict = () => addUnit(state, addUnitAction, encounter);
+        const messageData = {unitId: encounter.units[0].id, boardX: 0, boardY: 0};
+        const messageUnitConflict = () => addUnit(state, messageData, encounter);
         expect(messageUnitConflict).to.throw(/Add Unit failed: cannot add unit at specified coordinates/);
     });
 
-    //TODO: add basic "success" test that asserts it returns an 'ADD UNIT' Event for a valid unit Id
+    it('returns an AddUnit event with the event details', () => {
+        const state = blankEncounterState();
+        const actualEvent = addUnit(state, {unitId: encounter.units[0].id, boardX: 0, boardY: 0}, encounter)
 
-    //TODO: make this assert the correct event returned
-    //NOTE: this decouples the specifier (id vs. name) from the result of what actually happened.
-    // So we still need two unit tests for id and for name, but only one for the AddUnit event because
-    // it will have all the detail it needs
-    it.skip(`can add a unit by name`, () => {
-        //TODO: make this as specific as possible
         const expectedEvent = {
-            eventType: 'AddUnit', boardX: 0, boardY: 0, unit: {
-                name: 'Goblin'
+            "type": "AddUnit",
+            "unit": {
+                "definitionId": "Unit_0",
+                "movementMax": 6,
+                "movementRemaining": 6,
+                "name": "Goblin",
+                "positionX": 0,
+                "positionY": 0,
+                "turnOrder": 1
+            }
+        };
+        expect(actualEvent).to.deep.equal(expectedEvent)
+    })
+
+    it(`sets default values for optional properties not set on the unit definition`, () => {
+        const hackedEncounter = validGame().scenario.encounters[0];
+        delete hackedEncounter.units[0].turnOrder;
+        const state = blankEncounterState();
+        const actualEvent = addUnit(state, {unitId: hackedEncounter.units[0].id, boardX: 0, boardY: 0}, hackedEncounter)
+
+        expect(actualEvent.unit.turnOrder).to.equal(99);
+    });
+
+
+    it(`can add a unit by name`, () => {
+        const expectedEvent = {
+            "type": "AddUnit",
+            "unit": {
+                "definitionId": "Unit_0",
+                "movementMax": 6,
+                "movementRemaining": 6,
+                "name": "Goblin",
+                "positionX": 0,
+                "positionY": 0,
+                "turnOrder": 1
             }
         };
 
         const actualEvent = addUnit(blankEncounterState(), {unitName: 'Goblin', boardX: 0, boardY: 0}, encounter);
-
         expect(actualEvent).to.deep.equal(expectedEvent);
     });
 
@@ -74,7 +105,6 @@ describe('Encounter Action - AddUnit', () => {
         const unitNotFound = () => addUnit(blankEncounterState(), {unitName: "bogus"}, encounter);
         expect(unitNotFound).to.throw(/Add Unit failed: could not find unit with name/);
     });
-
 })
 
 //TODO: this probably knows too much about the internal Game state - can we fix this?
