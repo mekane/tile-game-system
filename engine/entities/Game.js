@@ -48,6 +48,9 @@ function Game(attributes) {
         const nameName = message.action.toLowerCase();
         const action = currentUnitActionFactory(nameName);
 
+        if (typeof action !== 'function')
+            throw new Error('Unknown action: ' + message.action);
+
         //TODO: in the final code for this, account for possible []
         const event = action(state, message, getCurrentEncounter());
         sendEvent(event);

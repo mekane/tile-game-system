@@ -33,13 +33,12 @@ describe('The GameAction Use Case Function', () => {
         });
     });
 
-    //TODO: make this work with new behavior
-    it.skip(`returns an error status if the game action is rejected`, async () => {
+    it(`returns an error status if the action is unknown`, async () => {
         const gameAction = GameAction({gameRepository: testGameRepository()});
         const result = await gameAction('test_id', {action: 'invalidGameAction'});
         expect(result).to.deep.equal({
             success: false,
-            error: `Invalid action`
+            error: `Unknown action: invalidGameAction`
         });
     });
 
@@ -62,6 +61,8 @@ describe('The GameAction Use Case Function', () => {
     });
 
     //TODO: test an injected other action
+
+    //TODO: test an injected action that returns multiple events
 
     //TODO: fix
     it.skip(`returns an OK status message if the action was accepted`, async () => {

@@ -14,26 +14,24 @@ function currentUnitActionFactory(actionName) {
     const name = actionName.toLowerCase();
 
     if (name === 'doneactivating')
-        actionFunction = doneActivating;
+        return wrapAction(doneActivating);
     else if (name === 'moveunit')
-        actionFunction = moveUnit
-
-
-    if (name === 'activateunit')
-        actionFunction = activateUnit;
+        return wrapAction(moveUnit)
+    else if (name === 'activateunit')
+        return wrapAction(activateUnit);
     else if (name === 'addunit')
-        actionFunction = addUnit;
+        return wrapAction(addUnit);
+}
 
+function wrapAction(actionFunction) {
     /**
      * @param {Object} state
      * @param {Object} options
      * @param {Object} encounter
      */
-    const actionResult = function (state, options, encounter) {
+    return function (state, options, encounter) {
         return actionFunction(state, options, encounter)
     }
-
-    return actionResult;
 }
 
 module.exports = currentUnitActionFactory;
