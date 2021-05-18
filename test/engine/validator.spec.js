@@ -7,7 +7,7 @@ const types = [
     'Board',
     'Encounter',
     'Game',
-    'GameAction',
+    'GameEvent',
     'Scenario',
     'Unit'
 ];

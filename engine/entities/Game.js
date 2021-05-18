@@ -74,8 +74,8 @@ function Game(attributes) {
         const encounter = getCurrentEncounter();
         state = initialEncounterState();
 
-        const initialActions = encounter.init || [];
-        initialActions.forEach(sendAction);
+        const initialEvents = encounter.init || [];
+        initialEvents.forEach(sendEvent);
 
         if (state.units.length) {
             state.activeGroup = 0;
@@ -128,6 +128,41 @@ function Game(attributes) {
             unitToMove.movementRemaining -= event.movementToSubtract;
             unitToMove.positionX = event.x;
             unitToMove.positionY = event.y;
+        } else if (event.type === 'UnitDone') {
+            const unitToMark = state.units[event.unitIndex];
+            unitToMark.hasActivated = true;
+            unitToMark.doneActivating = true;
+            const currentGroup = state.unitsGroupedByTurnOrder[state.activeGroup];
+
+            state.activeUnit = findNextUnitInGroup(currentGroup);
+
+            if (typeof state.activeUnit === 'undefined') {
+                state.activeGroup++;
+                const nextGroup = state.unitsGroupedByTurnOrder[state.activeGroup];
+
+                if (nextGroup)
+                    state.activeUnit = nextGroup[0];
+                else {
+                    state.unitsGroupedByTurnOrder = util.groupUnitsByTurnOrder(state.units);
+                    state.activeGroup = 0;
+                    state.activeUnit = state.unitsGroupedByTurnOrder[0][0];
+                    state.units.forEach(u => {
+                        u.hasActivated = false;
+                        u.doneActivating = false;
+                        u.movementRemaining = u.movementMax;
+                    });
+                }
+            }
+
+
+            function findNextUnitInGroup(group) {
+                for (let i = 0; i < group.length; i++) {
+                    const unitIndex = group[i];
+                    const unit = state.units[unitIndex];
+                    if (!unit.doneActivating)
+                        return unitIndex;
+                }
+            }
         } else {
             console.log('WARNING: unknown game event type ' + event.type)
             return false;

@@ -3,19 +3,16 @@ const expect = require('chai').expect;
 const markUnitDone = require('../../../../engine/entities/encounterActions/markUnitDone.js');
 
 describe('Encounter Action - MarkUnitDone', () => {
-    //ACTION
     it(`throws an error if no unit is specified`, () => {
         const messageMissingUnit = () => markUnitDone({}, {});
         expect(messageMissingUnit).to.throw(/Mark Unit Done Failed: missing unit index/);
     });
 
-    //ACTION
     it(`throws an error if the specified unit does not exist in the list of units`, () => {
         const unitNotFound = () => markUnitDone(initialEncounterState(), {unitIndex: 1});
         expect(unitNotFound).to.throw(/Mark Unit Done Failed: invalid unit/);
     });
 
-    //ACTION
     it(`throws an error if the unit was already done activating`, () => {
         const state = initialEncounterState();
         //TODO: this is inappropriate internal knowledge - find a better way to mark the unit done
@@ -26,7 +23,12 @@ describe('Encounter Action - MarkUnitDone', () => {
         expect(unitAlreadyDone).to.throw(/Mark Unit Done Failed: unit is already done/);
     });
 
-    //TODO: "success" test that asserts it returns a "UnitDone" event
+    it(`throws an error if the unit was already done activating`, () => {
+        const state = initialEncounterState();
+        const expectedEvent = {type: "UnitDone", unitIndex: 0};
+        const actualEvent = markUnitDone(state, {unitIndex: 0});
+        expect(actualEvent).to.deep.equal(expectedEvent);
+    });
 });
 
 
