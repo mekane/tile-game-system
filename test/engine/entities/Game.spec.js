@@ -607,20 +607,6 @@ function GameWithThreeUnits() {
     return game;
 }
 
-function GameWithSixUnitsInSpecificOrder() {
-    const gameData = gameDataWithMoreEncounterDetail();
-    const enc = gameData.scenario.encounters[1];
-    enc.units = [
-        {id: 'u01', name: 'U01', movement: 4, turnOrder: 1},  //5
-        {id: 'u09', name: 'U09', movement: 6, turnOrder: 9},  //4
-        {id: 'u10', name: 'U10', movement: 6, turnOrder: 10}, //3
-        {id: 'u11', name: 'U11', movement: 6, turnOrder: 11}, //2
-        {id: 'u20', name: 'U20', movement: 6, turnOrder: 20}, //1
-        {id: 'u29', name: 'U29', movement: 6, turnOrder: 29}, //0
-    ];
-    return gameData;
-}
-
 function expectedGameState() {
     return {
         units: [],
