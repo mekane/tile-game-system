@@ -44,18 +44,6 @@ function Game(attributes) {
         return newState;
     }
 
-    function sendAction(message) {
-        const nameName = message.action.toLowerCase();
-        const action = currentUnitActionFactory(nameName);
-
-        if (typeof action !== 'function')
-            throw new Error('Unknown action: ' + message.action);
-
-        //TODO: in the final code for this, account for possible []
-        const event = action(state, message, getCurrentEncounter());
-        sendEvent(event);
-    }
-
     function sendEvent(message) {
         //TODO: validate events somehow
         //if (!validator.validateAs(message, 'GameAction'))
@@ -105,7 +93,6 @@ function Game(attributes) {
         getState,
         getType: () => typeName,
         sendEvent,
-        sendAction,
         startEncounter,
         toJson
     });
@@ -119,7 +106,20 @@ function Game(attributes) {
 
             state.activeUnit = event.unitIndex;
         } else if (event.type === 'AddUnit') {
-            state.units.push(event.unit);
+            let unitToAdd = event.unit;
+
+            if (typeof unitToAdd !== 'object') {
+                if (event.byName)
+                    unitToAdd = findUnitDefinitionByName(getCurrentEncounter(), event.byName)
+
+                if (event.byId)
+                    unitToAdd = findUnitDefinitionById(getCurrentEncounter(), event.byId)
+            }
+
+            if (typeof unitToAdd !== 'object')
+                return;
+
+            state.units.push(Object.assign({}, unitToAdd));
             state.unitsGroupedByTurnOrder = util.groupUnitsByTurnOrder(state.units);
 
             if (state.activeGroup === null) {
@@ -175,3 +175,28 @@ function Game(attributes) {
 }
 
 module.exports = Game;
+
+
+function findUnitDefinitionById(encounter, unitDefinitionId) {
+    const unitDefs = encounter.units;
+
+    const keys = Object.keys(unitDefs);
+    for (let i = 0; i < keys.length; i++) {
+        const unitDef = unitDefs[keys[i]];
+        if (unitDefinitionId === unitDef.id) {
+            return unitDef;
+        }
+    }
+}
+
+function findUnitDefinitionByName(encounter, unitDefinitionName) {
+    const unitDefs = encounter.units;
+
+    const keys = Object.keys(unitDefs);
+    for (let i = 0; i < keys.length; i++) {
+        const unitDef = unitDefs[keys[i]];
+        if (unitDefinitionName === unitDef.name) {
+            return unitDef;
+        }
+    }
+}

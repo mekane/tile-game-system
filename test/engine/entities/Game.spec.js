@@ -268,6 +268,24 @@ describe('Game Event - AddUnit', () => {
         expect(state.activeGroup).to.equal(1);
         expect(state.activeUnit).to.equal(2);
     });
+
+    it(`can add a unit by looking up its definition using the byId property`, () => {
+        const game = Game(validGame());
+        const unitId = game.getCurrentEncounter().units[0].id;
+
+        game.sendEvent({type: 'AddUnit', byId: unitId});
+        const state = game.getState();
+        expect(state.units.length).to.equal(1);
+    })
+
+    it(`can add a unit by looking up its definition using the byName property`, () => {
+        const game = Game(validGame());
+        const unitName = game.getCurrentEncounter().units[0].name;
+
+        game.sendEvent({type: 'AddUnit', byName: unitName});
+        const state = game.getState();
+        expect(state.units.length).to.equal(1);
+    })
 });
 
 describe('Game Action - Move Unit', () => {
