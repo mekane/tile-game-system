@@ -3,9 +3,12 @@ const {validScenario} = require('../../../_fixtures.js');
 
 const {LocalGameAdapter} = require('../../../../engine/adapters/LocalGame');
 
+const EncounterActionFactory = require('../../../../engine/entities/EncounterActionFactory.js');
+const encounterActionFactory = EncounterActionFactory();
+
 describe('The LocalGameAdapter', () => {
     it(`exports an object with use case functions`, () => {
-        const localGameAdapter = LocalGameAdapter();
+        const localGameAdapter = LocalGameAdapter({encounterActionFactory});
 
         expect(localGameAdapter).to.be.an('object');
         expect(localGameAdapter.gameAction).to.be.a('function');
@@ -16,7 +19,7 @@ describe('The LocalGameAdapter', () => {
 
 describe('A realistic test using the Local Game Adapter to make a new game', () => {
     it('creates, manipulates, and gets state for a Game', async () => {
-        const localGameAdapter = LocalGameAdapter();
+        const localGameAdapter = LocalGameAdapter({encounterActionFactory});
 
         await populateSomeScenarios(localGameAdapter);
         const list = await localGameAdapter.listScenarios();

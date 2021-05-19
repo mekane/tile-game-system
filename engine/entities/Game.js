@@ -100,6 +100,7 @@ function Game(attributes) {
         getId: () => id,
         getActiveUnit,
         getCurrentBoard: () => Board(getCurrentEncounter().board),
+        getCurrentEncounter,
         getScenario: () => scenario,
         getState,
         getType: () => typeName,

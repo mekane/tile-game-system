@@ -3,6 +3,7 @@ const {mockRepository, spyRepository, inMemoryRepository, stubRepository} = requ
 const {validGame} = require('../../_fixtures.js');
 
 const {GameAction} = require('../../../engine/useCases/gameAction.js');
+const EncounterActionFactory = require('../../../engine/entities/EncounterActionFactory.js');
 
 const testId = 'test_id';
 
@@ -11,6 +12,8 @@ function testGameRepository() {
     testGameData.id = testId;
     return inMemoryRepository({[testId]: testGameData});
 }
+
+const encounterActionFactory = EncounterActionFactory();
 
 describe('The GameAction Use Case Initializer', () => {
     it(`exports an init function to inject the module with dependencies`, () => {
@@ -34,7 +37,7 @@ describe('The GameAction Use Case Function', () => {
     });
 
     it(`returns an error status if the action is unknown`, async () => {
-        const gameAction = GameAction({gameRepository: testGameRepository()});
+        const gameAction = GameAction({encounterActionFactory, gameRepository: testGameRepository()});
         const result = await gameAction('test_id', {action: 'invalidGameAction'});
         expect(result).to.deep.equal({
             success: false,
@@ -50,35 +53,32 @@ describe('The GameAction Use Case Function', () => {
         expect(gameSpy.getCalled).to.equal(1);
     });
 
-    //TODO: make this work
-    it.skip(`sends the events resulting from the action to the Game`, async () => {
+    it(`sends the events resulting from the action to the Game`, async () => {
         const gameRepository = testGameRepository();
-        const gameAction = GameAction({gameRepository});
-        await gameAction(testId, validGameAction());
+        const gameAction = GameAction({encounterActionFactory, gameRepository});
+        const result = await gameAction(testId, validGameAction());
 
+        expect(result).to.deep.equal({success: true})
         const game = gameRepository.getById(testId);
         expect(game.currentState.units.length).to.equal(1);
     });
 
-    //TODO: test an injected other action
-
-    //TODO: test an injected action that returns multiple events
-
-    //TODO: fix
-    it.skip(`returns an OK status message if the action was accepted`, async () => {
-        const gameAction = GameAction({gameRepository: testGameRepository()});
+    it(`correctly sends additional injected actions to the Game`, async () => {
+        const customFactory = encounterActionFactoryWithTestActionAdded();
+        const gameRepository = testGameRepository();
+        const gameAction = GameAction({encounterActionFactory: customFactory, gameRepository});
         const result = await gameAction(testId, validGameAction());
-        expect(result).to.deep.equal({
-            success: true
-        });
-    });
 
-    //TODO: fix
-    it.skip(`saves the Game back to the repository`, async () => {
+        expect(result).to.deep.equal({success: true})
+        const game = gameRepository.getById(testId);
+        expect(game.currentState.units.length).to.equal(1);
+    })
+
+    it(`saves the Game back to the repository`, async () => {
         const gameSpy = spyRepository();
         gameSpy.getById = _ => validGame(); //stub out a game so it gets to the save part
 
-        const gameAction = GameAction({gameRepository: gameSpy});
+        const gameAction = GameAction({encounterActionFactory, gameRepository: gameSpy});
         await gameAction('a_game_id', validGameAction());
 
         expect(gameSpy.saveCalled).to.equal(1);
@@ -86,5 +86,10 @@ describe('The GameAction Use Case Function', () => {
 });
 
 function validGameAction() {
-    return {action: 'addUnit'}
+    return {action: 'addUnit', unitName: 'Goblin', boardX: 0, boardY: 0}
+}
+
+function encounterActionFactoryWithTestActionAdded() {
+    const testAction = _ => ({type: 'AddUnit', unit: {name: 'Test'}});
+    return EncounterActionFactory({test: testAction});
 }
