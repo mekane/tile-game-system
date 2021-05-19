@@ -32,7 +32,10 @@ export function BoardView({activeLineOfSight, tiles, state, lastUnitMove = {}}) 
         const isActive = (unitNumber === state.activeUnit);
         const lastMove = lastUnitMove.unitIndex === unitNumber ? lastUnitMove.direction : '';
         const unitView = UnitView(unitData, unitNumber, isActive, TILE_SIZE, lastMove);
-        tileViews[tileNumber].children.push(unitView);
+
+        const container = tileViews[tileNumber];
+        if (container)
+            container.children.push(unitView);
     }
 
     function makeTileViews(row, rowNumber) {
