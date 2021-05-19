@@ -43,20 +43,8 @@ function addUnit(state, {unitId, unitName, boardX, boardY}, encounter) {
             throw new Error('Add Unit failed: cannot add unit at specified coordinates');
     });
 
-    const unitTurnOrder = unitDefinition.turnOrder;
-
-    const unit = {
-        definitionId: unitDefinition.id,
-        movementMax: unitDefinition.movement,
-        movementRemaining: unitDefinition.movement,
-        name: unitDefinition.name,
-        positionX: boardX,
-        positionY: boardY,
-        turnOrder: typeof unitTurnOrder === 'number' ? unitTurnOrder : 99
-    };
-
-    //TODO: use a const enum for the types
-    return {type: 'AddUnit', unit};
+    //TODO: use a const enum for the event types
+    return {type: 'AddUnit', byId: unitDefinition.id, boardX, boardY};
 }
 
 module.exports = addUnit;

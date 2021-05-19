@@ -286,6 +286,16 @@ describe('Game Event - AddUnit', () => {
         const state = game.getState();
         expect(state.units.length).to.equal(1);
     })
+
+    it(`sets default values for optional properties not set on the unit definition`, () => {
+        const gameData = validGame();
+        const unitId = gameData.scenario.encounters[0].units[0].id
+        delete gameData.scenario.encounters[0].units[0].turnOrder;
+        const game = Game(gameData);
+
+        game.sendEvent({type: 'AddUnit', byId: unitId, boardX: 0, boardY: 0})
+        expect(game.getState().units[0].turnOrder).to.equal(99);
+    })
 });
 
 describe('Game Action - Move Unit', () => {

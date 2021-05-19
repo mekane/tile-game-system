@@ -119,7 +119,20 @@ function Game(attributes) {
             if (typeof unitToAdd !== 'object')
                 return;
 
-            state.units.push(Object.assign({}, unitToAdd));
+            const unitTurnOrder = unitToAdd.turnOrder;
+
+
+            const unit = {
+                definitionId: unitToAdd.id,
+                movementMax: unitToAdd.movementMax || unitToAdd.movement || 0,
+                movementRemaining: unitToAdd.movementRemaining || unitToAdd.movement || 0,
+                name: unitToAdd.name,
+                positionX: event.boardX,
+                positionY: event.boardY,
+                turnOrder: typeof unitTurnOrder === 'number' ? unitTurnOrder : 99
+            }
+
+            state.units.push(unit);
             state.unitsGroupedByTurnOrder = util.groupUnitsByTurnOrder(state.units);
 
             if (state.activeGroup === null) {

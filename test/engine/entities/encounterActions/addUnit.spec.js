@@ -60,42 +60,20 @@ describe('Encounter Action - AddUnit', () => {
 
         const expectedEvent = {
             "type": "AddUnit",
-            "unit": {
-                "definitionId": "Unit_0",
-                "movementMax": 6,
-                "movementRemaining": 6,
-                "name": "Goblin",
-                "positionX": 0,
-                "positionY": 0,
-                "turnOrder": 1
-            }
-        };
+            "byId": "Unit_0",
+            boardX: 0,
+            boardY: 0,
+        }
         expect(actualEvent).to.deep.equal(expectedEvent)
     })
-
-    it(`sets default values for optional properties not set on the unit definition`, () => {
-        const hackedEncounter = validGame().scenario.encounters[0];
-        delete hackedEncounter.units[0].turnOrder;
-        const state = blankEncounterState();
-        const actualEvent = addUnit(state, {unitId: hackedEncounter.units[0].id, boardX: 0, boardY: 0}, hackedEncounter)
-
-        expect(actualEvent.unit.turnOrder).to.equal(99);
-    });
-
 
     it(`can add a unit by name`, () => {
         const expectedEvent = {
             "type": "AddUnit",
-            "unit": {
-                "definitionId": "Unit_0",
-                "movementMax": 6,
-                "movementRemaining": 6,
-                "name": "Goblin",
-                "positionX": 0,
-                "positionY": 0,
-                "turnOrder": 1
-            }
-        };
+            "byId": "Unit_0",
+            "boardX": 0,
+            "boardY": 0
+        }
 
         const actualEvent = addUnit(blankEncounterState(), {unitName: 'Goblin', boardX: 0, boardY: 0}, encounter);
         expect(actualEvent).to.deep.equal(expectedEvent);

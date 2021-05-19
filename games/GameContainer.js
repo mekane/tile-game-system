@@ -57,7 +57,7 @@ export async function GameContainer(scenarioDefinitions) {
             if (result.success)
                 lastUnitMove = moveAction;
         } else if (actionType === 'unitDone') {
-            result = await gameAdapter.gameAction(gameId, {action: 'doneActivating', unitIndex: properties.unitIndex});
+            result = await gameAdapter.gameAction(gameId, {action: 'markUnitDone', unitIndex: properties.unitIndex});
         } else if (actionType === 'activateUnit') {
             result = await gameAdapter.gameAction(gameId, {action: 'activateUnit', unitIndex: properties.unitIndex})
         } else {
