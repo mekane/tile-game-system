@@ -1,15 +1,15 @@
 {
   "$schema": "http://json-schema.org/schema#",
-  "$id": "http://martykane.org/schemas/GameAction.schema.json",
+  "$id": "http://martykane.org/schemas/GameEvent.schema.json",
   "type": "object",
   "properties": {
-    "action": {
+    "type": {
       "type": "string",
       "enum": [
-        "activateUnit",
-        "addUnit",
-        "doneActivating",
-        "moveUnit"
+        "ActivateUnit",
+        "AddUnit",
+        "MoveUnit",
+        "UnitDate"
       ]
     },
     "boardX": {
@@ -45,8 +45,8 @@
       "type": "string"
     }
   },
-  "additionalProperties": false,
+  "additionalProperties": true,
   "required": [
-    "action"
+    "type"
   ]
 }

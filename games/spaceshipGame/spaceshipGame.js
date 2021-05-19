@@ -24,11 +24,11 @@ const scenarioData = {
             {"id": "unit_genestealer_17516600", "name": "Genestealer", "movement": 6}
         ],
         "init": [
-            {"action": "addUnit", "unitName": "Space Marine", "boardX": 4, "boardY": 12},
-            {"action": "addUnit", "unitName": "Space Marine", "boardX": 3, "boardY": 12},
-            {"action": "addUnit", "unitName": "Space Marine", "boardX": 2, "boardY": 12},
-            {"action": "addUnit", "unitName": "Space Marine", "boardX": 1, "boardY": 12},
-            {"action": "addUnit", "unitName": "Space Marine", "boardX": 0, "boardY": 12}
+            {"type": "AddUnit", "byName": "Space Marine", "boardX": 4, "boardY": 12},
+            {"type": "AddUnit", "byName": "Space Marine", "boardX": 3, "boardY": 12},
+            {"type": "AddUnit", "byName": "Space Marine", "boardX": 2, "boardY": 12},
+            {"type": "AddUnit", "byName": "Space Marine", "boardX": 1, "boardY": 12},
+            {"type": "AddUnit", "byName": "Space Marine", "boardX": 0, "boardY": 12}
         ]
     }]
 };

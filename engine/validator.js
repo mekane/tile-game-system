@@ -1,7 +1,7 @@
 const BoardSchema = require('./schema/BoardAttributes.schema.json');
 const EncounterSchema = require('./schema/EncounterAttributes.schema.json');
 const GameSchema = require('./schema/GameAttributes.schema.json');
-const GameActionSchema = require('./schema/GameAction.schema.json');
+const GameEVentSchema = require('./schema/GameEvent.schema.json');
 const ScenarioSchema = require('./schema/ScenarioAttributes.schema.json');
 const UnitSchema = require('./schema/UnitAttributes.schema.json');
 
@@ -9,7 +9,7 @@ const schemaForType = {
     Board: BoardSchema,
     Encounter: EncounterSchema,
     Game: GameSchema,
-    GameAction: GameActionSchema,
+    GameEvent: GameEVentSchema,
     Scenario: ScenarioSchema,
     Unit: UnitSchema
 }

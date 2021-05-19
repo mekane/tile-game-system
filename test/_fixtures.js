@@ -27,18 +27,6 @@ function validBoard() {
     }
 }
 
-function validCharacter() {
-    return {
-        name: 'Test Character',
-        strength: 12,
-        dexterity: 9,
-        constitution: 3,
-        wisdom: 1,
-        intelligence: 19,
-        charisma: 16
-    }
-}
-
 function validEncounter(overrides) {
     return Object.assign({
         name: 'Test',
@@ -55,7 +43,7 @@ function validEncounterWithInitialUnit(overrides) {
     const encounterWithInit = validEncounter({
         name: 'Test Encounter With Initial Unit',
         init: [
-            validGameAction()
+            validAddUnitGameEvent()
         ]
     });
     return Object.assign(encounterWithInit, overrides);
@@ -69,12 +57,14 @@ function validGame(overrides) {
     }, overrides);
 }
 
-function validGameAction() {
+function validAddUnitGameEvent() {
     return {
-        action: 'addUnit',
-        unitName: 'Goblin',
-        boardX: 0,
-        boardY: 0,
+        type: 'AddUnit',
+        unit: {
+            name: 'Goblin',
+            positionX: 0,
+            positionY: 0,
+        }
     }
 }
 
@@ -97,13 +87,81 @@ function validUnit() {
     }
 }
 
+
+function gameDataWithMoreEncounterDetail() {
+    const simpleBoard = {
+        id: 'board_simple_1234',
+        name: 'Simple Board',
+        tiles: [['A']],
+        terrain: {A: {name: 'A'}}
+    }
+
+    const complexBoard = {
+        id: 'board_complex_1235',
+        name: 'Complex Board',
+        tiles: [
+            ['W', 'W', 'W', 'W', 'W'],
+            ['W', 'A', 'A', 'A', 'W'],
+            ['W', 'B', 'A', 'A', 'A'],
+            ['W', 'A', 'A', 'A', 'W'],
+            ['W', 'W', 'W', 'W', 'W']
+        ],
+        terrain: {
+            A: {
+                name: 'Floor'
+            },
+            B: {
+                name: 'Sticky Floor',
+                movementRequired: 2
+            },
+            W: {
+                name: 'Wall',
+                blocksMovement: true
+            }
+        }
+    }
+    return {
+        id: 'game_simple_1234',
+        name: 'Test Game',
+        scenario: {
+            id: 'scenario_simple_1234',
+            name: 'Test Scenario',
+            encounters: [{
+                id: 'encounter_simple_1234',
+                name: 'Test Encounter',
+                description: 'A simple encounter',
+                board: simpleBoard,
+                units: [
+                    {
+                        id: 'unit_simple_1234',
+                        name: 'Test Unit',
+                        movement: 5
+                    }
+                ]
+            }, {
+                id: 'encounter_simple_1235',
+                name: 'Test Encounter 2',
+                description: 'A complex encounter',
+                board: complexBoard,
+                units: [
+                    {
+                        id: 'unit_simple_1235',
+                        name: 'Test Unit 2',
+                        movement: 6
+                    }
+                ]
+            }]
+        }
+    }
+}
+
 module.exports = {
+    gameDataWithMoreEncounterDetail,
     validBoard,
-    validCharacter,
     validEncounter,
     validEncounterWithInitialUnit,
     validGame,
-    validGameAction,
+    validGameEvent: validAddUnitGameEvent,
     validScenario,
     validUnit
 };

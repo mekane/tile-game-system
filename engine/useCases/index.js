@@ -5,14 +5,14 @@ const {NewGame} = require('./newGame.js');
 const {SaveScenario} = require('./saveScenario.js');
 const {StartEncounter} = require('./startEncounter.js');
 
-function init({gameRepository, scenarioRepository}) {
+function init({encounterActionFactory, gameRepository, scenarioRepository}) {
     if (isInvalid(gameRepository))
         throw new Error('Error initializing Controller: missing repository gameRepository');
 
     if (isInvalid(scenarioRepository))
         throw new Error('Error initializing Controller: missing repository scenarioRepository');
 
-    const gameAction = GameAction({gameRepository});
+    const gameAction = GameAction({encounterActionFactory, gameRepository});
     const gameState = GameState({gameRepository});
     const newGame = NewGame({gameRepository, scenarioRepository});
     const listScenarios = ListScenarios({scenarioRepository});

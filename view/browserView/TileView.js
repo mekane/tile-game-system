@@ -7,7 +7,9 @@ export function TileView(tileData, tileX, tileY, lineOfSightData) {
     /*PROFILE*/
     window.profileGameView['TileView']++;
 
-    const visible = lineOfSightData[tileY][tileX];
+    let visible = false;
+    if (lineOfSightData[tileY])
+        visible = lineOfSightData[tileY][tileX];
 
     const elData = {
         class: {

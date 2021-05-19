@@ -2,6 +2,8 @@ import {BrowserView} from '../view/browserView';
 
 //This LocalGameAdapter runs everything in-browser, in memory and starts empty
 const {LocalGameAdapter} = require('../engine/adapters/LocalGame');
+const EncounterActionFactory = require('../engine/entities/EncounterActionFactory.js');
+
 
 /**
  * Used to start up a Local Game that run in the browser totally in memory.
@@ -11,7 +13,7 @@ const {LocalGameAdapter} = require('../engine/adapters/LocalGame');
  * @constructor
  */
 export async function GameContainer(scenarioDefinitions) {
-    const gameAdapter = LocalGameAdapter();
+    const gameAdapter = LocalGameAdapter({encounterActionFactory: EncounterActionFactory()});
     const main = document.querySelector('#main');
     const view = BrowserView(main, handleAction)
     console.log(view)
@@ -55,7 +57,7 @@ export async function GameContainer(scenarioDefinitions) {
             if (result.success)
                 lastUnitMove = moveAction;
         } else if (actionType === 'unitDone') {
-            result = await gameAdapter.gameAction(gameId, {action: 'doneActivating', unitIndex: properties.unitIndex});
+            result = await gameAdapter.gameAction(gameId, {action: 'markUnitDone', unitIndex: properties.unitIndex});
         } else if (actionType === 'activateUnit') {
             result = await gameAdapter.gameAction(gameId, {action: 'activateUnit', unitIndex: properties.unitIndex})
         } else {

@@ -18,6 +18,10 @@ function moveUnit(state, {unitIndex, direction}, encounter) {
     const unitX = unitToMove.positionX;
     const unitY = unitToMove.positionY;
     const {x, y} = util.adjustCoordinatesForDirection(unitX, unitY, direction);
+
+    if (unitX === x && unitY === y)
+        throw new Error('Move Unit failed: invalid move direction');
+
     const board = Board(encounter.board);
     const tile = board.getTileAt({x, y});
 
@@ -37,10 +41,7 @@ function moveUnit(state, {unitIndex, direction}, encounter) {
     if (unitToMove.movementRemaining < terrainDef.movementRequired)
         throw new Error('Move Unit failed: unit lacks sufficient movement points');
 
-    unitToMove.hasActivated = true;
-    unitToMove.movementRemaining -= terrainDef.movementRequired;
-    unitToMove.positionX = x;
-    unitToMove.positionY = y;
+    return {type: 'MoveUnit', unitIndex, x, y, movementToSubtract: terrainDef.movementRequired}
 }
 
 module.exports = moveUnit;
