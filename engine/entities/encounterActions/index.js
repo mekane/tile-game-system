@@ -1,37 +1,30 @@
-const doneActivating = require('./markUnitDone.js');
-const moveUnit = require('./moveUnit.js');
+/**
+ * This index exists to gather all of the default / built-in actions
+ * and export them as a single collection (defaultActionByName) as
+ * well as Enum-style consts for the action names.
+ */
 
 const activateUnit = require('./activateUnit.js');
 const addUnit = require('./addUnit.js');
+const doneActivating = require('./markUnitDone.js');
+const moveUnit = require('./moveUnit.js');
 
+const ACTIVATE_UNIT = 'activateunit';
+const ADD_UNIT = 'addunit';
+const MARK_UNIT_DONE = 'markunitdone';
+const MOVE_UNIT = 'moveunit';
 
-/**
- * @param actionName string
- * @return Function
- */
-function currentUnitActionFactory(actionName) {
-    let actionFunction = (state, options, encounter) => state;
-    const name = actionName.toLowerCase();
-
-    if (name === 'doneactivating')
-        return wrapAction(doneActivating);
-    else if (name === 'moveunit')
-        return wrapAction(moveUnit)
-    else if (name === 'activateunit')
-        return wrapAction(activateUnit);
-    else if (name === 'addunit')
-        return wrapAction(addUnit);
+const defaultActionByName = {
+    [ACTIVATE_UNIT]: activateUnit,
+    [ADD_UNIT]: addUnit,
+    [MARK_UNIT_DONE]: doneActivating,
+    [MOVE_UNIT]: moveUnit
 }
 
-function wrapAction(actionFunction) {
-    /**
-     * @param {Object} state
-     * @param {Object} options
-     * @param {Object} encounter
-     */
-    return function (state, options, encounter) {
-        return actionFunction(state, options, encounter)
-    }
+module.exports = {
+    ACTIVATE_UNIT,
+    ADD_UNIT,
+    defaultActionByName,
+    MARK_UNIT_DONE,
+    MOVE_UNIT
 }
-
-module.exports = currentUnitActionFactory;
