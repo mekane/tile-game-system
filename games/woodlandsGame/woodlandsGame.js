@@ -23,7 +23,7 @@ const scenarioData = {
             {"id": "unit_goblin_06067272", "name": "Goblin", "movement": 60},
         ],
         "init": [
-            {"action": "addUnit", "unitName": "Goblin", "boardX": 1, "boardY": 8}
+            {"type": "AddUnit", "byName": "Goblin", "boardX": 4, "boardY": 12},
         ]
     }]
 };

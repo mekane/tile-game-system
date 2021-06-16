@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+.tile.hallway {
+    background: #545454;
+}
+
+.tile.room {
+    background: #777;
+}
+
+.tile.room_1 {
+    background: #777;
+}
+
+.tile.room_2 {
+    background: #a77;
+}
+
+.tile.room_3 {
+    background: #7a7;
+}
+
+.tile.room_4 {
+    background: #77a;
+}
+
+.tile.wall {
+    background: #333;
+}
+
+.unit.active {
+    border-color: #3c3;
+}
+
+body {
+    background: black;
+}
+
+h1 {
+    color: #eee;
+}
+
+.unit-list {
+    color: white;
+}
+
+.unit-list__unit {
+    border-color: #aaa;
+}
+
+.unit-list__unit-move {
+    color: #66dd88;
+}
+
+button {
+    border-radius: 1px;
+}
+
+button.done {
+    background-color: #333;
+    border-color: #ccc;
+    color: #ccc;
+}
+
+button.activate {
+    background-color: #333;
+    border-color: #3d3;
+    color: #3d3;
+}

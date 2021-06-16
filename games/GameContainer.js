@@ -50,6 +50,7 @@ export async function GameContainer(scenarioDefinitions) {
         let result = false;
         lastUnitMove = {};
 
+        /* TODO: a better translation to the action names. Use enum not hard-coded strings */
         const actionType = properties.action;
         if (actionType === 'move') {
             const moveAction = {action: 'moveUnit', unitIndex: activeUnitIndex, direction: properties.dir};

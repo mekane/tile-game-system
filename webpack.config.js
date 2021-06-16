@@ -19,6 +19,7 @@ const viewBundle = {
 
 const gamesBundles = {
     entry: {
+        heroGame: './games/heroGame/heroGame.js',
         spaceshipGame: './games/spaceshipGame/spaceshipGame.js',
         woodlandsGame: './games/woodlandsGame/woodlandsGame.js'
     },
