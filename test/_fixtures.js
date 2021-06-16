@@ -22,6 +22,14 @@ function validBoard() {
             W: {
                 name: 'Wall',
                 blocksMovement: true
+            },
+            X: {
+                name: 'Blocking Terrain',
+                blocksEdges: true
+            },
+            Y: {
+                name: 'Blocking Terrain 2',
+                blocksEdges: true
             }
         }
     }

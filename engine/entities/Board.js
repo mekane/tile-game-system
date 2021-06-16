@@ -76,12 +76,43 @@ function Board(attributes) {
         return {width, height};
     }
 
+    function getInterTileWalls() {
+        const wallData = [];
+
+        for (let r = 0; r < tiles.length; r++) {
+            const row = tiles[r];
+
+            const dataRow = [];
+            for (let c = 0; c < row.length; c++) {
+                const thisTile = getTerrainAt({y: r, x: c})
+                const tileToRight = getTerrainAt({y: r, x: c + 1})
+                const tileBelow = getTerrainAt({y: r + 1, x: c})
+
+                const wallData = {r: 0, b: 0}
+
+                console.log(thisTile)
+
+                if (tileToRight.blocksEdges && thisTile.id !== tileToRight.id)
+                    wallData.r = 1
+
+                if (tileBelow.blocksEdges && thisTile.id !== tileBelow.id)
+                    wallData.b = 1
+
+                dataRow.push(wallData)
+            }
+
+            wallData.push(dataRow)
+        }
+
+        return wallData;
+    }
+
     function getTerrainAt({x, y}) {
         const terrainType = getTileAt({x, y});
 
         if (typeof terrainType === 'string' && terrainType !== '' && terrainType !== ' ') {
             const terrainProperties = terrain[terrainType];
-            return Object.assign({}, terrainDefaults, terrainProperties);
+            return Object.assign({id: terrainType}, terrainDefaults, terrainProperties);
         }
 
         return empty;
@@ -204,6 +235,7 @@ function Board(attributes) {
     return Object.freeze({
         getDimensions,
         getId: _ => id,
+        getInterTileWalls,
         getTerrainAt,
         getTileAt,
         getType: _ => typeName,
