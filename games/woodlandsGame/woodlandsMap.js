@@ -23,7 +23,7 @@ const tiles1 = [
     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S']
 ];
 
-module.exports = [
+const allGrass = [
     ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'],
     ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'],
     ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'],
@@ -47,3 +47,55 @@ module.exports = [
     ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'],
     ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'],
 ];
+
+function generateGrassTilesToFitSize(radius) {
+
+    const size = 1 + radius * 2;
+    const tiles = [];
+
+    for (let i = 0; i < size; i++) {
+        tiles.push(Array(size).fill('G'))
+    }
+
+    return tiles;
+}
+
+function generateCirclePattern(radius) {
+    const tiles = generateGrassTilesToFitSize(radius)
+    const octant = Math.round(radius * Math.cos(Math.PI / 4));
+    console.log('octant: ' + octant);
+
+    for (let x = 0; x <= octant; x++) {
+        const y = Math.round(Math.sqrt((radius * radius) - (x * x)));
+
+        const row1 = yToRow(y);
+        const row2 = yToRow(-y);
+
+        const col1 = xToCol(x)
+        const col2 = xToCol(-x)
+
+        // console.log('set ', yToRow(y), xToCol(x))
+        tiles[row1][col1] = 'R';
+        tiles[row1][col2] = 'R';
+        tiles[row2][col1] = 'R';
+        tiles[row2][col2] = 'R';
+
+        tiles[col1][row1] = 'R';
+        tiles[col2][row1] = 'R';
+        tiles[col1][row2] = 'R';
+        tiles[col2][row2] = 'R';
+    }
+
+    console.log(tiles);
+    return tiles;
+
+    function xToCol(x) {
+        return radius + x;
+    }
+
+    function yToRow(y) {
+        return radius - y;
+    }
+}
+
+module.exports = generateCirclePattern;

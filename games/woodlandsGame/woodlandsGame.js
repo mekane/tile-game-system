@@ -1,5 +1,7 @@
 const woodlandTiles = require('./woodlandsMap.js');
 
+const size = 21;
+
 const scenarioData = {
     "id": "scenario_test_85756276",
     "name": "Test",
@@ -10,7 +12,7 @@ const scenarioData = {
         "board": {
             "id": "board_test_06356206",
             "name": "Test",
-            "tiles": woodlandTiles,
+            "tiles": woodlandTiles(size),
             "terrain": {
                 "G": {"name": "Grass"},
                 "R": {"name": "Road"},
@@ -23,7 +25,7 @@ const scenarioData = {
             {"id": "unit_goblin_06067272", "name": "Goblin", "movement": 60},
         ],
         "init": [
-            {"type": "AddUnit", "byName": "Goblin", "boardX": 4, "boardY": 12},
+            {"type": "AddUnit", "byName": "Goblin", "boardX": size, "boardY": size},
         ]
     }]
 };
