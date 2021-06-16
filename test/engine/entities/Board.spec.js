@@ -110,21 +110,25 @@ describe('The Board entity', () => {
     it(`has a getTerrainAt method that returns the terrain definition at a given x,y coordinate`, () => {
         const newBoard = Board(validBoard());
         expect(newBoard.getTerrainAt({x: 0, y: 0})).to.deep.equal({
+            id: 'A',
             name: 'Grass',
             movementRequired: 1,
             blocksMovement: false
         });
         expect(newBoard.getTerrainAt({x: 2, y: 1})).to.deep.equal({
+            id: 'B',
             name: 'Trees',
             movementRequired: 1,
             blocksMovement: false
         });
         expect(newBoard.getTerrainAt({x: 0, y: 1})).to.deep.equal({
+            id: 'C',
             name: 'Hills',
             movementRequired: 2,
             blocksMovement: false
         });
         expect(newBoard.getTerrainAt({x: 0, y: 2})).to.deep.equal({
+            id: 'W',
             name: 'Wall',
             movementRequired: 1,
             blocksMovement: true
@@ -189,9 +193,9 @@ describe('The Board entity', () => {
         }
         let newBoard = Board(boardData);
 
-        const grass = {name: 'Grass', movementRequired: 1, blocksMovement: false};
-        const rocks = {name: 'Rocks', movementRequired: 2, blocksMovement: false};
-        const walls = {name: 'Walls', movementRequired: 1, blocksMovement: true};
+        const grass = {id: 'A', name: 'Grass', movementRequired: 1, blocksMovement: false};
+        const rocks = {id: 'B', name: 'Rocks', movementRequired: 2, blocksMovement: false};
+        const walls = {id: 'C', name: 'Walls', movementRequired: 1, blocksMovement: true};
         const expectedViewData = [
             [grass, grass],
             [grass, rocks],
@@ -215,7 +219,7 @@ describe('The Board entity', () => {
         }
         const newBoard = Board(boardData);
 
-        const grass = {name: 'Grass', movementRequired: 1, blocksMovement: false};
+        const grass = {id: 'A', name: 'Grass', movementRequired: 1, blocksMovement: false};
         const empty = {empty: true};
 
         const expectedViewData = [
@@ -248,5 +252,10 @@ describe('The Board entity', () => {
     it('has a lineOfSight method that takes a unit instance', () => {
         const board = Board(validBoard())
         expect(board.lineOfSightFor).to.be.a('function');
+    })
+
+    it('has a getInterTileWalls method', () => {
+        const board = Board(validBoard())
+        expect(board.getInterTileWalls).to.be.a('function');
     })
 });
