@@ -75,6 +75,23 @@ describe('The getInterTileWalls method on the Board class', () => {
         const expectedWallDataV = [[{r: 0, b: 1}], [{r: 0, b: 0}]]
         expect(wallDataV).to.deep.equal(expectedWallDataV)
     })
+
+    it(`correctly builds the data structure for a larger map`, () => {
+        const tileData = [
+            ['A', 'A', 'A'],
+            ['A', 'X', 'X'],
+            ['A', 'Y', 'Y']
+        ]
+        const wallData = makeBoard(tileData).getInterTileWalls()
+
+        const expectedWallData = [
+            [{r: 0, b: 0}, {r: 0, b: 1}, {r: 0, b: 1}],
+            [{r: 1, b: 0}, {r: 0, b: 1}, {r: 0, b: 1}],
+            [{r: 1, b: 0}, {r: 0, b: 0}, {r: 0, b: 0}]
+        ]
+
+        expect(wallData).to.deep.equal(expectedWallData)
+    })
 })
 
 function makeBoard(tiles) {
