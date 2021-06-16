@@ -12,7 +12,7 @@ const scenarioData = {
         "board": {
             "id": "board_test_06356206",
             "name": "Test",
-            "tiles": woodlandTiles(size),
+            "tiles": woodlandTiles(12, 12, 9),
             "terrain": {
                 "G": {"name": "Grass"},
                 "R": {"name": "Road"},

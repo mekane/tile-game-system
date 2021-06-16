@@ -60,42 +60,37 @@ function generateGrassTilesToFitSize(radius) {
     return tiles;
 }
 
-function generateCirclePattern(radius) {
-    const tiles = generateGrassTilesToFitSize(radius)
+function getCoordinatesForCircle(cx, cy, radius) {
+    const result = [];
+
     const octant = Math.round(radius * Math.cos(Math.PI / 4));
-    console.log('octant: ' + octant);
 
     for (let x = 0; x <= octant; x++) {
         const y = Math.round(Math.sqrt((radius * radius) - (x * x)));
 
-        const row1 = yToRow(y);
-        const row2 = yToRow(-y);
+        result.push({r: y + cy, c: x + cx});
+        result.push({r: y + cy, c: -x + cx});
+        result.push({r: -y + cy, c: x + cx});
+        result.push({r: -y + cy, c: -x + cx});
 
-        const col1 = xToCol(x)
-        const col2 = xToCol(-x)
-
-        // console.log('set ', yToRow(y), xToCol(x))
-        tiles[row1][col1] = 'R';
-        tiles[row1][col2] = 'R';
-        tiles[row2][col1] = 'R';
-        tiles[row2][col2] = 'R';
-
-        tiles[col1][row1] = 'R';
-        tiles[col2][row1] = 'R';
-        tiles[col1][row2] = 'R';
-        tiles[col2][row2] = 'R';
+        result.push({r: x + cy, c: y + cx});
+        result.push({r: -x + cy, c: y + cx});
+        result.push({r: x + cy, c: -y + cx});
+        result.push({r: -x + cy, c: -y + cx});
     }
 
-    console.log(tiles);
+    return result;
+}
+
+function generateCirclePattern(centerX, centerY, radius) {
+    const tiles = generateGrassTilesToFitSize(21)
+
+    const coordinates = getCoordinatesForCircle(centerX, centerY, radius);
+    coordinates.forEach(c => {
+        tiles[c.r][c.c] = 'R'
+    })
+
     return tiles;
-
-    function xToCol(x) {
-        return radius + x;
-    }
-
-    function yToRow(y) {
-        return radius - y;
-    }
 }
 
 module.exports = generateCirclePattern;
