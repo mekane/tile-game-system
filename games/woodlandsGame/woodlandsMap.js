@@ -83,14 +83,53 @@ function getCoordinatesForCircle(cx, cy, radius) {
 }
 
 function generateCirclePattern(centerX, centerY, radius) {
-    const tiles = generateGrassTilesToFitSize(21)
+    const tiles = generateGrassTilesToFitSize(30)
 
     const coordinates = getCoordinatesForCircle(centerX, centerY, radius);
     coordinates.forEach(c => {
-        tiles[c.r][c.c] = 'R'
+
+        const lineCoords = drawLine(c.c, c.r, centerX, centerY)
+        lineCoords.forEach(c => tiles[c.r][c.c] = 'T')
+        // tiles[c.r][c.c] = 'R'
     })
 
     return tiles;
+}
+
+function drawLine(x0, y0, x1, y1) {
+    const coords = [];
+
+    const dx = Math.abs(x1 - x0);
+    const sx = x0 < x1 ? 1 : -1;
+    const dy = -1 * Math.abs(y1 - y0);
+    const sy = y0 < y1 ? 1 : -1;
+
+    let err = dx + dy;
+    let e2 = 2 * err;
+
+    let x = x0;
+    let y = y0;
+
+    while (true) {
+        coords.push({r: y, c: x});
+
+        if (x === x1 && y === y1)
+            break;
+
+        if (e2 >= dy) {
+            err += dy;
+            x += sx;
+        }
+
+        if (e2 <= dx) {
+            err += dx;
+            y += sy;
+        }
+
+        e2 = 2 * err;
+    }
+
+    return coords;
 }
 
 module.exports = generateCirclePattern;
