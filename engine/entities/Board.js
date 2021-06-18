@@ -164,10 +164,10 @@ function Board(attributes) {
         const unitTile = {x: unit.positionX, y: unit.positionY};
         result[unitTile.y][unitTile.x] = true;
 
-        util.DIRECTIONS.forEach(dir => lineOfSightSearch(unitTile, dir));
+        //util.DIRECTIONS.forEach(dir => lineOfSightSearch(unitTile, dir));
 
         //TODO: only do these if it makes sense (we know we can see something in that direction)
-        secondaryDiagonals.forEach(dir => extendedLineOfSightSearch(unitTile, dir));
+        //secondaryDiagonals.forEach(dir => extendedLineOfSightSearch(unitTile, dir));
 
         return result;
 
